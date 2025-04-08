@@ -32,31 +32,38 @@ class LectorTicket:
         return inicioProductos, inicioPrecios
     
     def extraerProductos(self):
-        diccionario_productos = {}
+        lista_productos = []
 
         for producto in self.arrayTicket[self.inicioProductos + 1 :]:
             producto = producto.strip()
 
             if not producto:
                 continue
+            
+            if not producto.endswith(" kg"):
+                partes = producto.split(" ", 1)
+                if len(partes) != 2:
+                    continue
 
-            partes = producto.split(" ", 1)
-            if len(partes) != 2:
-                continue
+                cantidad, nombre = partes
+                nombre = str(nombre)
 
-            cantidad, nombre = partes
+                if nombre.strip().endswith("kg"):
+                    nombre = nombre[0:-2]
+                    nombre = nombre.strip()
 
-            if nombre.strip().upper() == "PARKING":
-                break
+                try:
+                    cantidad = int(cantidad)
+                except ValueError:
+                    continue
+                
+                lista_productos.append((nombre.strip(), cantidad))
+            else:
+                kg = producto[0:-2].strip()
+                kg = kg.replace(",",".")
+                lista_productos[len(lista_productos)-1] = (nombre, float(kg))
 
-            try:
-                cantidad = int(cantidad)
-            except ValueError:
-                continue
-
-            diccionario_productos[nombre.strip()] = cantidad
-
-        return diccionario_productos
+        return lista_productos
     
     def extraerPrecios(self):
         arrayPrecios = []
@@ -76,23 +83,27 @@ class LectorTicket:
         return arrayPrecios
 
     def cargarDiccionario(self):
-        diccionarioProductos = self.extraerProductos()
+        lista_productos = self.extraerProductos()
         arrayPrecios = self.extraerPrecios()
-        arrayNombres = []
         
         contador = 0
-        for nombreProducto in diccionarioProductos.keys():
-            self.diccionarioProductos[nombreProducto] = (diccionarioProductos[nombreProducto], arrayPrecios[contador])
-            contador = contador + 1
+        while contador < len(arrayPrecios):
+            producto = lista_productos[contador]
+            precio = arrayPrecios[contador]
             
+            if producto[1] > 1:
+                precio = round(arrayPrecios[contador] / producto[1], 2)
+            
+            self.diccionarioProductos[producto[0]] = precio
+            contador += 1
+        
         return self.diccionarioProductos
         
 
     
 if __name__ == "__main__":
-    lector = LectorTicket("ticket.pdf")
+    lector = LectorTicket("ticket1.pdf")
     texto = lector.cargarDiccionario()
     for mierda in texto.keys():
-        print(mierda, texto[mierda])
-    
+        print(f"1 {mierda} cuesta {texto[mierda]}")
     
