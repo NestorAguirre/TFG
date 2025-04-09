@@ -46,9 +46,9 @@ class LectorTicket:
                     continue
 
                 cantidad, nombre = partes
-                nombre = str(nombre)
+                nombre = str(nombre).title()
 
-                if nombre.strip().endswith("kg"):
+                if nombre.strip().lower().endswith("kg"):
                     nombre = nombre[0:-2]
                     nombre = nombre.strip()
 
@@ -102,7 +102,7 @@ class LectorTicket:
 
     
 if __name__ == "__main__":
-    lector = LectorTicket("ticket1.pdf")
+    lector = LectorTicket("ticket2.pdf")
     texto = lector.cargarDiccionario()
     for mierda in texto.keys():
         print(f"1 {mierda} cuesta {texto[mierda]}")
