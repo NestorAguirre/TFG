@@ -56,31 +56,14 @@ class DBController():
         conexion = sql.connect(self.nombreDB)
         cursor = conexion.cursor()
         
-        consulta = f"INSERT INTO productos(nombre, familia) VALUES ('{nombre}', '{familia}')"
-        cursor.execute(consulta)
+        cursor.execute("SELECT id FROM productos WHERE nombre = ?", (nombre,))
+        resultado = cursor.fetchone()
         
-        conexion.commit()
+        if resultado is None:
+            cursor.execute("INSERT INTO productos(nombre, familia) VALUES (?, ?)", (nombre, familia))
+            conexion.commit()
+        
         conexion.close()
-        
-    def clasificar_por_reglas(self, nombre_producto):
-        nombre = nombre_producto.lower()
-
-        if any(palabra in nombre for palabra in ["cerveza", "vino", "cola", "refresco", "agua"]):
-            return "Bebidas"
-        elif any(palabra in nombre for palabra in ["jamón", "pollo", "lechuga", "manzana", "pescado"]):
-            return "AlimentosFrescos"
-        elif any(palabra in nombre for palabra in ["galleta", "pasta", "arroz", "lata", "tomate frito"]):
-            return "AlimentosEnvasados"
-        elif any(palabra in nombre for palabra in ["pizza", "congelado", "helado"]):
-            return "Congelados"
-        elif any(palabra in nombre for palabra in ["champú", "gel", "crema", "dentífrico"]):
-            return "CuidadoPersonal"
-        elif any(palabra in nombre for palabra in ["lejía", "detergente", "limpiador"]):
-            return "Limpieza/Hogar"
-        elif any(palabra in nombre for palabra in ["pan", "bollería", "croissant"]):
-            return "Panaderia/Reposteria"
-        else:
-            return "FamiliaDesconocida"
 
 
 if __name__ == "__main__":

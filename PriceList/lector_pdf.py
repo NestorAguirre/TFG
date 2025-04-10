@@ -104,6 +104,5 @@ class LectorTicket:
 if __name__ == "__main__":
     lector = LectorTicket("ticket2.pdf")
     texto = lector.cargarDiccionario()
-    for mierda in texto.keys():
-        print(f"1 {mierda} cuesta {texto[mierda]}")
+    print(texto)
     
