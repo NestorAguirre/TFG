@@ -41,7 +41,7 @@ class DBController():
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     producto_id INTEGER,
                     ticket_id INTEGER,
-                    precio REAL,
+                    precio FLOAT,
                     FOREIGN KEY (producto_id) REFERENCES productos(id),
                     FOREIGN KEY (ticket_id) REFERENCES tickets(id)
                 );
@@ -64,6 +64,48 @@ class DBController():
             conexion.commit()
         
         conexion.close()
+        
+    def insertarTicket(self, fecha):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+        
+        cursor.execute("INSERT INTO tickets(fecha) VALUES (?)", (fecha,))
+        
+        conexion.commit()
+        conexion.close()
+        
+    def insertarPrecio(self, producto_id, ticket_id, precio):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+        
+        cursor.execute("INSERT INTO precios(producto_id, ticket_id, precio) VALUES (?, ?, ?)", (producto_id, ticket_id, precio))
+        
+        conexion.commit()
+        conexion.close()
+        
+    def getProdutoPorNombre(self, nombre_producto):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+        
+        cursor.execute("SELECT id FROM productos WHERE nombre = (?)", (nombre_producto,))
+        resultado = cursor.fetchone()
+        
+        conexion.commit()
+        conexion.close()
+        
+        return resultado[0]
+        
+    def getUltimoTicket(self):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+        
+        cursor.execute("SELECT id FROM tickets ORDER BY id DESC LIMIT 1")
+        resultado = cursor.fetchone()
+        
+        conexion.commit()
+        conexion.close()
+        
+        return resultado[0]
 
 
 if __name__ == "__main__":
