@@ -86,8 +86,10 @@ class LectorTicket:
                 precio = str(precio).strip()
                 precio = precio.replace(",",".")
                 
-                if not precio:
-                    continue
+                try:
+                    precio_float = float(precio)
+                except ValueError:
+                    break
                 
                 if precio == "0.00":
                     break
@@ -106,7 +108,10 @@ class LectorTicket:
             
             contador = 0
             while contador < len(arrayPrecios):
-                producto = lista_productos[contador]
+                try:
+                    producto = lista_productos[contador]
+                except:
+                    break
                 precio = arrayPrecios[contador]
                 
                 if producto[1] > 1:
@@ -121,7 +126,7 @@ class LectorTicket:
     
 if __name__ == "__main__":
     try:
-        lector = LectorTicket("ticket1.pdf")
+        lector = LectorTicket("tickets/ticket1.pdf") #ME HE QUEDADO EN EL 13
         texto = lector.cargarDiccionario()
         print(texto)
     except ErrorTicket as e:
