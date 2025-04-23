@@ -1,0 +1,69 @@
+<PriceListRoot>:
+    orientation: "vertical"
+    padding: [20, 40]
+    spacing: 40      
+    
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.9, 0.85, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+    Label:
+        text: "PriceList"
+        font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+        font_size: "50sp"
+        size_hint_y: None
+        height: self.texture_size[1]
+        color: 0, 0, 0, 1
+
+    GridLayout:
+        cols: 2
+        spacing: 30
+        row_default_height: 80
+        row_force_default: True
+        size_hint_y: None
+        height: self.minimum_height
+
+        Button:
+            text: "[i]Frescos[/i]"
+            markup: True
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            font_size: "30sp"
+        Button:
+            text: "[i]Envasados[/i]"
+            markup: True
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            font_size: "30sp"
+        Button:
+            text: "[i]Congelados[/i]"
+            markup: True
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            font_size: "30sp"
+        Button:
+            text: "[i]Bebidas[/i]"
+            markup: True
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            font_size: "30sp"
+        Button:
+            text: "[i]Cuidado personal[/i]"
+            markup: True
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            font_size: "30sp"
+        Button:
+            text: "[i]Limpieza hogar[/i]"
+            markup: True
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            font_size: "30sp"
+
+    Widget:  # Espacio extra antes del botón final
+
+    Button:
+        text: "[i]Importar Ticket[/i]"
+        markup: True
+        font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+        font_size: "36sp"
+        size_hint_y: None
+        height: 60

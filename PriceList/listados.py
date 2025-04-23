@@ -1,5 +1,8 @@
 productos_por_familia = {
-    # 1. Frutas
+    
+    # FRESCOS
+    
+    # Frutas
     "Frutas": [
         "Naranja 5 Kg.",
         "Mandarina 2",
@@ -23,7 +26,7 @@ productos_por_familia = {
         "Mango"
     ],
     
-    # 2. Verduras
+    # Verduras
     "Verduras": [
         "Ens Nueva Tierna",
         "Patatas Serrano",
@@ -38,7 +41,7 @@ productos_por_familia = {
         "Tomate Ensalada"
     ],
     
-    # 3. Carnes
+    # Carnes
     "Carnes": [
         "Lomo Fino",
         "Picada De Vacuno",
@@ -58,7 +61,22 @@ productos_por_familia = {
         "Costilla Carnosa"
     ],
     
-    # 4. Embutidos
+    # Pescados
+    "Pescados": [
+        "Medio Salmón",
+        "Filete De Dorada",
+        "Delicias Mar",
+        "Filete De Lubina",
+        "Filete De Salmon",
+        "Calamar Pequeño",
+        "Filete De Trucha"
+    ],
+    
+    # Mariscos
+    "Mariscos": [
+    ],
+    
+    # Embutidos
     "Embutidos": [
         "Longaniza Magro Fres",
         "Chorizo Leon",
@@ -80,22 +98,7 @@ productos_por_familia = {
         "Sarta Dulce"
     ],
     
-    # 5. Pescados
-    "Pescados": [
-        "Medio Salmón",
-        "Filete De Dorada",
-        "Delicias Mar",
-        "Filete De Lubina",
-        "Filete De Salmon",
-        "Calamar Pequeño",
-        "Filete De Trucha"
-    ],
-    
-    # 6. Mariscos
-    "Mariscos": [
-    ],
-    
-    # 7. Yogures y postres
+    # Yogures y postres
     "Yogures y postres": [
         "Griego Fresa X6",
         "Cremoso Des Nat Edul",
@@ -120,7 +123,7 @@ productos_por_familia = {
         "Gelly 0% Fresa"
     ],
     
-    # 8. Leche y derivados
+    # Leche y derivados
     "Leche y derivados": [
         "Crema Para Café",
         "Leche Semi P6",
@@ -136,7 +139,7 @@ productos_por_familia = {
         "Leche Desn"
     ],
     
-    # 9. Quesos
+    # Quesos
     "Quesos": [
         "Queso Emental Loncha",
         "Porción Light",
@@ -150,9 +153,18 @@ productos_por_familia = {
         "Mozzarella Fresca",
         "Q. Untar Suave",
         "Queso Fresco Desnata"
+        "Lonchas Light"
     ],
     
-    # 10. Arroz, pastas y legumbres
+    # Huevos
+    "Huevos": [
+        "12 Huevos Grandes-L",
+        "12 Huevos Grandes -L"
+    ],
+    
+    # ENVASADOS
+    
+    # Arroz, pastas y legumbres
     "Arroz, pastas y legumbres": [
         "Macarron",
         "Tortellini Carne",
@@ -166,30 +178,7 @@ productos_por_familia = {
         "Fideo"
     ],
     
-    # 11. Alimentos preparados
-    "Alimentos preparados": [
-        "Pizza Carbonara Fam",
-        "Pizza Jamon/Queso",
-        "Pizza Barbacoa/Bacon",
-        "Empanada Atun",
-        "Empanada Pollo Setas",
-        "Rosca Lomo Y Bacon",
-        "Tortillas Mexicanas",
-        "San Jacobo S/G",
-        "Pizza Deep Americana",
-        "Ls Tortilla 1/2 P/Ce",
-        "Boq. Al Vinagre",
-        "Focaccia Pack-2",
-        "Relleno Fajitas",
-        "Ls Ensaladilla Grand",
-        "Ls Media Pat Y Cebo",
-        "Sopa Pollo C/Fideos",
-        "Pincho Mexicano",
-        "Pizza Fam 4 Quesos",
-        "Tortilla Entera Cebo"
-    ],
-    
-    # 12. Conservas
+    # Conservas
     "Conservas": [
         "Tomate Frito Brick",
         "Caldo Verduras",
@@ -214,26 +203,14 @@ productos_por_familia = {
         "Salsa Barbacoa"
     ],
     
-    # 13. Aceites y vinagres
+    # Aceites y vinagres
     "Aceites y vinagres": [
         "Sal Yodada",
         "Aceite Oliva 0`4",
         "Aceite Girasol",
-        "Azucar"
     ],
     
-    # 14. Dulces y desayuno
-    "Dulces y desayuno": [
-        "C. Colombia Alu.",
-        "C. Dob. Espresso Alu",
-        "Copos De Avena",
-        "S.Caramelo/Galleta",
-        "Surtido Dulces",
-        "Copo Int.Bañado Choc",
-        "Merm. Melocotón"
-    ],
-    
-    # 15. Snacks
+    # Snacks
     "Snacks": [
         "Pipa Gigante Aguasal",
         "Tortita Legumbre 44%",
@@ -251,34 +228,99 @@ productos_por_familia = {
         "Popitos"
     ],
     
-    # 16. Bebidas no alcohólicas
-    "Bebidas no alcohólicas": [
-        "Cola Zero",
-        "C. Tost. 0,0 Bot",
-        "Fuente Dehesa 1,5L",
-        "Cola"
+    # Alimentos preparados
+    "Alimentos preparados": [
+        "Pizza Carbonara Fam",
+        "Pizza Jamon/Queso",
+        "Pizza Barbacoa/Bacon",
+        "Empanada Atun",
+        "Empanada Pollo Setas",
+        "Rosca Lomo Y Bacon",
+        "Tortillas Mexicanas",
+        "San Jacobo S/G",
+        "Pizza Deep Americana",
+        "Ls Tortilla 1/2 P/Ce",
+        "Boq. Al Vinagre",
+        "Focaccia Pack-2",
+        "Relleno Fajitas",
+        "Ls Ensaladilla Grand",
+        "Ls Media Pat Y Cebo",
+        "Sopa Pollo C/Fideos",
+        "Pincho Mexicano",
+        "Pizza Fam 4 Quesos",
+        "Tortilla Entera Cebo"
     ],
     
-    # 17. Bebidas alcohólicas
-    "Bebidas alcohólicas": [
-        "C Doble Malta Lata",
-        "Pedro Ximenez",
-        "C. Especial Bot",
-        "Cerv Pack 12",
-        "C. Doble Malta Lata"
+    # Bollería
+    "Bolleria": [
+        "Surtido Dulces",
+        "Croissant Rell Cacao",
+        "Napolitana Crema",
+        "Rosquilla Choco Coco",
+        "Rebuenas",
+        "Gall.Bañada Chocobla",
+        "Chocobuns",
+        "Magdalena Redonda",
+        "Galleta Rell Crema",
+        "Mantecadas S/Lactosa",
+        "Napolitana Mixta",
+        "Dorayaki Hacendado",
+        "Galleta Canela",
+        "Bocad.Bañados Cacao",
+        "Croissant",
+        "Cream Cookies",
+        "Caña Crema Choco",
+        "Cookies Chocolate"
     ],
     
-    # 18. Congelados de carne
+    # Pan
+    "Pan": [
+        "Pan De Pueblo",
+        "Pan Sem Y P Calabaza",
+        "Pan Blanco Familiar",
+        "Chapata Cristal",
+        "Pan Queso 18%",
+        "Chapata Cristal 4Uds",
+        "Panecillo 11 Uds"
+    ],
+    
+    # Cereales
+    "Cereales": [
+        "Copos De Avena",
+        "Copo Int.Bañado Choc"
+    ],
+    
+    # Otros
+    "Otros": [
+        "Masa Filo",
+        "Masa De Hojaldre",
+        "Hojaldre Mantequilla",
+        "C. Colombia Alu.",
+        "C. Dob. Espresso Alu",
+        "S.Caramelo/Galleta",
+        "Merm. Melocotón",
+        "Azucar"
+    ],
+    
+    # CONGELADOS
+    
+    # Congelados de carne
     "Congelados de carne": [
         "Lasaña Boloñesa",
         "Lasaña Boloñesa Fam."
     ],
     
-    # 19. Congelados de verduras
+    # Congelado de pescado y marisco
+    "Congelado de pescado": [
+        "Gamba Pelada Cruda",
+        "Langostino Crudo Ex"
+    ],
+    
+    # Congelados de verduras
     "Congelados de verduras": [
     ],
     
-    # 20. Postres congelados
+    # Postres congelados
     "Postres congelados": [
         "Mini Bombón Biscuit",
         "Crocan Choc Vainilla",
@@ -288,48 +330,39 @@ productos_por_familia = {
         "Mini Boom"
     ],
     
-    # 21. Otros congelados
+    # Otros congelados
     "Otros congelados": [
         "Base Pizza Extrafina"
     ],
     
-    # 22. Limpieza del hogar
-    "Limpieza del hogar": [
-        "Toallitas Quitagrasa",
-        "Suavizante Colonia",
-        "Deterg Hipo Colonia",
-        "Gel Wc Desincrustant",
-        "Amb C Fru Silvestres",
-        "Estropajo Salvauñas",
-        "Cepillo Lavar",
-        "30 Toallitas Limpiac",
-        "Detergente Colonia"
+    # BEBIDAS
+    
+    # Bebidas no alcohólicas
+    "Bebidas no alcohólicas": [
+        "Cola Zero",
+        "C. Tost. 0,0 Bot",
+        "Fuente Dehesa 1,5L",
+        "Cola"
     ],
     
-    # 23. Utensilios de limpieza
-    "Utensilios de limpieza": [
+    # Bebidas alcohólicas
+    "Bebidas alcohólicas": [
+        "C Doble Malta Lata",
+        "Pedro Ximenez",
+        "C. Especial Bot",
+        "Cerv Pack 12",
+        "C. Doble Malta Lata"
     ],
     
-    # 24. Productos de cocina
-    "Productos de cocina": [
-        "Lonchas Light",
-        "40 B.Cierra Fácil",
-        "40 B.Mini Papelera",
-        "Papel Aluminio",
-        "Bolsas Zip 5L",
-        "Bolsa Rafia",
-        "Film Transparente",
-        "Papel Vegetal 30H",
-        "Bolsas Zip 1L"
+    # CUIDADO PERSONAL
+    
+    # Cosmética
+    "Cosmética": [
+        "Barra Creamy 211",
+        "Lote Viento"
     ],
     
-    # 25. Huevos
-    "Huevos": [
-        "12 Huevos Grandes-L",
-        "12 Huevos Grandes -L"
-    ],
-    
-    # 26. Higiene
+    # Higiene
     "Higiene": [
         "Deo Body Sp Aqua",
         "Deo Fresh & Dry",
@@ -347,7 +380,6 @@ productos_por_familia = {
         "Gel Afeitar Sens.",
         "Champú Ac Mentol",
         "Champú Anticaída-For",
-        "Rollo Hogar Doble",
         "Crema De Manos",
         "Desodorante Roll-On",
         "Colg. Triple Accion",
@@ -355,50 +387,31 @@ productos_por_familia = {
         "Refill Dermo"
     ],
     
-    # 27. Cosmética
-    "Cosmética": [
-        "Barra Creamy 211",
-        "Lote Viento"
+    # LIMPIEZA
+    
+    # Limpieza del hogar
+    "Limpieza del hogar": [
+        "Toallitas Quitagrasa",
+        "Suavizante Colonia",
+        "Deterg Hipo Colonia",
+        "Gel Wc Desincrustant",
+        "Amb C Fru Silvestres",
+        "Estropajo Salvauñas",
+        "Cepillo Lavar",
+        "30 Toallitas Limpiac",
+        "Detergente Colonia"
     ],
     
-    # 28. Cuidado personal
-    "Cuidado personal": [
-    ],
-    
-    # 29. Congelado de pescado
-    "Congelado de pescado": [
-        "Gamba Pelada Cruda",
-        "Langostino Crudo Ex"
-    ],
-    
-    # 30. Panadería y bollería
-    "Panadería y bollería": [
-        "Pan De Pueblo",
-        "Croissant Rell Cacao",
-        "Napolitana Crema",
-        "Rosquilla Choco Coco",
-        "Rebuenas",
-        "Gall.Bañada Chocobla",
-        "Chocobuns",
-        "Pan Sem Y P Calabaza",
-        "Pan Blanco Familiar",
-        "Magdalena Redonda",
-        "Chapata Cristal",
-        "Galleta Rell Crema",
-        "Pan Queso 18%",
-        "Mantecadas S/Lactosa",
-        "Napolitana Mixta",
-        "Dorayaki Hacendado",
-        "Galleta Canela",
-        "Bocad.Bañados Cacao",
-        "Croissant",
-        "Chapata Cristal 4Uds",
-        "Cream Cookies",
-        "Caña Crema Choco",
-        "Masa Filo",
-        "Masa De Hojaldre",
-        "Panecillo 11 Uds",
-        "Hojaldre Mantequilla",
-        "Cookies Chocolate"
+    # Productos de cocina
+    "Productos de cocina": [
+        "40 B.Cierra Fácil",
+        "40 B.Mini Papelera",
+        "Papel Aluminio",
+        "Bolsas Zip 5L",
+        "Rollo Hogar Doble",
+        "Bolsa Rafia",
+        "Film Transparente",
+        "Papel Vegetal 30H",
+        "Bolsas Zip 1L"
     ]
 }
