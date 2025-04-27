@@ -1,0 +1,2 @@
+Kivy==2.3.1
+pdfminer.six==20240706
