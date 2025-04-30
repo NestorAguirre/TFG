@@ -6,7 +6,7 @@
 #if __name__ == "__main__":
 #    contador = 1
 #    while contador < 23:
-#        lector = LectorTicket(f"tickets/ticket{contador}.pdf")
+#        lector = LectorTicket(f"assets/tickets/ticket{contador}.pdf")
 #        db = DBController("database/pricelist.db")
 #        
 #        db.insertarTicket(date.today())
