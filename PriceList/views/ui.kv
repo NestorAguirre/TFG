@@ -1,0 +1,205 @@
+#:kivy 2.0.0
+#:import dp kivy.metrics.dp
+
+<MainScreen>:
+    orientation: 'vertical'
+    padding: [dp(20), dp(40)]
+    spacing: dp(30)
+    
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.9, 0.85, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        id: familia_label
+        text: root.familia
+        font_name: "DancingScript"
+        font_size: "42sp"
+        size_hint_y: None
+        height: dp(60)
+        color: 0, 0, 0, 1
+        halign: 'center'
+        valign: 'middle'
+
+    # Encabezado de la tabla
+    BoxLayout:
+        size_hint_y: None
+        height: dp(50)
+        size_hint_x: 1
+        padding: 0
+        spacing: 0
+
+        canvas.before:
+            Color:
+                rgba: 0, 0, 0, 1
+            # Borde exterior completo
+            Line:
+                width: dp(2)
+                rectangle: self.x, self.y, self.width, self.height
+            # Líneas divisorias verticales
+            Line:
+                width: dp(2)
+                points: [self.x + self.width*0.4, self.y, self.x + self.width*0.4, self.top]
+            Line:
+                width: dp(2)
+                points: [self.x + self.width*0.55, self.y, self.x + self.width*0.55, self.top]
+            Line:
+                width: dp(2)
+                points: [self.x + self.width*0.7, self.y, self.x + self.width*0.7, self.top]
+            Line:
+                width: dp(2)
+                points: [self.x + self.width*0.85, self.y, self.x + self.width*0.85, self.top]
+
+        # Celdas del encabezado
+        Label:
+            text: 'Producto'
+            font_name: "DancingScript"
+            font_size: "28sp"
+            color: 0, 0, 0, 1
+            size_hint_x: 0.4
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+            padding_x: dp(10)
+
+        Label:
+            text: 'Precio'
+            font_name: "DancingScript"
+            font_size: "28sp"
+            color: 0, 0, 0, 1
+            size_hint_x: 0.15
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+
+        Label:
+            text: 'Máximo'
+            font_name: "DancingScript"
+            font_size: "28sp"
+            color: 0, 0, 0, 1
+            size_hint_x: 0.15
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+
+        Label:
+            text: 'Mínimo'
+            font_name: "DancingScript"
+            font_size: "28sp"
+            color: 0, 0, 0, 1
+            size_hint_x: 0.15
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+
+        Label:
+            text: 'Media'
+            font_name: "DancingScript"
+            font_size: "28sp"
+            color: 0, 0, 0, 1
+            size_hint_x: 0.15
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+
+    # Tabla de datos
+    RecycleView:
+        id: table_rv
+        viewclass: 'TableRow'
+        scroll_type: ['bars', 'content']
+        bar_width: dp(10)
+        effect_cls: 'ScrollEffect'
+        do_scroll_x: False
+
+        RecycleGridLayout:
+            cols: 1
+            default_size: None, dp(40)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            spacing: 0
+            padding: 0
+
+<TableRow>:
+    orientation: 'horizontal'
+    spacing: 0
+    height: dp(40)
+    size_hint_y: None
+    size_hint_x: 1
+    padding: 0
+
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1
+        # Borde inferior
+        Line:
+            width: dp(2)
+            points: [self.x, self.y, self.right, self.y]
+        # Líneas verticales (deben coincidir exactamente con las del encabezado)
+        Line:
+            width: dp(2)
+            points: [self.x + self.width*0.4, self.y, self.x + self.width*0.4, self.top]
+        Line:
+            width: dp(2)
+            points: [self.x + self.width*0.55, self.y, self.x + self.width*0.55, self.top]
+        Line:
+            width: dp(2)
+            points: [self.x + self.width*0.7, self.y, self.x + self.width*0.7, self.top]
+        Line:
+            width: dp(2)
+            points: [self.x + self.width*0.85, self.y, self.x + self.width*0.85, self.top]
+
+    # Celdas de datos
+    Label:
+        text: root.texto_producto
+        font_name: "DancingScript"
+        font_size: "24sp"
+        color: 0, 0, 0, 1
+        halign: 'center'
+        valign: 'middle'
+        size_hint_x: 0.4
+        text_size: self.size
+        padding_x: dp(10)
+
+    Label:
+        text: root.texto_precio
+        font_name: "DancingScript"
+        font_size: "24sp"
+        color: 0, 0, 0, 1
+        halign: 'center'
+        valign: 'middle'
+        size_hint_x: 0.15
+        text_size: self.size
+
+    Label:
+        text: root.texto_maximo
+        font_name: "DancingScript"
+        font_size: "24sp"
+        color: 0, 0, 0, 1
+        halign: 'center'
+        valign: 'middle'
+        size_hint_x: 0.15
+        text_size: self.size
+
+    Label:
+        text: root.texto_minimo
+        font_name: "DancingScript"
+        font_size: "24sp"
+        color: 0, 0, 0, 1
+        halign: 'center'
+        valign: 'middle'
+        size_hint_x: 0.15
+        text_size: self.size
+
+    Label:
+        text: root.texto_media
+        font_name: "DancingScript"
+        font_size: "24sp"
+        color: 0, 0, 0, 1
+        halign: 'center'
+        valign: 'middle'
+        size_hint_x: 0.15
+        text_size: self.size

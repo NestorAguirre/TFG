@@ -1,69 +1,152 @@
 <PriceListRoot>:
     orientation: "vertical"
-    padding: [20, 40]
-    spacing: 40      
-    
+    padding: dp(20)
+    spacing: dp(20)
+
     canvas.before:
         Color:
-            rgba: 0.95, 0.9, 0.85, 1
+            rgba: 0.98, 0.98, 0.98, 1  # Fondo claro
         Rectangle:
             pos: self.pos
             size: self.size
 
-
+    # Encabezado
     Label:
         text: "PriceList"
+        font_size: '28sp'
+        bold: True
+        color: 0.2, 0.2, 0.2, 1
+        size_hint_y: 0.12
+        halign: 'center'
+        valign: 'middle'
         font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
-        font_size: "50sp"
-        size_hint_y: None
-        height: self.texture_size[1]
-        color: 0, 0, 0, 1
+        canvas.before:
+            Color:
+                rgba: 1, 0.6, 0.5, 1
+            Rectangle:
+                size: self.width, dp(4)
+                pos: self.x, self.y - dp(5)
 
+    # Contenedor principal de botones
     GridLayout:
         cols: 2
-        spacing: 30
-        row_default_height: 80
-        row_force_default: True
-        size_hint_y: None
-        height: self.minimum_height
+        spacing: dp(20)
+        padding: dp(20)
+        size_hint_y: 0.8
 
+        # Botón Frescos
         Button:
-            text: "[i]Frescos[/i]"
-            markup: True
+            text: "Frescos"
+            font_size: '20sp'
+            bold: True
+            color: 0.2, 0.2, 0.2, 1
+            background_normal: ''
+            background_color: 0, 0, 0, 0
             font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
-            font_size: "30sp"
-        Button:
-            text: "[i]Envasados[/i]"
-            markup: True
-            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
-            font_size: "30sp"
-        Button:
-            text: "[i]Congelados[/i]"
-            markup: True
-            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
-            font_size: "30sp"
-        Button:
-            text: "[i]Bebidas[/i]"
-            markup: True
-            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
-            font_size: "30sp"
-        Button:
-            text: "[i]Cuidado personal[/i]"
-            markup: True
-            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
-            font_size: "30sp"
-        Button:
-            text: "[i]Limpieza hogar[/i]"
-            markup: True
-            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
-            font_size: "30sp"
+            canvas.before:
+                Color:
+                    rgba: 0.85, 0.85, 0.85, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(15),]
 
-    Widget:  # Espacio extra antes del botón final
+        # Botón Envasados
+        Button:
+            text: "Envasados"
+            font_size: '20sp'
+            bold: True
+            color: 0.2, 0.2, 0.2, 1
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            canvas.before:
+                Color:
+                    rgba: 0.85, 0.85, 0.85, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(15),]
 
+        # Botón Congelados
+        Button:
+            text: "Congelados"
+            font_size: '20sp'
+            bold: True
+            color: 0.2, 0.2, 0.2, 1
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            canvas.before:
+                Color:
+                    rgba: 0.85, 0.85, 0.85, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(15),]
+
+        # Botón Bebidas
+        Button:
+            text: "Bebidas"
+            font_size: '20sp'
+            bold: True
+            color: 0.2, 0.2, 0.2, 1
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            canvas.before:
+                Color:
+                    rgba: 0.85, 0.85, 0.85, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(15),]
+
+        # Botón Cuidado personal
+        Button:
+            text: "Cuidado personal"
+            font_size: '20sp'
+            bold: True
+            color: 0.2, 0.2, 0.2, 1
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            canvas.before:
+                Color:
+                    rgba: 0.85, 0.85, 0.85, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(15),]
+
+        # Botón Limpieza hogar
+        Button:
+            text: "Limpieza hogar"
+            font_size: '20sp'
+            bold: True
+            color: 0.2, 0.2, 0.2, 1
+            background_normal: ''
+            background_color: 0, 0, 0, 0
+            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+            canvas.before:
+                Color:
+                    rgba: 0.85, 0.85, 0.85, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(15),]
+
+    # Botón Importar Ticket (sin cambios)
     Button:
-        text: "[i]Importar Ticket[/i]"
-        markup: True
-        font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
-        font_size: "36sp"
+        text: "Importar Ticket"
+        font_size: '20sp'
+        bold: True
         size_hint_y: None
-        height: 60
+        height: dp(60)
+        background_normal: ''
+        background_color: 1, 0.6, 0.5, 1  # Naranja
+        color: 1, 1, 1, 1
+        font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+        canvas.before:
+            Color:
+                rgba: 0.8, 0.4, 0, 1  # Sombra más oscura

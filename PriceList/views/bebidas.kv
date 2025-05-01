@@ -1,0 +1,118 @@
+<BebidasScreen>:
+    canvas:
+        Color:
+            rgba: 0.98, 0.98, 0.98, 1  # Fondo claro
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(20)
+        
+        # Encabezado
+        Label:
+            text: "Bebidas"
+            font_size: '28sp'
+            bold: True
+            color: 0.2, 0.2, 0.2, 1
+            size_hint_y: 0.12
+            halign: 'center'
+            valign: 'middle'
+            canvas.before:
+                Color:
+                    rgba: 0.5, 0.0, 0.5, 1
+                Rectangle:
+                    size: self.width, dp(4)
+                    pos: self.x, self.y - dp(5)
+        
+        # Contenedor principal
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(40)
+            padding: dp(30)
+            
+            # Sección No alcohólicas
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: dp(15)
+                size_hint_y: 0.45
+                
+                RelativeLayout:
+                    size_hint: 1, 0.8
+                    
+                    Button:
+                        size_hint: None, None
+                        size: dp(200), dp(200)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        background_normal: ''
+                        background_color: 0, 0, 0, 0  # Fondo transparente
+                        on_release: app.on_button_press("No alcohólicas")
+                        canvas.before:
+                            # Solo sombra muy sutil
+                            Color:
+                                rgba: 0.25, 0.65, 0.45, 0.1
+                            RoundedRectangle:
+                                size: self.size[0]+dp(6), self.size[1]+dp(6)
+                                pos: self.pos[0]-dp(3), self.pos[1]-dp(3)
+                                radius: [dp(25),]
+                    
+                    Image:
+                        source: 'assets/images/familias/noalcohol.jpg'
+                        size_hint: None, None
+                        size: dp(180), dp(180)  # Imagen más grande al quitar bordes
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        allow_stretch: True
+                        keep_ratio: True
+                
+                Label:
+                    text: "No alcohólicas"
+                    font_size: '20sp'
+                    bold: True
+                    color: 0.3, 0.3, 0.3, 1
+                    size_hint_y: 0.2
+                    halign: 'center'
+            
+            # Sección Alcohólicas
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: dp(15)
+                size_hint_y: 0.45
+                
+                RelativeLayout:
+                    size_hint: 1, 0.8
+                    
+                    Button:
+                        size_hint: None, None
+                        size: dp(200), dp(200)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        background_normal: ''
+                        background_color: 0, 0, 0, 0  # Fondo transparente
+                        on_release: app.on_button_press("Alcohólicas")
+                        canvas.before:
+                            Color:
+                                rgba: 0.8, 0.5, 0.3, 0.1
+                            RoundedRectangle:
+                                size: self.size[0]+dp(6), self.size[1]+dp(6)
+                                pos: self.pos[0]-dp(3), self.pos[1]-dp(3)
+                                radius: [dp(25),]
+                    
+                    Image:
+                        source: 'assets/images/familias/alcohol.jpg'
+                        size_hint: None, None
+                        size: dp(180), dp(180)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        allow_stretch: True
+                        keep_ratio: True
+                
+                Label:
+                    text: "Alcohólicas"
+                    font_size: '20sp'
+                    bold: True
+                    color: 0.3, 0.3, 0.3, 1
+                    size_hint_y: 0.2
+                    halign: 'center'
+        
+        Widget:
+            size_hint_y: 0.1
