@@ -1,0 +1,278 @@
+<EnvasadosScreen>:
+    canvas:
+        Color:
+            rgba: 0.98, 0.98, 0.98, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(10)
+        spacing: dp(5)
+        
+        # Encabezado ajustado
+        Label:
+            text: "Envasados"
+            font_size: '24sp'  # Reducido tamaño
+            bold: True
+            color: 0.2, 0.2, 0.2, 1
+            size_hint_y: 0.1  # Menor altura
+            halign: 'center'
+            valign: 'middle'
+            canvas.before:
+                Color:
+                    rgba: 0.5, 0.5, 0.5, 1
+                Rectangle:
+                    size: self.width, dp(3)  # Línea más fina
+                    pos: self.x, self.y - dp(3)  # Posición ajustada
+        
+        # Contenedor principal sin scroll
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(10)
+            padding: dp(5)
+            
+            # Fila 1 (2 columnas)
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: dp(10)
+                size_hint_y: None
+                height: dp(150)  # Altura reducida
+                
+                # Botón 1 - Carne
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(5)
+                    size_hint_x: 0.5
+                    
+                    RelativeLayout:
+                        size_hint: 1, 0.8
+                        
+                        Button:
+                            size_hint: None, None
+                            size: dp(120), dp(120)  # Botón más pequeño
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0
+                            on_release: app.on_button_press("Arroz, pastas y legumbre")
+                            canvas.before:
+                                Color:
+                                    rgba: 0.25, 0.65, 0.45, 0.1
+                                RoundedRectangle:
+                                    size: self.size[0]+dp(4), self.size[1]+dp(4)
+                                    pos: self.pos[0]-dp(2), self.pos[1]-dp(2)
+                                    radius: [dp(20),]
+                        
+                        Image:
+                            source: 'assets/images/familias/postrescongelados.png'
+                            size_hint: None, None
+                            size: dp(100), dp(100)  # Imagen más pequeña
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    
+                    Label:
+                        text: "Arroz, pastas y legumbre"
+                        font_size: '16sp'  # Texto más pequeño
+                        bold: True
+                        color: 0.3, 0.3, 0.3, 1
+                        halign: 'center'
+                
+                # Botón 2 - Pescado y marisco
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(5)
+                    size_hint_x: 0.5
+                    
+                    RelativeLayout:
+                        size_hint: 1, 0.8
+                        
+                        Button:
+                            size_hint: None, None
+                            size: dp(120), dp(120)
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0
+                            on_release: app.on_button_press("Conservas")
+                            canvas.before:
+                                Color:
+                                    rgba: 0.8, 0.5, 0.3, 0.1
+                                RoundedRectangle:
+                                    size: self.size[0]+dp(4), self.size[1]+dp(4)
+                                    pos: self.pos[0]-dp(2), self.pos[1]-dp(2)
+                                    radius: [dp(20),]
+                        
+                        Image:
+                            source: 'assets/images/familias/postrescongelados.png'
+                            size_hint: None, None
+                            size: dp(100), dp(100)
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    
+                    Label:
+                        text: "Conservas"
+                        font_size: '16sp'
+                        bold: True
+                        color: 0.3, 0.3, 0.3, 1
+                        halign: 'center'
+            
+            # Fila 2 (2 columnas)
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: dp(10)
+                size_hint_y: None
+                height: dp(150)
+                
+                # Botón 3 - Verduras
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(5)
+                    size_hint_x: 0.5
+                    
+                    RelativeLayout:
+                        size_hint: 1, 0.8
+                        
+                        Button:
+                            size_hint: None, None
+                            size: dp(120), dp(120)
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0
+                            on_release: app.on_button_press("Aceite y vinagre")
+                            canvas.before:
+                                Color:
+                                    rgba: 0.3, 0.4, 0.8, 0.1
+                                RoundedRectangle:
+                                    size: self.size[0]+dp(4), self.size[1]+dp(4)
+                                    pos: self.pos[0]-dp(2), self.pos[1]-dp(2)
+                                    radius: [dp(20),]
+                        
+                        Image:
+                            source: 'assets/images/familias/postrescongelados.png'
+                            size_hint: None, None
+                            size: dp(100), dp(100)
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    
+                    Label:
+                        text: "Aceite y vinagre"
+                        font_size: '16sp'
+                        bold: True
+                        color: 0.3, 0.3, 0.3, 1
+                        halign: 'center'
+                
+                # Botón 4 - Postres
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(5)
+                    size_hint_x: 0.5
+                    
+                    RelativeLayout:
+                        size_hint: 1, 0.8
+                        
+                        Button:
+                            size_hint: None, None
+                            size: dp(120), dp(120)
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0
+                            on_release: app.on_button_press("Snacks")
+                            canvas.before:
+                                Color:
+                                    rgba: 0.8, 0.3, 0.4, 0.1
+                                RoundedRectangle:
+                                    size: self.size[0]+dp(4), self.size[1]+dp(4)
+                                    pos: self.pos[0]-dp(2), self.pos[1]-dp(2)
+                                    radius: [dp(20),]
+                        
+                        Image:
+                            source: 'assets/images/familias/postrescongelados.png'
+                            size_hint: None, None
+                            size: dp(100), dp(100)
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    
+                    Label:
+                        text: "Snacks"
+                        font_size: '16sp'
+                        bold: True
+                        color: 0.3, 0.3, 0.3, 1
+                        halign: 'center'
+            
+            # Fila 3 (3 columnas)
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: dp(10)
+                size_hint_y: None
+                height: dp(150)
+                
+                # Botón 5 - Alimentos preparados
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(5)
+                    size_hint_x: 0.5
+                    
+                    RelativeLayout:
+                        size_hint: 1, 0.8
+                        
+                        Button:
+                            size_hint: None, None
+                            size: dp(120), dp(120)
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0
+                            on_release: app.on_button_press("Alimentos preparados")
+                            canvas.before:
+                                Color:
+                                    rgba: 0.3, 0.4, 0.8, 0.1
+                                RoundedRectangle:
+                                    size: self.size[0]+dp(4), self.size[1]+dp(4)
+                                    pos: self.pos[0]-dp(2), self.pos[1]-dp(2)
+                                    radius: [dp(20),]
+                        
+                        Image:
+                            source: 'assets/images/familias/postrescongelados.png'
+                            size_hint: None, None
+                            size: dp(100), dp(100)
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    
+                    Label:
+                        text: "Alimentos preparados"
+                        font_size: '16sp'
+                        bold: True
+                        color: 0.3, 0.3, 0.3, 1
+                        halign: 'center'
+                
+                # Botón 6 - Desayuno
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(5)
+                    size_hint_x: 0.5
+                    
+                    RelativeLayout:
+                        size_hint: 1, 0.8
+                        
+                        Button:
+                            size_hint: None, None
+                            size: dp(120), dp(120)
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            background_normal: ''
+                            background_color: 0, 0, 0, 0
+                            on_release: app.on_button_press("Desayuno")
+                            canvas.before:
+                                Color:
+                                    rgba: 0.8, 0.3, 0.4, 0.1
+                                RoundedRectangle:
+                                    size: self.size[0]+dp(4), self.size[1]+dp(4)
+                                    pos: self.pos[0]-dp(2), self.pos[1]-dp(2)
+                                    radius: [dp(20),]
+                        
+                        Image:
+                            source: 'assets/images/familias/postrescongelados.png'
+                            size_hint: None, None
+                            size: dp(100), dp(100)
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    
+                    Label:
+                        text: "Desayuno"
+                        font_size: '16sp'
+                        bold: True
+                        color: 0.3, 0.3, 0.3, 1
+                        halign: 'center'
+            
