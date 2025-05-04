@@ -12,10 +12,6 @@ class LectorTicket:
         self.detectarTicket()
         self.inicioProductos, self.inicioPrecios = self.inicioProductosPrecios()
         
-    def detectarTicket(self):
-        if not self.arrayTicket or str(self.arrayTicket[0]).strip().upper()[0:9] != "MERCADONA":
-            raise ErrorTicket("No se ha podido leer el ticket. Parece que no es un ticket del Mercadona.")
-        
     def extraerTexto(self):
         ticketTexto = extract_text(self.ticket)
         lineas = ticketTexto.split("\n")
@@ -25,7 +21,10 @@ class LectorTicket:
                 self.arrayTicket.append(linea.strip())
 
         return self.arrayTicket
-
+    
+    def detectarTicket(self):
+        if not self.arrayTicket or str(self.arrayTicket[0]).strip().upper()[0:9] != "MERCADONA":
+            raise ErrorTicket("No se ha podido leer el ticket. Parece que no es un ticket del Mercadona.")
     
     def inicioProductosPrecios(self):
         try:
@@ -125,11 +124,11 @@ class LectorTicket:
             raise ErrorTicket("Error en la lectura del ticket")
     
 if __name__ == "__main__":
-    try:
-        lector = LectorTicket("tickets/ticket1.pdf") #ME HE QUEDADO EN EL 13
-        texto = lector.cargarDiccionario()
-        print(texto)
-    except ErrorTicket as e:
-        print(f"Error: {e}")
-    
-    
+    #try:
+    #    lector = LectorTicket("tickets/ticket1.pdf") #ME HE QUEDADO EN EL 13
+    #    texto = lector.cargarDiccionario()
+    #    print(texto)
+    #except ErrorTicket as e:
+    #    print(f"Error: {e}")
+    lector = LectorTicket("assets/tickets/ticket23.pdf") #ME HE QUEDADO EN EL 13
+    print(lector.extraerTexto())

@@ -4,7 +4,7 @@ import os
 class DBController():
     
     def __init__(self, nombreDB):
-        self.nombreDB = os.path.join(os.path.dirname(__file__), "..", nombreDB)
+        self.nombreDB = os.path.join(os.path.dirname(__file__), "../data/", nombreDB)
         self.crearDB()
         self.crearTablas()
         
@@ -31,7 +31,7 @@ class DBController():
                 CREATE TABLE IF NOT EXISTS productos (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nombre TEXT,
-                    familia TEXT  -- Alimentos envasados, Frescos, Bebidas...
+                    familia TEXT
                 );
             """
         )
@@ -107,8 +107,40 @@ class DBController():
         conexion.close()
         
         return resultado[0]
+    
+    def getResumenProductosPorFamilia(self, nombre_familia):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+
+        cursor.execute("""
+            SELECT p.nombre,
+                (SELECT pr.precio FROM precios pr WHERE pr.producto_id = p.id ORDER BY pr.id DESC LIMIT 1) as precio_actual,
+                MIN(pr.precio) as minimo,
+                MAX(pr.precio) as maximo,
+                AVG(pr.precio) as media
+            FROM productos p
+            JOIN precios pr ON pr.producto_id = p.id
+            WHERE p.familia = ?
+            GROUP BY p.id
+            ORDER BY p.nombre ASC
+        """, (nombre_familia,))
+        
+        resultados = cursor.fetchall()
+        conexion.close()
+
+        productos = []
+        for nombre, precio, minimo, maximo, media in resultados:
+            productos.append({
+                "producto": nombre,
+                "precio": f"{precio:.2f}",
+                "minimo": f"{minimo:.2f}",
+                "maximo": f"{maximo:.2f}",
+                "media": f"{media:.2f}"
+            })
+
+        return productos 
+
 
 
 if __name__ == "__main__":
-    base = DBController("pricelist.db")
-    base.insertarProducto("nombreProducto", "familiaProducto")
+    base = DBController("prueba.db")
