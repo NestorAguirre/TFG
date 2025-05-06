@@ -6,7 +6,7 @@
         
         canvas.before:
             Color:
-                rgba: 0.98, 0.95, 0.88, 1  # Fondo crema claro (#FAF3E0)
+                rgba: 0.98, 0.95, 0.88, 1
             Rectangle:
                 size: self.size
                 pos: self.pos
@@ -16,12 +16,11 @@
 
             canvas.before:
                 Color:
-                    rgba: 0.73, 0.37, 0.27, 1  # Línea terracota
+                    rgba: 0.73, 0.37, 0.27, 1
                 Rectangle:
                     size: self.width, dp(4)
                     pos: self.x, self.y - dp(5)
 
-            # Botón de retroceso con imagen superpuesta
             RelativeLayout:
                 size_hint: None, None
                 size: dp(40), dp(40)
@@ -49,152 +48,207 @@
                 valign: 'middle'
                 font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
 
-        BoxLayout:
-            orientation: 'vertical'
-            spacing: dp(20)
-            padding: dp(10)
-            size_hint_y: 0.8
+        ScrollView:
+            size_hint_y: 1
+            bar_width: dp(10)
+            do_scroll_x: False
+            scroll_type: ['bars', 'content']
 
-            # Primera fila
-            BoxLayout:
-                orientation: 'horizontal'
+            GridLayout:
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
                 spacing: dp(20)
+                padding: dp(10)
 
-                # Botón Carne
+                # Primera fila
                 BoxLayout:
-                    orientation: 'vertical'
-                    size_hint_x: 0.5
+                    orientation: 'horizontal'
+                    spacing: dp(20)
                     size_hint_y: None
-                    height: 1.25 * self.width
-                    
-                    Button:
-                        size_hint_y: 0.8
-                        background_normal: ''
-                        background_color: 0.25, 0.65, 0.45, 0.3
-                        on_release:
-                            app.familia('Carnes')
-                            app.cambiar_pantalla('listadoproductos')
-                    
-                    Label:
-                        text: "Carne"
-                        font_size: app.label_font_size
-                        bold: True
-                        size_hint_y: 0.2
-                        color: 0.2, 0.2, 0.2, 1
-                        halign: 'center'
-                        valign: 'middle'
-                        font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+                    height: 1.25 * (root.width / 2 - dp(20))
 
-                # Botón Pescado
+                    # Botón Carne
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_x: 0.5
+                        size_hint_y: None
+                        height: 1.25 * self.width
+                        
+                        RelativeLayout:
+                            size_hint_y: 0.8
+                            
+                            Button:
+                                size_hint: 1, 1
+                                background_normal: ''
+                                background_color: 0.25, 0.65, 0.45, 0.3
+                                on_release:
+                                    app.familia('Congelados de carne')
+                                    app.cambiar_pantalla('listadoproductos')
+                            
+                            Image:
+                                source: 'assets/images/familias/Congelados/Carne.png'
+                                size_hint: 0.85, 0.85
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        
+                        Label:
+                            text: "Carne"
+                            font_size: app.label_font_size
+                            bold: True
+                            size_hint_y: 0.2
+                            color: 0.2, 0.2, 0.2, 1
+                            halign: 'center'
+                            valign: 'middle'
+                            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+
+                    # Botón Pescado
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_x: 0.5
+                        size_hint_y: None
+                        height: 1.25 * self.width
+                        
+                        RelativeLayout:
+                            size_hint_y: 0.8
+                            
+                            Button:
+                                size_hint: 1, 1
+                                background_normal: ''
+                                background_color: 0.8, 0.5, 0.3, 0.3
+                                on_release:
+                                    app.familia('Congelado de pescado')
+                                    app.cambiar_pantalla('listadoproductos')
+                            
+                            Image:
+                                source: 'assets/images/familias/Congelados/PescadoMarisco.png'
+                                size_hint: 0.85, 0.85
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        
+                        Label:
+                            text: "Pescado y marisco"
+                            font_size: app.label_font_size
+                            bold: True
+                            size_hint_y: 0.2
+                            color: 0.2, 0.2, 0.2, 1
+                            halign: 'center'
+                            valign: 'middle'
+                            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+
+                # Segunda fila
                 BoxLayout:
-                    orientation: 'vertical'
-                    size_hint_x: 0.5
+                    orientation: 'horizontal'
+                    spacing: dp(20)
                     size_hint_y: None
-                    height: 1.25 * self.width
-                    
-                    Button:
-                        size_hint_y: 0.8
-                        background_normal: ''
-                        background_color: 0.8, 0.5, 0.3, 0.3
-                        on_release:
-                            app.familia('Congelado de pescado')
-                            app.cambiar_pantalla('listadoproductos')
-                    
-                    Label:
-                        text: "Pescado y marisco"
-                        font_size: app.label_font_size
-                        bold: True
-                        size_hint_y: 0.2
-                        color: 0.2, 0.2, 0.2, 1
-                        halign: 'center'
-                        valign: 'middle'
-                        font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+                    height: 1.25 * (root.width / 2 - dp(20))
 
-            # Segunda fila
-            BoxLayout:
-                orientation: 'horizontal'
-                spacing: dp(20)
+                    # Botón Verduras
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_x: 0.5
+                        size_hint_y: None
+                        height: 1.25 * self.width
+                        
+                        RelativeLayout:
+                            size_hint_y: 0.8
+                            
+                            Button:
+                                size_hint: 1, 1
+                                background_normal: ''
+                                background_color: 0.3, 0.4, 0.8, 0.3
+                                on_release:
+                                    app.familia('Congelados de verduras')
+                                    app.cambiar_pantalla('listadoproductos')
+                            
+                            Image:
+                                source: 'assets/images/familias/Congelados/Verduras.png'
+                                size_hint: 0.85, 0.85
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        
+                        Label:
+                            text: "Verduras"
+                            font_size: app.label_font_size
+                            bold: True
+                            size_hint_y: 0.2
+                            color: 0.2, 0.2, 0.2, 1
+                            halign: 'center'
+                            valign: 'middle'
+                            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
 
-                # Botón Verduras
+                    # Botón Postres
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_x: 0.5
+                        size_hint_y: None
+                        height: 1.25 * self.width
+                        
+                        RelativeLayout:
+                            size_hint_y: 0.8
+                            
+                            Button:
+                                size_hint: 1, 1
+                                background_normal: ''
+                                background_color: 0.8, 0.3, 0.4, 0.3
+                                on_release:
+                                    app.familia('Postres congelados')
+                                    app.cambiar_pantalla('listadoproductos')
+                            
+                            Image:
+                                source: 'assets/images/familias/Congelados/Postres.png'
+                                size_hint: 0.85, 0.85
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        
+                        Label:
+                            text: "Postres"
+                            font_size: app.label_font_size
+                            bold: True
+                            size_hint_y: 0.2
+                            color: 0.2, 0.2, 0.2, 1
+                            halign: 'center'
+                            valign: 'middle'
+                            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+
+                # Tercera fila
                 BoxLayout:
-                    orientation: 'vertical'
-                    size_hint_x: 0.5
+                    orientation: 'horizontal'
+                    spacing: dp(20)
                     size_hint_y: None
-                    height: 1.25 * self.width
-                    
-                    Button:
-                        size_hint_y: 0.8
-                        background_normal: ''
-                        background_color: 0.3, 0.4, 0.8, 0.3
-                        on_release:
-                            app.familia('Congelados de verduras')
-                            app.cambiar_pantalla('listadoproductos')
-                    
-                    Label:
-                        text: "Verduras"
-                        font_size: app.label_font_size
-                        bold: True
-                        size_hint_y: 0.2
-                        color: 0.2, 0.2, 0.2, 1
-                        halign: 'center'
-                        valign: 'middle'
-                        font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+                    height: 1.25 * (root.width / 2 - dp(20))
 
-                # Botón Postres
-                BoxLayout:
-                    orientation: 'vertical'
-                    size_hint_x: 0.5
-                    size_hint_y: None
-                    height: 1.25 * self.width
-                    
-                    Button:
-                        size_hint_y: 0.8
-                        background_normal: ''
-                        background_color: 0.8, 0.3, 0.4, 0.3
-                        on_release:
-                            app.familia('Postres congelados')
-                            app.cambiar_pantalla('listadoproductos')
-                    
-                    Label:
-                        text: "Postres"
-                        font_size: app.label_font_size
-                        bold: True
-                        size_hint_y: 0.2
-                        color: 0.2, 0.2, 0.2, 1
-                        halign: 'center'
-                        valign: 'middle'
-                        font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+                    # Botón Otros
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_x: 0.5
+                        size_hint_y: None
+                        height: 1.25 * self.width
+                        
+                        RelativeLayout:
+                            size_hint_y: 0.8
+                            
+                            Button:
+                                size_hint: 1, 1
+                                background_normal: ''
+                                background_color: 0.6, 0.3, 0.8, 0.3
+                                on_release:
+                                    app.familia('Otros congelados')
+                                    app.cambiar_pantalla('listadoproductos')
+                            
+                            Image:
+                                source: 'assets/images/familias/Congelados/Otros.png'
+                                size_hint: 0.85, 0.85
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        
+                        Label:
+                            text: "Otros"
+                            font_size: app.label_font_size
+                            bold: True
+                            size_hint_y: 0.2
+                            color: 0.2, 0.2, 0.2, 1
+                            halign: 'center'
+                            valign: 'middle'
+                            font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
 
-            # Tercera fila
-            BoxLayout:
-                orientation: 'horizontal'
-                spacing: dp(20)
-
-                # Botón Otros
-                BoxLayout:
-                    orientation: 'vertical'
-                    size_hint_x: 0.5
-                    size_hint_y: None
-                    height: 1.25 * self.width
-                    
-                    Button:
-                        size_hint_y: 0.8
-                        background_normal: ''
-                        background_color: 0.6, 0.3, 0.8, 0.3
-                        on_release:
-                            app.familia('Otros congelados')
-                            app.cambiar_pantalla('listadoproductos')
-                    
-                    Label:
-                        text: "Otros"
-                        font_size: app.label_font_size
-                        bold: True
-                        size_hint_y: 0.2
-                        color: 0.2, 0.2, 0.2, 1
-                        halign: 'center'
-                        valign: 'middle'
-                        font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
-
-                # Espacio vacío
-                Widget:
-                    size_hint_x: 0.5
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_x: 0.5
+                        size_hint_y: None
+                        height: 1.25 * self.width

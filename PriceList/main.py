@@ -31,6 +31,8 @@ Builder.load_file("views/limpieza.kv")
 Builder.load_file("views/congelados.kv")
 Builder.load_file("views/envasados.kv")
 Builder.load_file("views/frescos.kv")
+Builder.load_file("views/lacteos.kv")
+Builder.load_file("views/desayuno.kv")
 Builder.load_file("views/listadoproductos.kv")
 
 # Pantallas
@@ -41,6 +43,8 @@ class LimpiezaScreen(Screen): pass
 class CongeladosScreen(Screen): pass
 class EnvasadosScreen(Screen): pass
 class FrescosScreen(Screen): pass
+class LacteosScreen(Screen): pass
+class DesayunoScreen(Screen): pass
 
 class ListadoProductosScreen(Screen):
     familia_nombre = StringProperty('Familia Final')
@@ -106,6 +110,8 @@ class PriceList(App):
         self.sm.add_widget(CongeladosScreen(name="congelados"))
         self.sm.add_widget(EnvasadosScreen(name="envasados"))
         self.sm.add_widget(FrescosScreen(name="frescos"))
+        self.sm.add_widget(LacteosScreen(name="lacteos"))
+        self.sm.add_widget(DesayunoScreen(name="desayuno"))
         self.sm.add_widget(ListadoProductosScreen(name="listadoproductos"))
         self.historial_pantallas.append("menu")
         Window.bind(on_resize=self.actualizar_fuentes)
