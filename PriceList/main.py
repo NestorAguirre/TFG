@@ -10,6 +10,8 @@ from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.button import Button
 from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
+from kivy import require
+require('2.1.0')
 
 from controllers.dbcontroller import DBController
 from modules.lector_pdf import LectorTicket
