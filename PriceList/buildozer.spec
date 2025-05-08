@@ -42,7 +42,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3==3.8.10,kivy==2.1.0,sqlite3,pdfminer.six====20250324
+requirements = python3==3.8.10,kivy==2.1.0,sqlite3,pdfminer.six==20250324
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
