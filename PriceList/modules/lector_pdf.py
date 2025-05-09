@@ -1,4 +1,5 @@
 from pdfminer.high_level import extract_text
+import re
 
 class ErrorTicket(Exception):
     pass
@@ -122,6 +123,13 @@ class LectorTicket:
             return self.diccionarioProductos
         except:
             raise ErrorTicket("Error en la lectura del ticket")
+        
+    def getFechaTicket(self):
+        for linea in self.arrayTicket:
+            match = re.match(r'^(\d{2}/\d{2}/\d{4}) \d{2}:\d{2}$', linea)
+            if match:
+                return match.group(1)
+        raise ErrorTicket("No se encontró una fecha válida en el ticket.")
     
 if __name__ == "__main__":
     #try:
@@ -130,5 +138,5 @@ if __name__ == "__main__":
     #    print(texto)
     #except ErrorTicket as e:
     #    print(f"Error: {e}")
-    lector = LectorTicket("assets/tickets/ticket23.pdf") #ME HE QUEDADO EN EL 13
-    print(lector.extraerTexto())
+    lector = LectorTicket(r"D:\ASIGNATURAS\TFG\TFG\tickets\ticket30.pdf")
+    print(lector.getFechaTicket())
