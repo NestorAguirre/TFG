@@ -1,16 +1,17 @@
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
-from kivy.properties import NumericProperty
+from kivy.properties import NumericProperty, StringProperty
 from kivy.core.window import Window
 from kivy.metrics import Metrics
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.button import Button
-from kivy.properties import StringProperty
-from kivy.uix.boxlayout import BoxLayout
 from kivy import require
+from kivymd.app import MDApp
+from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.pickers import MDDatePicker
 require('2.1.0')
 
 from controllers.dbcontroller import DBController
@@ -86,8 +87,7 @@ class PopupImportarArchivo(Popup):
                 self.al_seleccionar_callback(archivo_seleccionado)
             self.dismiss()
 
-# Clase principal
-class PriceList(App):
+class PriceList(MDApp):
     title_font_size = NumericProperty(28)
     button_font_size = NumericProperty(20)
     label_font_size = NumericProperty(16)
@@ -103,6 +103,8 @@ class PriceList(App):
         self.historial_pantallas = []
 
     def build(self):
+        self.theme_cls.theme_style = "Light"
+        self.theme_cls.primary_palette = "BlueGray"
         self.icon = 'assets/images/PriceListLogo.jpg'
         self.sm = ScreenManager()
         self.sm.add_widget(MenuScreen(name="menu"))
@@ -120,17 +122,29 @@ class PriceList(App):
         self.actualizar_fuentes()
         return self.sm
 
+    def get_date(self, instance, value, date_range):
+        print(f"Fecha seleccionada: {str(value)}")
+
+    def on_cancel(self, instance, value):
+        print("Selección cancelada")
+
+    def show_date_picker(self):
+        date_dialog = MDDatePicker(
+            size_hint=(0.8, 0.6)  # Ajusta estos valores (ancho, alto) entre 0 y 1
+        )
+        date_dialog.bind(on_save=self.get_date, on_cancel=self.on_cancel)
+        date_dialog.open()
+
     def actualizar_fuentes(self, *args):
-        base_ancho = 360
-        ancho_actual = Window.width / Metrics.density
-        escala = min(ancho_actual / base_ancho, 1.5)
+        base_ancho = 360  # Ancho base para móviles (360px)
+        densidad = Metrics.density
+        ancho_actual = Window.width / densidad
+        escala = min(ancho_actual / base_ancho, 1.5)  # Máximo escalado 1.5x
         
-        # Tamaños de texto
-        self.title_font_size = 28 * escala
-        self.button_font_size = 20 * escala
-        self.label_font_size = 16 * escala
-        
-        # Tamaños de elementos gráficos
+        # Actualizar propiedades de escalado
+        self.title_font_size = int(28 * escala)
+        self.button_font_size = int(20 * escala)
+        self.label_font_size = int(16 * escala)
         self.content_button_size = 120 * escala
         self.content_image_size = 100 * escala
         self.back_button_size = 40 * escala
@@ -164,6 +178,8 @@ class PriceList(App):
             db.insertarTicket(date.today())
             ticket_id = db.getUltimoTicket()
             
+            productos_nuevos = []
+            
             for producto, precio in lector.cargarDiccionario().items():
                 producto_normalizado = producto.strip().lower()
                 familia = "otraFamilia"
@@ -177,9 +193,18 @@ class PriceList(App):
                         continue
                     break
                 
+                if familia != "otraFamilia":
+                    db.insertarProducto(producto, familia)
+                    db.insertarPrecio(db.getProdutoPorNombre(producto), ticket_id, precio)
+                else:
+                    productos_nuevos.append(producto)
+                
+            for producto in productos_nuevos:
+                print(f"¿A qué familia pertenece el producto {producto}?")
+                familia = input()
                 db.insertarProducto(producto, familia)
                 db.insertarPrecio(db.getProdutoPorNombre(producto), ticket_id, precio)
-
+                
         popup = PopupImportarArchivo(al_seleccionar_callback=al_seleccionar_pdf)
         popup.open()
 
