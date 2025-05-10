@@ -1,0 +1,271 @@
+KV_LISTADOPRODUCTOS = """
+#:kivy 2.1.0
+#:import dp kivy.metrics.dp
+#:import Window kivy.core.window.Window
+
+<ListadoProductosScreen>:
+    canvas:
+        Color:
+            rgba: 0.98, 0.95, 0.88, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(20)
+
+        # --- SECCIÓN TÍTULO ---
+        RelativeLayout:
+            size_hint_y: 0.12
+            
+            canvas.before:
+                Color:
+                    rgba: 0.73, 0.37, 0.27, 1
+                Rectangle:
+                    size: self.width, dp(4)
+                    pos: self.x, self.y - dp(5)
+
+            # Botón Atrás
+            RelativeLayout:
+                size_hint: None, None
+                size: app.back_button_size, app.back_button_size
+                pos: dp(10), self.height - app.back_button_size
+
+                Button:
+                    size: self.parent.size
+                    pos: 0, 0
+                    background_normal: ''
+                    background_color: 0, 0, 0, 0
+                    on_release: app.volver_atras()
+
+                Image:
+                    source: 'assets/images/botones/btnatras.png'
+                    size_hint: None, None
+                    size: app.back_icon_size, app.back_icon_size
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            # Título
+            Label:
+                text: root.familia_nombre
+                font_size: app.title_font_size
+                bold: True
+                color: 0.2, 0.2, 0.2, 1
+                halign: 'center'
+                valign: 'middle'
+                size_hint: 1, 1
+                font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
+                text_size: self.size
+
+        # --- DATE PICKER ---
+        AnchorLayout:
+            anchor_x: 'center'
+            size_hint_y: 0.1
+            padding: [0, dp(10), 0, dp(10)]
+            
+            MDRaisedButton:
+                text: "Seleccionar Fecha"
+                size_hint: None, None
+                size: app.content_button_size * 1.5, app.button_font_size * 2
+                md_bg_color: 0.73, 0.37, 0.27, 1
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                font_size: app.button_font_size
+                on_release: app.show_date_picker()
+
+        # --- SECCIÓN TABLA ---
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(2)
+            size_hint_y: 0.78
+            
+            # Encabezados
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: app.row_height * 0.4
+                spacing: dp(2)
+                padding: dp(10)
+                
+                Label:
+                    text: "Producto"
+                    bold: True
+                    font_size: app.label_font_size
+                    font_name: "assets/fonts/Lato-Bold.ttf"
+                    color: 0.2, 0.2, 0.2, 1
+                    size_hint_x: 0.4
+                    halign: 'left'
+                    padding_x: dp(10)
+                    canvas.before:
+                        Color:
+                            rgba: 0.93, 0.93, 0.93, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                
+                Label:
+                    text: "Precio"
+                    bold: True
+                    font_size: app.label_font_size
+                    font_name: "assets/fonts/Lato-Bold.ttf"
+                    color: 0.2, 0.2, 0.2, 1
+                    size_hint_x: 0.15
+                    canvas.before:
+                        Color:
+                            rgba: 0.93, 0.93, 0.93, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                
+                Label:
+                    text: "Max"
+                    bold: True
+                    font_size: app.label_font_size
+                    font_name: "assets/fonts/Lato-Bold.ttf"
+                    color: 0.2, 0.2, 0.2, 1
+                    size_hint_x: 0.15
+                    canvas.before:
+                        Color:
+                            rgba: 0.93, 0.93, 0.93, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                
+                Label:
+                    text: "Min"
+                    bold: True
+                    font_size: app.label_font_size
+                    font_name: "assets/fonts/Lato-Bold.ttf"
+                    color: 0.2, 0.2, 0.2, 1
+                    size_hint_x: 0.15
+                    canvas.before:
+                        Color:
+                            rgba: 0.93, 0.93, 0.93, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                
+                Label:
+                    text: "Media"
+                    bold: True
+                    font_size: app.label_font_size
+                    font_name: "assets/fonts/Lato-Bold.ttf"
+                    color: 0.2, 0.2, 0.2, 1
+                    size_hint_x: 0.15
+                    canvas.before:
+                        Color:
+                            rgba: 0.93, 0.93, 0.93, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+            
+            # Tabla
+            RecycleView:
+                id: rv
+                viewclass: 'ProductosRecyclerView'
+                bar_width: dp(10)
+                bar_color: 0.73, 0.37, 0.27, 1
+                scroll_type: ['bars', 'content']
+                
+                RecycleBoxLayout:
+                    orientation: 'vertical'
+                    default_size: None, app.row_height * 0.4
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(2)
+
+<ProductosRecyclerView>:
+    producto: ""
+    precio: ""
+    maximo: ""
+    minimo: ""
+    media: ""
+    
+    orientation: 'horizontal'
+    spacing: dp(2)
+    size_hint_y: None
+    height: app.row_height * 0.4
+    
+    Label:
+        text: root.producto
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        padding: (dp(10), 0)
+        color: 0.2, 0.2, 0.2, 1
+        font_size: app.label_font_size
+        size_hint_x: 0.4
+        font_name: "assets/fonts/Lato-Regular.ttf"
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.98, 0.98, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    
+    Label:
+        text: root.precio
+        text_size: self.size
+        halign: 'center'
+        valign: 'middle'
+        color: 0.2, 0.2, 0.2, 1
+        font_size: app.label_font_size
+        size_hint_x: 0.15
+        font_name: "assets/fonts/Lato-Regular.ttf"
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.98, 0.98, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    
+    Label:
+        text: root.maximo
+        text_size: self.size
+        halign: 'center'
+        valign: 'middle'
+        color: 0.2, 0.2, 0.2, 1
+        font_size: app.label_font_size
+        size_hint_x: 0.15
+        font_name: "assets/fonts/Lato-Regular.ttf"
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.98, 0.98, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    
+    Label:
+        text: root.minimo
+        text_size: self.size
+        halign: 'center'
+        valign: 'middle'
+        color: 0.2, 0.2, 0.2, 1
+        font_size: app.label_font_size
+        size_hint_x: 0.15
+        font_name: "assets/fonts/Lato-Regular.ttf"
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.98, 0.98, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    
+    Label:
+        text: root.media
+        text_size: self.size
+        halign: 'center'
+        valign: 'middle'
+        color: 0.2, 0.2, 0.2, 1
+        font_size: app.label_font_size
+        size_hint_x: 0.15
+        font_name: "assets/fonts/Lato-Regular.ttf"
+        canvas.before:
+            Color:
+                rgba: 0.98, 0.98, 0.98, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+"""
