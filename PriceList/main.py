@@ -1,5 +1,8 @@
 from kivy.utils import platform
+
 import os
+if platform == "android":
+    os.environ["SDL_AUDIODRIVER"] = "android"
 
 if platform == "android":
     try:
@@ -9,7 +12,6 @@ if platform == "android":
         db_path = os.path.join("data", "pricelist.db")
 else:
     db_path = os.path.join("data", "pricelist.db")
-
 
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -38,18 +40,6 @@ class ProductosRecyclerView(BoxLayout):
     maximo = StringProperty('')
     minimo = StringProperty('')
     media = StringProperty('')
-
-# Cargar archivos .kv
-Builder.load_file("views/main.kv")
-Builder.load_file("views/bebidas.kv")
-Builder.load_file("views/cuidadopersonal.kv")
-Builder.load_file("views/limpieza.kv")
-Builder.load_file("views/congelados.kv")
-Builder.load_file("views/envasados.kv")
-Builder.load_file("views/frescos.kv")
-Builder.load_file("views/lacteos.kv")
-Builder.load_file("views/desayuno.kv")
-Builder.load_file("views/listadoproductos.kv")
 
 # Pantallas
 class MenuScreen(Screen): pass
@@ -114,26 +104,28 @@ class PriceList(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.historial_pantallas = []
+        self.kv_loaded = set()  # Para trackear archivos .kv cargados
 
     def build(self):
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "BlueGray"
         self.icon = 'assets/images/PriceListLogo.png'
         self.sm = ScreenManager()
+        
+        # Cargar solo la pantalla principal al inicio
+        self.cargar_kv('main')
         self.sm.add_widget(MenuScreen(name="menu"))
-        self.sm.add_widget(BebidasScreen(name="bebidas"))
-        self.sm.add_widget(CuidadoPersonalScreen(name="cuidadopersonal"))
-        self.sm.add_widget(LimpiezaScreen(name="limpieza"))
-        self.sm.add_widget(CongeladosScreen(name="congelados"))
-        self.sm.add_widget(EnvasadosScreen(name="envasados"))
-        self.sm.add_widget(FrescosScreen(name="frescos"))
-        self.sm.add_widget(LacteosScreen(name="lacteos"))
-        self.sm.add_widget(DesayunoScreen(name="desayuno"))
-        self.sm.add_widget(ListadoProductosScreen(name="listadoproductos"))
+        
+        # No añadir otras pantallas aquí
         self.historial_pantallas.append("menu")
         Window.bind(on_resize=self.actualizar_fuentes)
         self.actualizar_fuentes()
         return self.sm
+
+    def cargar_kv(self, nombre_kv):
+        if nombre_kv not in self.kv_loaded:
+            Builder.load_file(f"views/{nombre_kv}.kv")
+            self.kv_loaded.add(nombre_kv)
 
     def get_date(self, instance, value, date_range):
         print(f"Fecha seleccionada: {str(value)}")
@@ -142,19 +134,16 @@ class PriceList(MDApp):
         print("Selección cancelada")
 
     def show_date_picker(self):
-        date_dialog = MDDatePicker(
-            size_hint=(0.8, 0.6)  # Ajusta estos valores (ancho, alto) entre 0 y 1
-        )
+        date_dialog = MDDatePicker(size_hint=(0.8, 0.6))
         date_dialog.bind(on_save=self.get_date, on_cancel=self.on_cancel)
         date_dialog.open()
 
     def actualizar_fuentes(self, *args):
-        base_ancho = 360  # Ancho base para móviles (360px)
+        base_ancho = 360
         densidad = Metrics.density
         ancho_actual = Window.width / densidad
-        escala = min(ancho_actual / base_ancho, 1.5)  # Máximo escalado 1.5x
+        escala = min(ancho_actual / base_ancho, 1.5)
         
-        # Actualizar propiedades de escalado
         self.title_font_size = int(28 * escala)
         self.button_font_size = int(20 * escala)
         self.label_font_size = int(16 * escala)
@@ -167,14 +156,51 @@ class PriceList(MDApp):
 
     def cambiar_pantalla(self, nombre_pantalla):
         if self.sm.current != nombre_pantalla:
+            # Mapeo de nombres de pantalla a archivos .kv y clases
+            pantallas_config = {
+                "bebidas": ("bebidas", BebidasScreen),
+                "cuidadopersonal": ("cuidadopersonal", CuidadoPersonalScreen),
+                "limpieza": ("limpieza", LimpiezaScreen),
+                "congelados": ("congelados", CongeladosScreen),
+                "envasados": ("envasados", EnvasadosScreen),
+                "frescos": ("frescos", FrescosScreen),
+                "lacteos": ("lacteos", LacteosScreen),
+                "desayuno": ("desayuno", DesayunoScreen),
+                "listadoproductos": ("listadoproductos", ListadoProductosScreen)
+            }
+
+            # Cargar .kv y crear pantalla si no existe
+            if nombre_pantalla in pantallas_config:
+                kv_file, screen_class = pantallas_config[nombre_pantalla]
+                
+                # 1. Cargar el archivo .kv primero
+                self.cargar_kv(kv_file)
+                
+                # 2. Crear y añadir pantalla solo si no existe
+                if not self.sm.has_screen(nombre_pantalla):
+                    screen = screen_class(name=nombre_pantalla)
+                    self.sm.add_widget(screen)
+
+            # Manejar pantallas especiales
+            elif nombre_pantalla == "menu":
+                # Pantalla principal ya existe
+                pass
+            else:
+                print(f"Error: Pantalla {nombre_pantalla} no configurada")
+                return
+
+            # 3. Realizar transición
             self.historial_pantallas.append(self.sm.current)
             self.sm.transition.direction = 'left'
             self.sm.current = nombre_pantalla
 
     def familia(self, nombre_familia):
+        # Primero asegúrate de que la pantalla existe y está configurada
+        self.cambiar_pantalla('listadoproductos')
+        
+        # Ahora recupera la pantalla
         listado_screen = self.sm.get_screen('listadoproductos')
         listado_screen.cargar_productos_por_familia(nombre_familia)
-        self.cambiar_pantalla('listadoproductos')
 
     def volver_atras(self):
         if len(self.historial_pantallas) > 1:
@@ -184,7 +210,6 @@ class PriceList(MDApp):
 
     def abrir_filechooser(self):
         def al_seleccionar_pdf(ruta):
-            print(f"PDF seleccionado: {ruta}")
             lector = LectorTicket(ruta)
             db = DBController(db_path)
             
@@ -214,7 +239,7 @@ class PriceList(MDApp):
                 
             for producto in productos_nuevos:
                 print(f"¿A qué familia pertenece el producto {producto}?")
-                familia = "SinClasificar"  # input eliminado para compatibilidad con Android
+                familia = "SinClasificar"
                 db.insertarProducto(producto, familia)
                 db.insertarPrecio(db.getProdutoPorNombre(producto), ticket_id, precio)
                 
