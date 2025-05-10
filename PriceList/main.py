@@ -1,3 +1,16 @@
+from kivy.utils import platform
+import os
+
+if platform == "android":
+    try:
+        from android.storage import app_storage_path
+        db_path = os.path.join(app_storage_path(), "pricelist.db")
+    except ImportError:
+        db_path = os.path.join("data", "pricelist.db")
+else:
+    db_path = os.path.join("data", "pricelist.db")
+
+
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
@@ -54,7 +67,7 @@ class ListadoProductosScreen(Screen):
     
     def cargar_productos_por_familia(self, familia):
         self.familia_nombre = familia
-        db = DBController("pricelist.db")
+        db = DBController(db_path)
         productos = db.getResumenProductosPorFamilia(familia)
         self.ids.rv.data = [{
             'producto': p['producto'],
@@ -105,7 +118,7 @@ class PriceList(MDApp):
     def build(self):
         self.theme_cls.theme_style = "Light"
         self.theme_cls.primary_palette = "BlueGray"
-        self.icon = 'assets/images/PriceListLogo.jpg'
+        self.icon = 'assets/images/PriceListLogo.png'
         self.sm = ScreenManager()
         self.sm.add_widget(MenuScreen(name="menu"))
         self.sm.add_widget(BebidasScreen(name="bebidas"))
@@ -173,7 +186,7 @@ class PriceList(MDApp):
         def al_seleccionar_pdf(ruta):
             print(f"PDF seleccionado: {ruta}")
             lector = LectorTicket(ruta)
-            db = DBController("pricelist.db")
+            db = DBController(db_path)
             
             db.insertarTicket(lector.getFechaTicket())
             ticket_id = db.getUltimoTicket()
@@ -201,7 +214,7 @@ class PriceList(MDApp):
                 
             for producto in productos_nuevos:
                 print(f"¿A qué familia pertenece el producto {producto}?")
-                familia = input()
+                familia = "SinClasificar"  # input eliminado para compatibilidad con Android
                 db.insertarProducto(producto, familia)
                 db.insertarPrecio(db.getProdutoPorNombre(producto), ticket_id, precio)
                 

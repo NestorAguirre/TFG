@@ -4,7 +4,7 @@ import os
 class DBController():
     
     def __init__(self, nombreDB):
-        self.nombreDB = os.path.join(os.path.dirname(__file__), "../data/", nombreDB)
+        self.nombreDB = nombreDB  # Ruta completa ya proporcionada desde main
         self.crearDB()
         self.crearTablas()
         
