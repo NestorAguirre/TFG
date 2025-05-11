@@ -84,7 +84,7 @@ class DBController():
         conexion.commit()
         conexion.close()
         
-    def getProdutoPorNombre(self, nombre_producto):
+    def getProductoPorNombre(self, nombre_producto):
         conexion = sql.connect(self.nombreDB)
         cursor = conexion.cursor()
         
