@@ -25,26 +25,18 @@ from views.limpieza import KV_LIMPIEZA
 from views.listadoproductos import KV_LISTADOPRODUCTOS
 
 from modules.listados import productos_por_familia
+from controllers.dbcontroller import DBController
 
 class MenuScreen(Screen): pass
-class BebidasScreen(Screen): pass
-class CuidadoPersonalScreen(Screen): pass
-class LimpiezaScreen(Screen): pass
-class CongeladosScreen(Screen): pass
-class EnvasadosScreen(Screen): pass
-class FrescosScreen(Screen): pass
-class LacteosScreen(Screen): pass
-class DesayunoScreen(Screen): pass
-
-class ListadoProductosScreen(Screen):
-    familia_nombre = StringProperty("")
-
-class ProductosRecyclerView(BoxLayout):
-    producto = StringProperty("")
-    precio = StringProperty("")
-    maximo = StringProperty("")
-    minimo = StringProperty("")
-    media = StringProperty("")
+class BebidasScreen(Screen): familia_nombre = StringProperty("Bebidas")
+class CuidadoPersonalScreen(Screen): familia_nombre = StringProperty("Cuidado Personal")
+class LimpiezaScreen(Screen): familia_nombre = StringProperty("Limpieza")
+class CongeladosScreen(Screen): familia_nombre = StringProperty("Congelados")
+class EnvasadosScreen(Screen): familia_nombre = StringProperty("Envasados")
+class FrescosScreen(Screen): familia_nombre = StringProperty("Frescos")
+class LacteosScreen(Screen): familia_nombre = StringProperty("Lácteos")
+class DesayunoScreen(Screen): familia_nombre = StringProperty("Desayuno")
+class ListadoProductosScreen(Screen): familia_nombre = StringProperty("")
 
 class PriceListApp(MDApp):
     title_font_size = NumericProperty(28)
@@ -66,7 +58,7 @@ class PriceListApp(MDApp):
         Builder.load_string(KV_CUIDADOPERSONAL)
         Builder.load_string(KV_DESAYUNO)
         Builder.load_string(KV_ENVASADOS)
-        Builder.load_string(KV_LACTEOS) 
+        Builder.load_string(KV_LACTEOS)
         Builder.load_string(KV_LISTADOPRODUCTOS)
 
         self.sm = ScreenManager()
@@ -97,6 +89,20 @@ class PriceListApp(MDApp):
             pantalla_anterior = self.historial_pantallas.pop()
             self.sm.transition.direction = 'right'
             self.sm.current = pantalla_anterior
+
+    def familia(self, nombre_familia):
+        pantalla = self.sm.get_screen("listadoproductos")
+        pantalla.familia_nombre = nombre_familia
+        self.mostrar_listado_productos(nombre_familia, "listadoproductos")
+
+    def mostrar_listado_productos(self, familia, screen_name):
+        try:
+            db = DBController("data/pricelist.db")
+            datos = db.getResumenProductosPorFamilia(familia)
+            screen = self.sm.get_screen(screen_name)
+            screen.ids.rv.data = datos
+        except Exception as e:
+            Logger.error(f"Mostrar productos: Error al cargar datos -> {e}")
 
     def actualizar_fuentes(self, *args):
         base_ancho = 360
@@ -169,20 +175,13 @@ class PriceListApp(MDApp):
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
             Clock.schedule_once(lambda dt: Snackbar(text="Error al importar el ticket", duration=2).open())
 
-
-    def mostrar_listado_productos(self, familia):
-        try:
-            from controllers.dbcontroller import DBController
-            db = DBController("data/pricelist.db")
-            resumen = db.getResumenProductosPorFamilia(familia)
-
-            pantalla = self.sm.get_screen('listadoproductos')
-            pantalla.familia_nombre = familia
-            pantalla.ids.rv.data = resumen
-
-            self.cambiar_pantalla('listadoproductos')
-        except Exception as e:
-            Logger.error(f"ListadoProductos: Error -> {e}")
+# Clase personalizada usada por RecycleView
+class ProductosRecyclerView(BoxLayout):
+    producto = StringProperty("")
+    precio = StringProperty("")
+    maximo = StringProperty("")
+    minimo = StringProperty("")
+    media = StringProperty("")
 
 if __name__ == '__main__':
     PriceListApp().run()

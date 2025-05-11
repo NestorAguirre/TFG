@@ -96,7 +96,7 @@ KV_LISTADOPRODUCTOS = """
                     color: 0.2, 0.2, 0.2, 1
                     size_hint_x: 0.4
                     halign: 'left'
-                    padding_x: dp(10)
+                    padding: [dp(10), 0]
                     canvas.before:
                         Color:
                             rgba: 0.93, 0.93, 0.93, 1
