@@ -5,20 +5,20 @@ package.domain = org.pricelist
 
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,ttf,txt,json
-include_patterns = assets/**, views/**, controllers/**, modules/**, data/**
+include_patterns = modules/**, controllers/**, views/**, assets/**, data/**
 
 version = 1.0
 orientation = portrait
 fullscreen = 1
 
-# Requisitos de Python y librerías necesarias
-requirements = python3,kivy==2.1.0,kivymd==1.1.1,plyer,pdfminer.six
+# Requisitos
+requirements = python3,kivy==2.1.0,kivymd==1.1.1,plyer,pdfminer.six,chardet
 
-# Permisos necesarios para acceder a archivos PDF y guardar en base de datos
-android.permissions = READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE
+# Permisos
+android.permissions = READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,MANAGE_EXTERNAL_STORAGE
 android.grant_permissions = True
 
-# Configuración Android
+# Android config
 android.minapi = 21
 android.api = 33
 android.ndk = 25b
@@ -28,11 +28,11 @@ android.hardwareAccelerated = True
 android.meta_data = android.max_aspect=2.1
 android.private_storage = True
 
-# SplashScreen y icono personalizados
+# Iconos
 icon.filename = assets/images/PriceListLogo.png
 presplash.filename = assets/images/PriceListLogo.png
 
-# Compatibilidad extra (si usas compat-v7)
+# Compat
 android.gradle_dependencies = com.android.support:appcompat-v7:28.0.0
 
 [buildozer]
