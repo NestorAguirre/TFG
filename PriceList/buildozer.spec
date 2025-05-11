@@ -9,7 +9,7 @@ version = 1.0
 requirements = python3,kivy==2.1.0,kivymd==1.1.1,plyer,pdfminer.six
 orientation = portrait
 fullscreen = 1
-android.permissions = INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE
+android.permissions = READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,MANAGE_EXTERNAL_STORAGE
 android.minapi = 21
 android.api = 33
 android.ndk = 25b

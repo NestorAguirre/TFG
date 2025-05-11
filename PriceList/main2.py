@@ -1,7 +1,11 @@
-from kivy.app import App
+from kivymd.app import MDApp
+from kivymd.uix.snackbar import Snackbar
+
+from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.properties import NumericProperty
+from kivy.properties import NumericProperty, StringProperty
+from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.metrics import Metrics
 from kivy.utils import platform
@@ -9,7 +13,6 @@ from kivy.logger import Logger
 
 from plyer import filechooser
 
-# Importa los archivos KV
 from views.main import KV_MAIN
 from views.frescos import KV_FRESCOS
 from views.bebidas import KV_BEBIDAS
@@ -19,6 +22,7 @@ from views.desayuno import KV_DESAYUNO
 from views.envasados import KV_ENVASADOS
 from views.lacteos import KV_LACTEOS
 from views.limpieza import KV_LIMPIEZA
+from views.listadoproductos import KV_LISTADOPRODUCTOS
 
 from modules.listados import productos_por_familia
 
@@ -32,7 +36,17 @@ class FrescosScreen(Screen): pass
 class LacteosScreen(Screen): pass
 class DesayunoScreen(Screen): pass
 
-class PriceListApp(App):
+class ListadoProductosScreen(Screen):
+    familia_nombre = StringProperty("")
+
+class ProductosRecyclerView(BoxLayout):
+    producto = StringProperty("")
+    precio = StringProperty("")
+    maximo = StringProperty("")
+    minimo = StringProperty("")
+    media = StringProperty("")
+
+class PriceListApp(MDApp):
     title_font_size = NumericProperty(28)
     button_font_size = NumericProperty(20)
     label_font_size = NumericProperty(16)
@@ -52,7 +66,8 @@ class PriceListApp(App):
         Builder.load_string(KV_CUIDADOPERSONAL)
         Builder.load_string(KV_DESAYUNO)
         Builder.load_string(KV_ENVASADOS)
-        Builder.load_string(KV_LACTEOS)
+        Builder.load_string(KV_LACTEOS) 
+        Builder.load_string(KV_LISTADOPRODUCTOS)
 
         self.sm = ScreenManager()
         self.sm.add_widget(MenuScreen(name='menu'))
@@ -64,6 +79,7 @@ class PriceListApp(App):
         self.sm.add_widget(DesayunoScreen(name='desayuno'))
         self.sm.add_widget(EnvasadosScreen(name='envasados'))
         self.sm.add_widget(LacteosScreen(name='lacteos'))
+        self.sm.add_widget(ListadoProductosScreen(name='listadoproductos'))
 
         self.historial_pantallas = ["menu"]
         Window.bind(on_resize=self.actualizar_fuentes)
@@ -144,11 +160,29 @@ class PriceListApp(App):
 
                 if familia != "otraFamilia":
                     db.insertarProducto(producto, familia)
-                    db.insertarPrecio(db.getProdutoPorNombre(producto), ticket_id, precio)
+                    db.insertarPrecio(db.getProductoPorNombre(producto), ticket_id, precio)
 
             Logger.info("Archivo procesado correctamente.")
+            Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
+
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
+            Clock.schedule_once(lambda dt: Snackbar(text="Error al importar el ticket", duration=2).open())
+
+
+    def mostrar_listado_productos(self, familia):
+        try:
+            from controllers.dbcontroller import DBController
+            db = DBController("data/pricelist.db")
+            resumen = db.getResumenProductosPorFamilia(familia)
+
+            pantalla = self.sm.get_screen('listadoproductos')
+            pantalla.familia_nombre = familia
+            pantalla.ids.rv.data = resumen
+
+            self.cambiar_pantalla('listadoproductos')
+        except Exception as e:
+            Logger.error(f"ListadoProductos: Error -> {e}")
 
 if __name__ == '__main__':
     PriceListApp().run()
