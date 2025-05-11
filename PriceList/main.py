@@ -173,13 +173,11 @@ class PriceList(MDApp):
         def al_seleccionar_pdf(ruta):
             print(f"PDF seleccionado: {ruta}")
             lector = LectorTicket(ruta)
-            db = DBController("pricelist.db")
+            db = DBController("data/pricelist.db")
 
             db.insertarTicket(date.today())
             db.insertarTicket(lector.getFechaTicket())
             ticket_id = db.getUltimoTicket()
-
-            productos_nuevos = []
 
             for producto, precio in lector.cargarDiccionario().items():
                 producto_normalizado = producto.strip().lower()
@@ -197,14 +195,6 @@ class PriceList(MDApp):
                 if familia != "otraFamilia":
                     db.insertarProducto(producto, familia)
                     db.insertarPrecio(db.getProdutoPorNombre(producto), ticket_id, precio)
-                else:
-                    productos_nuevos.append(producto)
-
-            for producto in productos_nuevos:
-                print(f"¿A qué familia pertenece el producto {producto}?")
-                familia = input()
-                db.insertarProducto(producto, familia)
-                db.insertarPrecio(db.getProdutoPorNombre(producto), ticket_id, precio)
 
         popup = PopupImportarArchivo(al_seleccionar_callback=al_seleccionar_pdf)
         popup.open()

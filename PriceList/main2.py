@@ -7,7 +7,6 @@ from kivy.metrics import Metrics
 from kivy.utils import platform
 from kivy.logger import Logger
 
-# Importa el selector de archivos
 from plyer import filechooser
 
 # Importa los archivos KV
@@ -21,7 +20,8 @@ from views.envasados import KV_ENVASADOS
 from views.lacteos import KV_LACTEOS
 from views.limpieza import KV_LIMPIEZA
 
-# Define las pantallas
+from modules.listados import productos_por_familia
+
 class MenuScreen(Screen): pass
 class BebidasScreen(Screen): pass
 class CuidadoPersonalScreen(Screen): pass
@@ -106,17 +106,49 @@ class PriceListApp(App):
                     filters=["*.pdf"],
                     on_selection=self.on_archivo_seleccionado
                 )
-
             except Exception as e:
                 Logger.error(f"FileChooser: Error al abrir el selector de archivos: {e}")
         else:
             Logger.info("FileChooser: Esta función solo está implementada para Android por ahora.")
 
     def on_archivo_seleccionado(self, seleccion):
-        if seleccion:
-            Logger.info(f"Archivo seleccionado: {seleccion[0]}")
-        else:
+        if not seleccion:
             Logger.info("No se seleccionó ningún archivo.")
+            return
+
+        ruta = seleccion[0]
+        Logger.info(f"Archivo seleccionado: {ruta}")
+
+        try:
+            from controllers.dbcontroller import DBController
+            from modules.lector_pdf import LectorTicket
+
+            lector = LectorTicket(ruta)
+            db = DBController("data/pricelist.db")
+
+            db.insertarTicket(lector.getFechaTicket())
+            ticket_id = db.getUltimoTicket()
+
+            for producto, precio in lector.cargarDiccionario().items():
+                producto_normalizado = producto.strip().lower()
+                familia = "otraFamilia"
+
+                for key, lista_productos in productos_por_familia.items():
+                    for p in lista_productos:
+                        if p.strip().lower() == producto_normalizado:
+                            familia = key
+                            break
+                    else:
+                        continue
+                    break
+
+                if familia != "otraFamilia":
+                    db.insertarProducto(producto, familia)
+                    db.insertarPrecio(db.getProdutoPorNombre(producto), ticket_id, precio)
+
+            Logger.info("Archivo procesado correctamente.")
+        except Exception as e:
+            Logger.error(f"Procesamiento de PDF: Error -> {e}")
 
 if __name__ == '__main__':
     PriceListApp().run()
