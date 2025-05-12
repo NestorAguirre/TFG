@@ -54,7 +54,7 @@ class ListadoProductosScreen(Screen):
 
     def cargar_productos_por_familia(self, familia):
         self.familia_nombre = familia
-        db = DBController("pricelist.db")
+        db = DBController("data/pricelist.db")
         productos = db.getResumenProductosPorFamilia(familia)
         self.ids.rv.data = [{
             'producto': p['producto'],
@@ -194,7 +194,7 @@ class PriceList(MDApp):
 
                 if familia != "otraFamilia":
                     db.insertarProducto(producto, familia)
-                    db.insertarPrecio(db.getProdutoPorNombre(producto), ticket_id, precio)
+                    db.insertarPrecio(db.getProductoPorNombre(producto), ticket_id, precio)
 
         popup = PopupImportarArchivo(al_seleccionar_callback=al_seleccionar_pdf)
         popup.open()

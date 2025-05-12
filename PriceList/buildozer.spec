@@ -4,15 +4,15 @@ package.name = pricelist
 package.domain = org.pricelist
 
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,ttf,txt,json
-include_patterns = modules/**, controllers/**, views/**, assets/**, data/**
+source.include_exts = py,png,jpg,kv,atlas,ttf,txt,json,db
+include_patterns = modules/**, controllers/**, views/**, assets/**, data/**, data/*.db
 
 version = 1.0
 orientation = portrait
 fullscreen = 1
 
 # Requisitos
-requirements = python3,kivy==2.1.0,kivymd==1.1.1,plyer,pdfminer.six,chardet
+requirements = python3,kivy==2.1.0,kivymd==1.1.1,plyer,pymupdf,chardet
 
 # Permisos
 android.permissions = READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,MANAGE_EXTERNAL_STORAGE
