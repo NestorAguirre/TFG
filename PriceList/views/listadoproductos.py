@@ -1,5 +1,4 @@
 KV_LISTADOPRODUCTOS = """
-
 <ListadoProductosScreen>:
     canvas:
         Color:
@@ -13,10 +12,8 @@ KV_LISTADOPRODUCTOS = """
         padding: dp(20)
         spacing: dp(20)
 
-        # --- SECCIÓN TÍTULO ---
         RelativeLayout:
             size_hint_y: 0.12
-           
             canvas.before:
                 Color:
                     rgba: 0.73, 0.37, 0.27, 1
@@ -24,7 +21,6 @@ KV_LISTADOPRODUCTOS = """
                     size: self.width, dp(4)
                     pos: self.x, self.y - dp(5)
 
-            # Botón Atrás
             RelativeLayout:
                 size_hint: None, None
                 size: app.back_button_size, app.back_button_size
@@ -43,7 +39,6 @@ KV_LISTADOPRODUCTOS = """
                     size: app.back_icon_size, app.back_icon_size
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
-            # Título
             Label:
                 text: root.familia_nombre
                 font_size: app.title_font_size
@@ -55,7 +50,6 @@ KV_LISTADOPRODUCTOS = """
                 font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
                 text_size: self.size
 
-        # --- DATE PICKER ---
         AnchorLayout:
             anchor_x: 'center'
             size_hint_y: 0.1
@@ -71,17 +65,15 @@ KV_LISTADOPRODUCTOS = """
                 font_size: app.button_font_size
                 on_release: app.mostrar_selector_fecha()
 
-        # --- SECCIÓN TABLA ---
         BoxLayout:
             orientation: 'vertical'
             spacing: dp(2)
             size_hint_y: 0.78
            
-            # Encabezados
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint_y: None
-                height: app.row_height * 0.4
+                height: app.row_height * 0.7
                 spacing: dp(2)
                 padding: dp(10)
                
@@ -100,7 +92,7 @@ KV_LISTADOPRODUCTOS = """
                         Rectangle:
                             pos: self.pos
                             size: self.size
-               
+
                 Label:
                     text: "Precio"
                     bold: True
@@ -114,7 +106,7 @@ KV_LISTADOPRODUCTOS = """
                         Rectangle:
                             pos: self.pos
                             size: self.size
-               
+
                 Label:
                     text: "Max"
                     bold: True
@@ -128,7 +120,7 @@ KV_LISTADOPRODUCTOS = """
                         Rectangle:
                             pos: self.pos
                             size: self.size
-               
+
                 Label:
                     text: "Min"
                     bold: True
@@ -142,7 +134,7 @@ KV_LISTADOPRODUCTOS = """
                         Rectangle:
                             pos: self.pos
                             size: self.size
-               
+
                 Label:
                     text: "Media"
                     bold: True
@@ -156,8 +148,7 @@ KV_LISTADOPRODUCTOS = """
                         Rectangle:
                             pos: self.pos
                             size: self.size
-           
-            # Tabla
+
             RecycleView:
                 id: rv
                 viewclass: 'ProductosRecyclerView'
@@ -167,7 +158,7 @@ KV_LISTADOPRODUCTOS = """
                
                 RecycleBoxLayout:
                     orientation: 'vertical'
-                    default_size: None, app.row_height * 0.4
+                    default_size: None, app.row_height * 0.7
                     default_size_hint: 1, None
                     size_hint_y: None
                     height: self.minimum_height
@@ -183,7 +174,7 @@ KV_LISTADOPRODUCTOS = """
     orientation: 'horizontal'
     spacing: dp(2)
     size_hint_y: None
-    height: app.row_height * 0.4
+    height: app.row_height * 0.7
    
     Label:
         text: root.producto
@@ -201,7 +192,7 @@ KV_LISTADOPRODUCTOS = """
             Rectangle:
                 pos: self.pos
                 size: self.size
-   
+
     Label:
         text: root.precio
         text_size: self.size
@@ -217,7 +208,7 @@ KV_LISTADOPRODUCTOS = """
             Rectangle:
                 pos: self.pos
                 size: self.size
-   
+
     Label:
         text: root.maximo
         text_size: self.size
@@ -233,7 +224,7 @@ KV_LISTADOPRODUCTOS = """
             Rectangle:
                 pos: self.pos
                 size: self.size
-   
+
     Label:
         text: root.minimo
         text_size: self.size
@@ -249,7 +240,7 @@ KV_LISTADOPRODUCTOS = """
             Rectangle:
                 pos: self.pos
                 size: self.size
-   
+
     Label:
         text: root.media
         text_size: self.size
@@ -265,4 +256,5 @@ KV_LISTADOPRODUCTOS = """
             Rectangle:
                 pos: self.pos
                 size: self.size
+
 """
