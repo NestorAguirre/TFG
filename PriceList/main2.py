@@ -11,6 +11,7 @@ from kivy.utils import platform
 from kivy.logger import Logger
 
 from plyer import filechooser
+import os
 
 from kivy.core.window import Window
 Window.clearcolor = (0.98, 0.95, 0.88, 1)
@@ -52,7 +53,7 @@ class PriceListApp(MDApp):
     row_height = NumericProperty(150)
 
     def build(self):
-        Window.clearcolor = (0.98, 0.95, 0.88, 1)  # Fondo crema
+        Window.clearcolor = (0.98, 0.95, 0.88, 1)
         self.sm = ScreenManager()
         self.sm.add_widget(MenuScreen(name='menu'))
         
@@ -94,7 +95,9 @@ class PriceListApp(MDApp):
 
     def mostrar_listado_productos(self, familia, screen_name):
         try:
-            db = DBController("data/pricelist.db")
+            ruta_base = os.path.dirname(os.path.abspath(__file__))
+            db_path = os.path.join(ruta_base, "data", "pricelist.db")
+            db = DBController(db_path)
             datos = db.getResumenProductosPorFamilia(familia)
             screen = self.sm.get_screen(screen_name)
             screen.ids.rv.data = datos
@@ -106,9 +109,9 @@ class PriceListApp(MDApp):
         ancho_actual = Window.width
         escala = max(min(ancho_actual / base_ancho, 1.8), 1.0)
 
-        self.title_font_size = int(37 * escala)
-        self.button_font_size = int(27 * escala)
-        self.label_font_size = int(23 * escala)
+        self.title_font_size = int(40 * escala)
+        self.button_font_size = int(30 * escala)
+        self.label_font_size = int(26 * escala)
         self.content_button_size = 120 * escala
         self.content_image_size = 100 * escala
         self.back_button_size = 40 * escala
@@ -118,17 +121,14 @@ class PriceListApp(MDApp):
 
 
     def abrir_filechooser(self):
-        if platform == "android":
-            try:
-                filechooser.open_file(
-                    title="Selecciona un archivo PDF",
-                    filters=["*.pdf"],
-                    on_selection=self.on_archivo_seleccionado
-                )
-            except Exception as e:
-                Logger.error(f"FileChooser: Error al abrir el selector de archivos: {e}")
-        else:
-            Logger.info("FileChooser: Esta función solo está implementada para Android por ahora.")
+        try:
+            filechooser.open_file(
+                title="Selecciona un archivo PDF",
+                filters=["*.pdf"],
+                on_selection=self.on_archivo_seleccionado
+            )
+        except Exception as e:
+            Logger.error(f"FileChooser: Error al abrir el selector de archivos: {e}")
 
     def on_archivo_seleccionado(self, seleccion):
         if not seleccion:
@@ -142,7 +142,9 @@ class PriceListApp(MDApp):
             from modules.lector_pdf import LectorTicket
 
             lector = LectorTicket(ruta)
-            db = DBController("data/pricelist.db")
+            ruta_base = os.path.dirname(os.path.abspath(__file__))
+            db_path = os.path.join(ruta_base, "data", "pricelist.db")
+            db = DBController(db_path)
 
             db.insertarTicket(lector.getFechaTicket())
             ticket_id = db.getUltimoTicket()
