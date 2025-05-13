@@ -12,6 +12,9 @@ from kivy.logger import Logger
 
 from plyer import filechooser
 
+from kivy.core.window import Window
+Window.clearcolor = (0.98, 0.95, 0.88, 1)
+
 from modules.listados import productos_por_familia
 from controllers.dbcontroller import DBController
 
@@ -49,9 +52,18 @@ class PriceListApp(MDApp):
     row_height = NumericProperty(150)
 
     def build(self):
-
+        Window.clearcolor = (0.98, 0.95, 0.88, 1)  # Fondo crema
         self.sm = ScreenManager()
         self.sm.add_widget(MenuScreen(name='menu'))
+        
+        Clock.schedule_once(self.load_remaining_screens, 0)
+        
+        self.historial_pantallas = ["menu"]
+        Window.bind(on_resize=self.actualizar_fuentes)
+        self.actualizar_fuentes()
+        return self.sm
+
+    def load_remaining_screens(self, dt):
         self.sm.add_widget(FrescosScreen(name='frescos'))
         self.sm.add_widget(LimpiezaScreen(name='limpieza'))
         self.sm.add_widget(BebidasScreen(name='bebidas'))
@@ -62,10 +74,6 @@ class PriceListApp(MDApp):
         self.sm.add_widget(LacteosScreen(name='lacteos'))
         self.sm.add_widget(ListadoProductosScreen(name='listadoproductos'))
 
-        self.historial_pantallas = ["menu"]
-        Window.bind(on_resize=self.actualizar_fuentes)
-        self.actualizar_fuentes()
-        return self.sm
 
     def cambiar_pantalla(self, nombre_pantalla):
         if self.sm.current != nombre_pantalla:
