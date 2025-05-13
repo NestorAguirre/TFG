@@ -7,22 +7,10 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import NumericProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
-from kivy.metrics import Metrics
 from kivy.utils import platform
 from kivy.logger import Logger
 
 from plyer import filechooser
-
-from views.main import KV_MAIN
-from views.frescos import KV_FRESCOS
-from views.bebidas import KV_BEBIDAS
-from views.congelados import KV_CONGELADOS
-from views.cuidadopersonal import KV_CUIDADOPERSONAL
-from views.desayuno import KV_DESAYUNO
-from views.envasados import KV_ENVASADOS
-from views.lacteos import KV_LACTEOS
-from views.limpieza import KV_LIMPIEZA
-from views.listadoproductos import KV_LISTADOPRODUCTOS
 
 from modules.listados import productos_por_familia
 from controllers.dbcontroller import DBController
@@ -38,6 +26,17 @@ class LacteosScreen(Screen): familia_nombre = StringProperty("Lácteos")
 class DesayunoScreen(Screen): familia_nombre = StringProperty("Desayuno")
 class ListadoProductosScreen(Screen): familia_nombre = StringProperty("")
 
+Builder.load_file("views/main.kv")
+Builder.load_file("views/bebidas.kv")
+Builder.load_file("views/cuidadopersonal.kv")
+Builder.load_file("views/limpieza.kv")
+Builder.load_file("views/congelados.kv")
+Builder.load_file("views/envasados.kv")
+Builder.load_file("views/frescos.kv")
+Builder.load_file("views/lacteos.kv")
+Builder.load_file("views/desayuno.kv")
+Builder.load_file("views/listadoproductos.kv")
+
 class PriceListApp(MDApp):
     title_font_size = NumericProperty(28)
     button_font_size = NumericProperty(20)
@@ -50,16 +49,6 @@ class PriceListApp(MDApp):
     row_height = NumericProperty(150)
 
     def build(self):
-        Builder.load_string(KV_MAIN)
-        Builder.load_string(KV_FRESCOS)
-        Builder.load_string(KV_LIMPIEZA)
-        Builder.load_string(KV_BEBIDAS)
-        Builder.load_string(KV_CONGELADOS)
-        Builder.load_string(KV_CUIDADOPERSONAL)
-        Builder.load_string(KV_DESAYUNO)
-        Builder.load_string(KV_ENVASADOS)
-        Builder.load_string(KV_LACTEOS)
-        Builder.load_string(KV_LISTADOPRODUCTOS)
 
         self.sm = ScreenManager()
         self.sm.add_widget(MenuScreen(name='menu'))
