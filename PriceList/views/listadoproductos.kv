@@ -47,22 +47,6 @@
                 valign: 'middle'
                 size_hint: 1, 1
                 font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
-                text_size: self.size
-
-        AnchorLayout:
-            anchor_x: 'center'
-            size_hint_y: 0.1
-            padding: [0, dp(10), 0, dp(10)]
-           
-            MDRaisedButton:
-                text: "Seleccionar Fecha"
-                size_hint: None, None
-                size: app.content_button_size * 1.5, app.button_font_size * 2
-                md_bg_color: 0.73, 0.37, 0.27, 1
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-                font_size: app.button_font_size
-                on_release: app.mostrar_selector_fecha()
 
         BoxLayout:
             orientation: 'vertical'

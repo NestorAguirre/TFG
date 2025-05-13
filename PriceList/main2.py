@@ -13,12 +13,10 @@ from kivy.logger import Logger
 from plyer import filechooser
 import os
 
-from kivy.core.window import Window
-Window.clearcolor = (0.98, 0.95, 0.88, 1)
-
 from modules.listados import productos_por_familia
 from controllers.dbcontroller import DBController
 
+# Pantallas
 class MenuScreen(Screen): pass
 class BebidasScreen(Screen): familia_nombre = StringProperty("Bebidas")
 class CuidadoPersonalScreen(Screen): familia_nombre = StringProperty("Cuidado Personal")
@@ -29,7 +27,14 @@ class FrescosScreen(Screen): familia_nombre = StringProperty("Frescos")
 class LacteosScreen(Screen): familia_nombre = StringProperty("Lácteos")
 class DesayunoScreen(Screen): familia_nombre = StringProperty("Desayuno")
 class ListadoProductosScreen(Screen): familia_nombre = StringProperty("")
+class ProductosRecyclerView(BoxLayout):
+    producto = StringProperty("")
+    precio = StringProperty("")
+    maximo = StringProperty("")
+    minimo = StringProperty("")
+    media = StringProperty("")
 
+# Cargar archivos KV
 Builder.load_file("views/main.kv")
 Builder.load_file("views/bebidas.kv")
 Builder.load_file("views/cuidadopersonal.kv")
@@ -40,6 +45,20 @@ Builder.load_file("views/frescos.kv")
 Builder.load_file("views/lacteos.kv")
 Builder.load_file("views/desayuno.kv")
 Builder.load_file("views/listadoproductos.kv")
+
+# Función para obtener la ruta a la base de datos de forma compatible
+def get_db_path():
+    if platform == "android":
+        from android.storage import app_storage_path
+        ruta_base = app_storage_path()
+    else:
+        ruta_base = os.path.dirname(os.path.abspath(__file__))
+
+    data_dir = os.path.join(ruta_base, "data")
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
+    return os.path.join(data_dir, "pricelist.db")
 
 class PriceListApp(MDApp):
     title_font_size = NumericProperty(28)
@@ -56,15 +75,15 @@ class PriceListApp(MDApp):
         Window.clearcolor = (0.98, 0.95, 0.88, 1)
         self.sm = ScreenManager()
         self.sm.add_widget(MenuScreen(name='menu'))
-        
-        Clock.schedule_once(self.load_remaining_screens, 0)
-        
+
+        Clock.schedule_once(self.cargar_vistas, 0)
+
         self.historial_pantallas = ["menu"]
         Window.bind(on_resize=self.actualizar_fuentes)
         self.actualizar_fuentes()
         return self.sm
 
-    def load_remaining_screens(self, dt):
+    def cargar_vistas(self, dt):
         self.sm.add_widget(FrescosScreen(name='frescos'))
         self.sm.add_widget(LimpiezaScreen(name='limpieza'))
         self.sm.add_widget(BebidasScreen(name='bebidas'))
@@ -74,7 +93,6 @@ class PriceListApp(MDApp):
         self.sm.add_widget(EnvasadosScreen(name='envasados'))
         self.sm.add_widget(LacteosScreen(name='lacteos'))
         self.sm.add_widget(ListadoProductosScreen(name='listadoproductos'))
-
 
     def cambiar_pantalla(self, nombre_pantalla):
         if self.sm.current != nombre_pantalla:
@@ -95,8 +113,7 @@ class PriceListApp(MDApp):
 
     def mostrar_listado_productos(self, familia, screen_name):
         try:
-            ruta_base = os.path.dirname(os.path.abspath(__file__))
-            db_path = os.path.join(ruta_base, "data", "pricelist.db")
+            db_path = get_db_path()
             db = DBController(db_path)
             datos = db.getResumenProductosPorFamilia(familia)
             screen = self.sm.get_screen(screen_name)
@@ -118,7 +135,6 @@ class PriceListApp(MDApp):
         self.back_icon_size = 24 * escala
         self.button_radius = 20 * escala
         self.row_height = 150 * escala
-
 
     def abrir_filechooser(self):
         try:
@@ -142,8 +158,7 @@ class PriceListApp(MDApp):
             from modules.lector_pdf import LectorTicket
 
             lector = LectorTicket(ruta)
-            ruta_base = os.path.dirname(os.path.abspath(__file__))
-            db_path = os.path.join(ruta_base, "data", "pricelist.db")
+            db_path = get_db_path()
             db = DBController(db_path)
 
             db.insertarTicket(lector.getFechaTicket())
@@ -172,14 +187,6 @@ class PriceListApp(MDApp):
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
             Clock.schedule_once(lambda dt: Snackbar(text="Error al importar el ticket", duration=2).open())
-
-# Clase personalizada usada por RecycleView
-class ProductosRecyclerView(BoxLayout):
-    producto = StringProperty("")
-    precio = StringProperty("")
-    maximo = StringProperty("")
-    minimo = StringProperty("")
-    media = StringProperty("")
 
 if __name__ == '__main__':
     PriceListApp().run()
