@@ -1,4 +1,4 @@
-from pdfminer.high_level import extract_text
+import fitz
 import re
 
 class ErrorTicket(Exception):
@@ -11,16 +11,19 @@ class LectorTicket:
         self.diccionarioProductos = {}
         self.extraerTexto()
         self.detectarTicket()
-        self.inicioProductos, self.inicioPrecios = self.inicioProductosPrecios()
+        self.inicioProductos = self.inicioProductosPrecios()
         
     def extraerTexto(self):
-        ticketTexto = extract_text(self.ticket)
-        lineas = ticketTexto.split("\n")
-
-        for linea in lineas:
-            if linea.strip() != "":
-                self.arrayTicket.append(linea.strip())
-
+        ticket = fitz.open(self.ticket)
+        self.arrayTicket = []
+        for pagina in ticket:
+            textoTicket = pagina.get_text()
+            lineas = textoTicket.split("\n")
+            for linea in lineas:
+                linea = linea.strip()
+                if linea:
+                    self.arrayTicket.append(linea)
+        ticket.close()
         return self.arrayTicket
     
     def detectarTicket(self):
@@ -30,15 +33,12 @@ class LectorTicket:
     def inicioProductosPrecios(self):
         try:
             contador = 0
-            inicioProductos = 0
-            inicioPrecios = 0
+            inicioProductosPrecios = 0
             for texto in self.arrayTicket:
-                if texto == "Descripción".strip():
-                    inicioProductos = contador
                 if texto == "Importe".strip():
-                    inicioPrecios = contador
+                    inicioProductosPrecios = contador
                 contador = contador + 1
-            return inicioProductos, inicioPrecios
+            return inicioProductosPrecios
         except:
             raise ErrorTicket("Error en la lectura del ticket")
     
@@ -81,23 +81,50 @@ class LectorTicket:
     
     def extraerPrecios(self):
         try:
-            arrayPrecios = []
-            for precio in self.arrayTicket[self.inicioPrecios + 1 : ]:
-                precio = str(precio).strip()
-                precio = precio.replace(",",".")
-                
-                try:
-                    precio_float = float(precio)
-                except ValueError:
-                    break
-                
-                if precio == "0.00":
-                    break
-                
-                precio = float(precio)
-                
-                arrayPrecios.append(precio)
-            return arrayPrecios
+            arrayprecios = []
+            i = self.inicioProductos + 1
+            lista = self.arrayTicket
+
+            while i < len(lista):
+                item = lista[i]
+
+                # Productos a peso (€/kg)
+                if "€/kg" in str(item):
+                    partes = str(item).split(" ")
+                    for parte in partes:
+                        if "€" in parte:
+                            break
+                        else:
+                            precio = parte.replace(",", ".").strip()
+                            arrayprecios.append(round(float(precio), 2))
+                        break
+                    i += 3
+                    continue
+
+                # Productos normales
+                if isinstance(item, str):
+                    es_numero = item.replace(",", "").replace(".", "").isdigit()
+                    if not es_numero and "€/kg" not in item:
+                        siguiente = lista[i + 1] if i + 1 < len(lista) else ""
+                        despues = lista[i + 2] if i + 2 < len(lista) else ""
+
+                        # Dos precios seguidos → coger el primero
+                        if isinstance(siguiente, str) and siguiente.replace(",", "").replace(".", "").isdigit() and \
+                        isinstance(despues, str) and despues.replace(",", "").replace(".", "").isdigit():
+                            arrayprecios.append(round(float(siguiente.replace(",", ".")), 2))
+                            i += 3
+                            continue
+
+                        # Un solo precio
+                        elif isinstance(siguiente, str) and siguiente.replace(",", "").replace(".", "").isdigit():
+                            arrayprecios.append(round(float(siguiente.replace(",", ".")), 2))
+                            i += 2
+                            continue
+
+                i += 1
+
+            return arrayprecios
+
         except:
             raise ErrorTicket("Error en la lectura del ticket")
 
@@ -114,12 +141,14 @@ class LectorTicket:
                     break
                 precio = arrayPrecios[contador]
                 
-                if producto[1] > 1:
-                    precio = round(arrayPrecios[contador] / producto[1], 2)
-                
                 self.diccionarioProductos[producto[0]] = precio
                 contador += 1
-            
+                
+            try:
+                del self.diccionarioProductos["Parking"]
+                del self.diccionarioProductos["Parking:"]
+            except:
+                pass
             return self.diccionarioProductos
         except:
             raise ErrorTicket("Error en la lectura del ticket")
@@ -138,5 +167,5 @@ if __name__ == "__main__":
     #    print(texto)
     #except ErrorTicket as e:
     #    print(f"Error: {e}")
-    lector = LectorTicket(r"D:\ASIGNATURAS\TFG\TFG\tickets\ticket30.pdf")
-    print(lector.getFechaTicket())
+    lector = LectorTicket(r"D:\ASIGNATURAS\TFG\TFG\tickets\ticket1.pdf")
+    print(lector.cargarDiccionario())

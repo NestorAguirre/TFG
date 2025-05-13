@@ -175,7 +175,6 @@ class PriceList(MDApp):
             lector = LectorTicket(ruta)
             db = DBController("data/pricelist.db")
 
-            db.insertarTicket(date.today())
             db.insertarTicket(lector.getFechaTicket())
             ticket_id = db.getUltimoTicket()
 

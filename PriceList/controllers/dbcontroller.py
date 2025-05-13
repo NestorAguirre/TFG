@@ -113,11 +113,19 @@ class DBController():
         cursor = conexion.cursor()
 
         cursor.execute("""
-            SELECT p.nombre,
-                (SELECT pr.precio FROM precios pr WHERE pr.producto_id = p.id ORDER BY pr.id DESC LIMIT 1) as precio_actual,
-                MIN(pr.precio) as minimo,
-                MAX(pr.precio) as maximo,
-                AVG(pr.precio) as media
+            SELECT 
+                p.nombre,
+                (
+                    SELECT pr.precio
+                    FROM precios pr
+                    JOIN tickets t ON pr.ticket_id = t.id
+                    WHERE pr.producto_id = p.id
+                    ORDER BY DATE(t.fecha) DESC
+                    LIMIT 1
+                ) AS precio_actual,
+                MIN(pr.precio) AS minimo,
+                MAX(pr.precio) AS maximo,
+                AVG(pr.precio) AS media
             FROM productos p
             JOIN precios pr ON pr.producto_id = p.id
             WHERE p.familia = ?
@@ -138,9 +146,7 @@ class DBController():
                 "media": f"{media:.2f}"
             })
 
-        return productos 
-
-
+        return productos
 
 if __name__ == "__main__":
     base = DBController("prueba.db")
