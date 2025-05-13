@@ -98,9 +98,9 @@ class PriceListApp(MDApp):
         ancho_actual = Window.width
         escala = max(min(ancho_actual / base_ancho, 1.8), 1.0)
 
-        self.title_font_size = int(34 * escala)
-        self.button_font_size = int(24 * escala)
-        self.label_font_size = int(20 * escala)
+        self.title_font_size = int(37 * escala)
+        self.button_font_size = int(27 * escala)
+        self.label_font_size = int(23 * escala)
         self.content_button_size = 120 * escala
         self.content_image_size = 100 * escala
         self.back_button_size = 40 * escala
