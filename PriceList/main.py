@@ -11,6 +11,7 @@ from controllers.mostrar_productos import cargar_productos
 from controllers.screens_controller import (MenuScreen, cargar_vistas)
 from controllers.navegacion_controller import cambiar_pantalla as cambiar_pantalla_controller, volver_atras as volver_atras_controller
 from controllers.utils import actualizar_fuentes
+from controllers.selector_fecha_controller import DatePickerController
 
 Builder.load_file("views/main.kv")
 Builder.load_file("views/bebidas.kv")
@@ -40,13 +41,22 @@ class PriceListApp(MDApp):
         self.sm = ScreenManager()
         self.sm.add_widget(MenuScreen(name='menu'))
 
-        Clock.schedule_once(lambda dt: cargar_vistas(self.sm), 0)
+        Clock.schedule_once(self.post_carga_vistas, 0)
 
         self.historial_pantallas = ["menu"]
         Window.bind(on_resize=lambda *_: actualizar_fuentes(self))
         actualizar_fuentes(self)
 
+        self.date_picker = None
+
         return self.sm
+
+    def post_carga_vistas(self, dt):
+        cargar_vistas(self.sm)
+
+        listado_screen = self.sm.get_screen('listadoproductos')
+        self.date_picker = DatePickerController()
+        self.date_picker.root = listado_screen
 
     def cambiar_pantalla(self, nombre_pantalla):
         cambiar_pantalla_controller(self, nombre_pantalla)
@@ -64,6 +74,10 @@ class PriceListApp(MDApp):
 
     def abrir_filechooser(self):
         abrir_filechooser(self)
+
+    def open(self):
+        if self.date_picker:
+            self.date_picker.open()
 
 
 if __name__ == '__main__':

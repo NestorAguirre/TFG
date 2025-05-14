@@ -48,6 +48,26 @@
                 size_hint: 1, 1
                 font_name: "assets/fonts/DancingScript-VariableFont_wght.ttf"
 
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: self.minimum_height
+            spacing: dp(10)
+
+            MDRaisedButton: 
+                text: 'Seleccionar fecha'
+                pos_hint: {'center_x': 0.5}
+                on_release: app.open()
+
+            MDLabel:
+                id: date
+                text: ''
+                halign: 'center'
+                theme_text_color: 'Primary'
+                font_style: 'Body1'
+                size_hint_y: None
+                height: self.texture_size[1]
+
         BoxLayout:
             orientation: 'vertical'
             spacing: dp(2)

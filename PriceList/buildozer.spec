@@ -12,7 +12,7 @@ orientation = portrait
 fullscreen = 1
 
 # Requisitos
-requirements = python3,kivy==2.1.0,kivymd==1.1.1,plyer,pymupdf,chardet,fitz==0.0.1.dev2
+requirements = python3,kivy==2.1.0,kivymd==1.1.1,plyer,pymupdf,chardet,fitz==0.0.1.dev2,akivymd
 
 # Permisos
 android.permissions = READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,MANAGE_EXTERNAL_STORAGE
