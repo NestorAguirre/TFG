@@ -1,5 +1,6 @@
 import fitz
 import re
+from datetime import datetime
 
 class ErrorTicket(Exception):
     pass
@@ -157,7 +158,10 @@ class LectorTicket:
         for linea in self.arrayTicket:
             match = re.match(r'^(\d{2}/\d{2}/\d{4}) \d{2}:\d{2}$', linea)
             if match:
-                return match.group(1)
+                fecha_str = match.group(1)
+                # Convertir a formato datetime y luego a ISO (YYYY-MM-DD)
+                fecha_iso = datetime.strptime(fecha_str, "%d/%m/%Y").strftime("%Y-%m-%d")
+                return fecha_iso
         raise ErrorTicket("No se encontró una fecha válida en el ticket.")
     
 if __name__ == "__main__":

@@ -108,7 +108,7 @@ class DBController():
         
         return resultado[0]
     
-    def getResumenProductosPorFamilia(self, nombre_familia):
+    def getResumenProductosPorFamilia(self, nombre_familia, fecha_limite):
         conexion = sql.connect(self.nombreDB)
         cursor = conexion.cursor()
 
@@ -120,6 +120,7 @@ class DBController():
                     FROM precios pr
                     JOIN tickets t ON pr.ticket_id = t.id
                     WHERE pr.producto_id = p.id
+                    AND t.fecha <= ?
                     ORDER BY DATE(t.fecha) DESC
                     LIMIT 1
                 ) AS precio_actual,
@@ -128,10 +129,12 @@ class DBController():
                 AVG(pr.precio) AS media
             FROM productos p
             JOIN precios pr ON pr.producto_id = p.id
+            JOIN tickets t ON pr.ticket_id = t.id
             WHERE p.familia = ?
+            AND t.fecha <= ?
             GROUP BY p.id
             ORDER BY p.nombre ASC
-        """, (nombre_familia,))
+        """, (fecha_limite, nombre_familia, fecha_limite))
         
         resultados = cursor.fetchall()
         conexion.close()
@@ -140,10 +143,10 @@ class DBController():
         for nombre, precio, minimo, maximo, media in resultados:
             productos.append({
                 "producto": nombre,
-                "precio": f"{precio:.2f}",
-                "minimo": f"{minimo:.2f}",
-                "maximo": f"{maximo:.2f}",
-                "media": f"{media:.2f}"
+                "precio": f"{precio:.2f}" if precio is not None else "N/A",
+                "minimo": f"{minimo:.2f}" if minimo is not None else "N/A",
+                "maximo": f"{maximo:.2f}" if maximo is not None else "N/A",
+                "media": f"{media:.2f}" if media is not None else "N/A"
             })
 
         return productos
