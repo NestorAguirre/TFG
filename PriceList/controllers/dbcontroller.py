@@ -4,7 +4,7 @@ import os
 class DBController():
     
     def __init__(self, nombreDB):
-        self.nombreDB = nombreDB  # Ruta completa ya proporcionada desde main
+        self.nombreDB = nombreDB
         self.crearDB()
         self.crearTablas()
         
@@ -149,4 +149,4 @@ class DBController():
         return productos
 
 if __name__ == "__main__":
-    base = DBController("prueba.db")
+    base = DBController("data/pricelist.db")
