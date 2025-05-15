@@ -1,0 +1,18 @@
+<ClasificadorPopupLayout@GridLayout>:
+    cols: 1
+    spacing: 10
+    size_hint_y: None
+    height: self.minimum_height
+
+    MDLabel:
+        id: producto_label
+        text: "Producto:"
+        size_hint_y: None
+        height: 30
+
+    MDRaisedButton:
+        id: button_select
+        text: "Selecciona una familia"
+        size_hint_y: None
+        height: 40
+        on_release: app.clasificador_popup.abrir_menu(self)

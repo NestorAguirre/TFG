@@ -8,7 +8,6 @@ productos_por_familia = {
         "Mandarina 2",
         "Piña Pelada Rodajas",
         "Banana",
-        "Aguacate",
         "Sandía Partida B/S",
         "Piña Pelada Natural",
         "Higo Seco",
@@ -23,7 +22,9 @@ productos_por_familia = {
         "Manzana Golden Bolsa",
         "Fresón 1,3",
         "Piña",
-        "Mango"
+        "Mango",
+        "Aguacate",
+        "Manzana Golden"
     ],
     
     # Verduras
@@ -95,7 +96,8 @@ productos_por_familia = {
         "Chorizo Asturiano",
         "Longaniza Payes 4Pk",
         "Butifarra Fresca",
-        "Sarta Dulce"
+        "Sarta Dulce",
+        "Lonchas Light"
     ],
     
     # Yogures y postres
@@ -153,7 +155,8 @@ productos_por_familia = {
         "Mozzarella Fresca",
         "Q. Untar Suave",
         "Queso Fresco Desnata"
-        "Lonchas Light"
+        "Lonchas Light",
+        "Queso Fresco Desnata"
     ],
     
     # Huevos
@@ -384,7 +387,8 @@ productos_por_familia = {
         "Desodorante Roll-On",
         "Colg. Triple Accion",
         "Gel-Champú Ducha",
-        "Refill Dermo"
+        "Refill Dermo",
+        "Cepillo Pack-3 Suave"
     ],
     
     # LIMPIEZA
@@ -399,7 +403,8 @@ productos_por_familia = {
         "Estropajo Salvauñas",
         "Cepillo Lavar",
         "30 Toallitas Limpiac",
-        "Detergente Colonia"
+        "Detergente Colonia",
+        "Amb. Spray Sweet"
     ],
     
     # Productos de cocina
@@ -415,3 +420,36 @@ productos_por_familia = {
         "Bolsas Zip 1L"
     ]
 }
+
+FAMILIAS_FIJAS = [
+    "Frutas",
+    "Verduras",
+    "Carnes",
+    "Pescados",
+    "Mariscos",
+    "Embutidos",
+    "Yogures y postres",
+    "Leche y derivados",
+    "Quesos",
+    "Huevos",
+    "Arroz, pastas y legumbres",
+    "Conservas",
+    "Aceites y vinagres",
+    "Snacks",
+    "Alimentos preparados",
+    "Bolleria",
+    "Pan",
+    "Cereales",
+    "Otros",
+    "Congelados de carne",
+    "Congelado de pescado",
+    "Congelados de verduras",
+    "Postres congelados",
+    "Otros congelados",
+    "Bebidas no alcohólicas",
+    "Bebidas alcohólicas",
+    "Cosmética",
+    "Higiene",
+    "Limpieza del hogar",
+    "Productos de cocina"
+]
