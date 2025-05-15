@@ -1,4 +1,4 @@
-import fitz
+import pdfplumber
 import re
 from datetime import datetime
 
@@ -13,155 +13,104 @@ class LectorTicket:
         self.extraerTexto()
         self.detectarTicket()
         self.inicioProductos = self.inicioProductosPrecios()
-        
+
     def extraerTexto(self):
-        ticket = fitz.open(self.ticket)
-        self.arrayTicket = []
-        for pagina in ticket:
-            textoTicket = pagina.get_text()
-            lineas = textoTicket.split("\n")
-            for linea in lineas:
-                linea = linea.strip()
-                if linea:
-                    self.arrayTicket.append(linea)
-        ticket.close()
-        return self.arrayTicket
-    
+        try:
+            self.arrayTicket = []
+            with pdfplumber.open(self.ticket) as pdf:
+                for page in pdf.pages:
+                    texto = page.extract_text()
+                    if texto:
+                        lineas = texto.split("\n")
+                        for linea in lineas:
+                            sublineas = re.split(r'\s{2,}', linea.strip())
+                            for sub in sublineas:
+                                sub = sub.strip()
+                                if sub:
+                                    self.arrayTicket.append(sub)
+            return self.arrayTicket
+        except Exception:
+            raise ErrorTicket("Error leyendo el PDF")
+
     def detectarTicket(self):
-        if not self.arrayTicket or str(self.arrayTicket[0]).strip().upper()[0:9] != "MERCADONA":
+        if not self.arrayTicket or not str(self.arrayTicket[0]).strip().upper().startswith("MERCADONA"):
             raise ErrorTicket("No se ha podido leer el ticket. Parece que no es un ticket del Mercadona.")
-    
+
     def inicioProductosPrecios(self):
         try:
-            contador = 0
-            inicioProductosPrecios = 0
-            for texto in self.arrayTicket:
-                if texto == "Importe".strip():
-                    inicioProductosPrecios = contador
-                contador = contador + 1
-            return inicioProductosPrecios
-        except:
+            for i, linea in enumerate(self.arrayTicket):
+                if re.search(r'(?i)\bImporte\b', linea):
+                    return i
+            raise ErrorTicket("No se encontró 'Importe'")
+        except Exception:
             raise ErrorTicket("Error en la lectura del ticket")
-    
+
     def extraerProductos(self):
         try:
             lista_productos = []
-
-            for producto in self.arrayTicket[self.inicioProductos + 1 :]:
-                producto = producto.strip()
-
-                if not producto:
+            for linea in self.arrayTicket[self.inicioProductos + 1:]:
+                linea = linea.strip()
+                if not linea or "TOTAL" in linea or "TARJETA" in linea:
                     continue
-                
-                if not producto.endswith(" kg"):
-                    partes = producto.split(" ", 1)
-                    if len(partes) != 2:
-                        continue
 
-                    cantidad, nombre = partes
-                    nombre = str(nombre).title()
-
-                    if nombre.strip().lower().endswith("kg"):
-                        nombre = nombre[0:-2]
-                        nombre = nombre.strip()
-
-                    try:
-                        cantidad = int(cantidad)
-                    except ValueError:
-                        continue
-                    
-                    lista_productos.append((nombre.strip(), cantidad))
+                match = re.match(r"^(\d+)\s+(.*?)(?:\s+\d+,\d{2}){1,2}$", linea)
+                if match:
+                    cantidad = int(match.group(1))
+                    nombre = match.group(2).strip().title()
+                    lista_productos.append((nombre, cantidad))
                 else:
-                    kg = producto[0:-2].strip()
-                    kg = kg.replace(",",".")
-                    lista_productos[len(lista_productos)-1] = (nombre, float(kg))
-
+                    tokens = linea.split()
+                    if len(tokens) >= 2 and tokens[0].isdigit():
+                        cantidad = int(tokens[0])
+                        nombre = " ".join(tokens[1:]).title()
+                        lista_productos.append((nombre, cantidad))
             return lista_productos
-        except:
-            raise ErrorTicket("Error en la lectura del ticket")
-    
+        except Exception:
+            raise ErrorTicket("Error en la lectura de productos")
+
     def extraerPrecios(self):
         try:
-            arrayprecios = []
-            i = self.inicioProductos + 1
-            lista = self.arrayTicket
-
-            while i < len(lista):
-                item = lista[i]
-
-                # Productos a peso (€/kg)
-                if "€/kg" in str(item):
-                    partes = str(item).split(" ")
-                    for parte in partes:
-                        if "€" in parte:
-                            break
-                        else:
-                            precio = parte.replace(",", ".").strip()
-                            arrayprecios.append(round(float(precio), 2))
-                        break
-                    i += 3
+            precios = []
+            for linea in self.arrayTicket[self.inicioProductos + 1:]:
+                if not linea or "TOTAL" in linea:
                     continue
 
-                # Productos normales
-                if isinstance(item, str):
-                    es_numero = item.replace(",", "").replace(".", "").isdigit()
-                    if not es_numero and "€/kg" not in item:
-                        siguiente = lista[i + 1] if i + 1 < len(lista) else ""
-                        despues = lista[i + 2] if i + 2 < len(lista) else ""
+                if "€/kg" in linea:
+                    match = re.search(r"(\d+,\d{2})\s*€/kg", linea)
+                    if match:
+                        precio = float(match.group(1).replace(",", "."))
+                        precios.append(round(precio, 2))
+                        continue
 
-                        # Dos precios seguidos → coger el primero
-                        if isinstance(siguiente, str) and siguiente.replace(",", "").replace(".", "").isdigit() and \
-                        isinstance(despues, str) and despues.replace(",", "").replace(".", "").isdigit():
-                            arrayprecios.append(round(float(siguiente.replace(",", ".")), 2))
-                            i += 3
-                            continue
-
-                        # Un solo precio
-                        elif isinstance(siguiente, str) and siguiente.replace(",", "").replace(".", "").isdigit():
-                            arrayprecios.append(round(float(siguiente.replace(",", ".")), 2))
-                            i += 2
-                            continue
-
-                i += 1
-
-            return arrayprecios
-
-        except:
-            raise ErrorTicket("Error en la lectura del ticket")
+                # Extraer precios y coger el primero (precio unitario)
+                partes = re.findall(r"\d+,\d{2}", linea)
+                if partes:
+                    precio = float(partes[0].replace(",", "."))
+                    precios.append(round(precio, 2))
+            return precios
+        except Exception:
+            raise ErrorTicket("Error en la lectura de precios")
 
     def cargarDiccionario(self):
         try:
-            lista_productos = self.extraerProductos()
-            arrayPrecios = self.extraerPrecios()
-            
-            contador = 0
-            while contador < len(arrayPrecios):
-                try:
-                    producto = lista_productos[contador]
-                except:
-                    break
-                precio = arrayPrecios[contador]
-                
-                self.diccionarioProductos[producto[0]] = precio
-                contador += 1
-                
-            try:
-                del self.diccionarioProductos["Parking"]
-                del self.diccionarioProductos["Parking:"]
-            except:
-                pass
+            productos = self.extraerProductos()
+            precios = self.extraerPrecios()
+
+            for i in range(min(len(productos), len(precios))):
+                self.diccionarioProductos[productos[i][0]] = precios[i]
+
+            for basura in ["Parking", "Parking:"]:
+                self.diccionarioProductos.pop(basura, None)
+
             return self.diccionarioProductos
         except:
-            raise ErrorTicket("Error en la lectura del ticket")
-        
+            raise ErrorTicket("Error cargando diccionario")
+
     def getFechaTicket(self):
         for linea in self.arrayTicket:
-            match = re.match(r'^(\d{2}/\d{2}/\d{4}) \d{2}:\d{2}$', linea)
+            match = re.search(r'(\d{2}/\d{2}/\d{4})\s+\d{2}:\d{2}', linea)
             if match:
-                fecha_str = match.group(1)
-                # Convertir a formato datetime y luego a ISO (YYYY-MM-DD)
-                fecha_iso = datetime.strptime(fecha_str, "%d/%m/%Y").strftime("%Y-%m-%d")
-                return fecha_iso
+                return datetime.strptime(match.group(1), "%d/%m/%Y").strftime("%Y-%m-%d")
         raise ErrorTicket("No se encontró una fecha válida en el ticket.")
     
 if __name__ == "__main__":
