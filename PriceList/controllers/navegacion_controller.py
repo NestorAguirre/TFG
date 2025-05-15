@@ -9,10 +9,9 @@ def cambiar_pantalla(app, nombre_pantalla):
 
 
 def volver_atras(app):
-    if len(app.historial_pantallas) > 1:
-        app.historial_pantallas.pop()
-        pantalla_anterior = app.historial_pantallas[-1]
-
+    if len(app.historial_pantallas) > 0:
+        pantalla_anterior = app.historial_pantallas.pop()
+        
         if app.sm.current == "listadoproductos":
             app.date_picker.reset_fecha()
 

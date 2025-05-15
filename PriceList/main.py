@@ -45,7 +45,7 @@ class PriceListApp(MDApp):
         self.date_picker = DatePickerController(app=self)
         
         Clock.schedule_once(self.post_carga_vistas, 0)
-        self.historial_pantallas = ["menu"]
+        self.historial_pantallas = []
         Window.bind(on_resize=lambda *_: actualizar_fuentes(self))
         actualizar_fuentes(self)
 
