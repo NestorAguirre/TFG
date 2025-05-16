@@ -1,10 +1,9 @@
 from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.uix.scrollview import ScrollView
-from kivymd.uix.button import MDFlatButton, MDRaisedButton
+from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.label import MDLabel
 from kivy.logger import Logger
 
 from modules.listados import productos_por_familia, FAMILIAS_FIJAS
@@ -13,11 +12,13 @@ from controllers.utils import get_db_path
 
 Builder.load_file("views/clasificador_popup.kv")
 
+
 class ClasificadorPopup:
-    def __init__(self, app, producto, precio):
+    def __init__(self, app, producto, precio, callback=None):
         self.app = app
         self.producto = producto
         self.precio = precio
+        self.callback = callback
         self.dialog = None
         self.menu = None
         self.familia_seleccionada = None
@@ -25,7 +26,7 @@ class ClasificadorPopup:
         self.label = None
 
     def mostrar(self):
-        self.app.clasificador_popup = self  # Para acceso desde .kv
+        self.app.clasificador_popup = self
 
         from kivy.factory import Factory
         layout = Factory.ClasificadorPopupLayout()
@@ -86,3 +87,5 @@ class ClasificadorPopup:
     def cerrar(self, *args):
         if self.dialog:
             self.dialog.dismiss()
+            if self.callback:
+                Clock.schedule_once(lambda dt: self.callback(self.app), 0.3)
