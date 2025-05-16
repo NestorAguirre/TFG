@@ -79,9 +79,12 @@ class PriceListApp(MDApp):
             self.date_picker.open()
             
     def vaciar_base_de_datos(self):
-        db = DBController("data/pricelist.db")
-        db.vaciarBaseDeDatos()
-        Snackbar(text="Base de datos vaciada correctamente").open()
+        try:
+            db = DBController("data/pricelist.db")
+            db.vaciarBaseDeDatos()
+            Snackbar(text="Base de datos vaciada correctamente").open()
+        except:
+            pass
 
 if __name__ == '__main__':
     PriceListApp().run()
