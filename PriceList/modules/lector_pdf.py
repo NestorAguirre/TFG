@@ -82,7 +82,6 @@ class LectorTicket:
                         precios.append(round(precio, 2))
                         continue
 
-                # Extraer precios y coger el primero (precio unitario)
                 partes = re.findall(r"\d+,\d{2}", linea)
                 if partes:
                     precio = float(partes[0].replace(",", "."))

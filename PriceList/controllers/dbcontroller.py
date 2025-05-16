@@ -150,6 +150,18 @@ class DBController():
             })
 
         return productos
+    
+    def vaciarBaseDeDatos(self):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+
+        cursor.execute("DELETE FROM precios")
+        cursor.execute("DELETE FROM tickets")
+        cursor.execute("DELETE FROM productos")
+
+        conexion.commit()
+        conexion.close()
 
 if __name__ == "__main__":
     base = DBController("data/pricelist.db")
+    base.vaciarBaseDeDatos()
