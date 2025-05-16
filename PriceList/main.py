@@ -4,6 +4,7 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.core.window import Window
+from kivymd.uix.snackbar import Snackbar
 
 from controllers.abrir_filechooser import abrir_filechooser
 from controllers.mostrar_productos import cargar_productos
@@ -78,13 +79,9 @@ class PriceListApp(MDApp):
             self.date_picker.open()
             
     def vaciar_base_de_datos(self):
-        try:
-            db = DBController("data/pricelist.db")
-            db.vaciarBaseDeDatos()
-            Snackbar(text="Base de datos vaciada correctamente").open()
-        except Exception as e:
-            from kivymd.uix.snackbar import Snackbar
-            Snackbar(text=f"Error al vaciar la base de datos: {e}").open()
+        db = DBController("data/pricelist.db")
+        db.vaciarBaseDeDatos()
+        Snackbar(text="Base de datos vaciada correctamente").open()
 
 if __name__ == '__main__':
     PriceListApp().run()
