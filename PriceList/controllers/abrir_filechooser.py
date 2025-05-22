@@ -1,9 +1,13 @@
-from android.permissions import request_permissions, Permission
-from android import activity
-from jnius import autoclass, cast
+try:
+    from android.permissions import request_permissions, Permission
+    from android import activity
+    from jnius import autoclass, cast
+except:
+    pass
 from kivy.logger import Logger
 from kivy.clock import Clock
 from kivymd.uix.snackbar import Snackbar
+from kivy.utils import platform
 
 import os
 import pdfplumber
@@ -101,7 +105,7 @@ def _procesar_archivo(ruta, app):
             raise FileNotFoundError(f"La ruta no existe: {ruta}")
 
         lector = LectorTicket(ruta)
-        db = DBController(get_db_path())
+        db = DBController("data/pricelist.db")
 
         db.insertarTicket(lector.getFechaTicket())
         ticket_id = db.getUltimoTicket()
