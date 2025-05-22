@@ -54,9 +54,11 @@
             height: self.minimum_height
             spacing: dp(10)
 
-            MDRaisedButton: 
+            MDFlatButton: 
                 text: 'Seleccionar fecha'
                 pos_hint: {'center_x': 0.5}
+                elevation: 0
+                md_bg_color: 1, 0.4, 0.4, 1
                 on_release: app.open_date_picker()
 
             MDLabel:
