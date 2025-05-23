@@ -77,7 +77,7 @@ class ClasificadorPopup:
 
         productos_por_familia.setdefault(self.familia_seleccionada, []).append(self.producto)
 
-        db = DBController(get_db_path())
+        db = DBController("data/pricelist.db")
         db.insertarProducto(self.producto, self.familia_seleccionada)
         db.insertarPrecio(db.getProductoPorNombre(self.producto), db.getUltimoTicket(), self.precio)
 
