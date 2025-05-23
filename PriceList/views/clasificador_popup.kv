@@ -1,43 +1,38 @@
 <ClasificadorPopupLayout@BoxLayout>:
     orientation: 'vertical'
-    spacing: '15dp'
-    padding: '20dp'
+    spacing: '8dp'
+    padding: ['20dp', '20dp', '20dp', '20dp']
     size_hint_y: None
-    height: self.minimum_height
-    adaptive_height: True
+    height: '160dp'
+    adaptive_height: False
 
-    MDCard:
-        orientation: 'vertical'
-        size_hint: 1, None
-        height: self.minimum_height
-        padding: '10dp'
-        spacing: '15dp'
-        elevation: 3
-        radius: [15]
-        md_bg_color: app.theme_cls.bg_dark if app.theme_cls.theme_style == "Dark" else [1,1,1,1]
-
-        MDLabel:
-            id: producto_label
-            text: "Producto"
-            font_style: "H6"
-            bold: True
-            size_hint_y: None
-            height: self.texture_size[1]
-            theme_text_color: "Primary"
-            padding: ('10dp', 0)
-
-        MDSeparator:
-            height: '1dp'
-
+    MDLabel:
+        id: producto_label
+        text: "Producto:"
+        font_style: "Subtitle1"
+        bold: True
+        size_hint_y: None
+        height: '40dp'
+        theme_text_color: "Primary"
+        halign: "left"
+        
+    MDSeparator:
+        height: '1dp'
+        size_hint_y: None
+        
+    GridLayout:
+        cols: 1
+        size_hint_y: None
+        height: '80dp'
+        spacing: '8dp'
+        padding: ['0dp', '10dp', '0dp', '10dp']
+            
         MDFillRoundFlatButton:
             id: button_select
             text: "Seleccionar familia"
-            icon: "folder-outline"
             size_hint: None, None
-            size: "280dp", "48dp"
+            size: '240dp', '48dp'
             pos_hint: {'center_x': 0.5}
-            theme_icon_color: "Custom"
-            icon_color: app.theme_cls.primary_color
-            md_bg_color: app.theme_cls.bg_dark if app.theme_cls.theme_style == "Dark" else [0.95, 0.95, 0.95, 1]
-            text_color: app.theme_cls.primary_color
+            md_bg_color: app.theme_cls.primary_color
+            text_color: [1, 1, 1, 1]
             on_release: app.clasificador_popup.abrir_menu(self)
