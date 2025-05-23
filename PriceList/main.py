@@ -40,17 +40,21 @@ class PriceListApp(MDApp):
     def build(self):
         Window.clearcolor = (0.98, 0.95, 0.88, 1)
         Window.bind(on_keyboard=capturar_tecla_atras)
+
         self.sm = ScreenManager()
         self.sm.add_widget(MenuScreen(name='menu'))
-        
+
         self.date_picker = DatePickerController(app=self)
-        
-        Clock.schedule_once(self.post_carga_vistas, 0)
         self.historial_pantallas = []
         Window.bind(on_resize=lambda *_: actualizar_fuentes(self))
         actualizar_fuentes(self)
 
+        cargar_vistas(self.sm)
+        listado_screen = self.sm.get_screen('listadoproductos')
+        self.date_picker.screen = listado_screen
+
         return self.sm
+
 
     def post_carga_vistas(self, dt):
         cargar_vistas(self.sm)
