@@ -5,6 +5,7 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.menu import MDDropdownMenu
 from kivy.logger import Logger
+from kivy.utils import platform
 
 from modules.listados import productos_por_familia, FAMILIAS_FIJAS
 from controllers.dbcontroller import DBController
@@ -77,7 +78,10 @@ class ClasificadorPopup:
 
         productos_por_familia.setdefault(self.familia_seleccionada, []).append(self.producto)
 
-        db = DBController("data/pricelist.db")
+        if platform == "android":
+            db = DBController("data/pricelist.db")
+        else:
+            db = DBController(get_db_path())
         db.insertarProducto(self.producto, self.familia_seleccionada)
         db.insertarPrecio(db.getProductoPorNombre(self.producto), db.getUltimoTicket(), self.precio)
 
