@@ -1,17 +1,16 @@
-from akivymd.uix.datepicker import AKDatePicker
+from kivymd.uix.pickers import MDDatePicker
 from datetime import date
 from kivymd.uix.snackbar import Snackbar
 
 class DatePickerController:
     def __init__(self, app):
-        self.date = AKDatePicker(callback=self.callback, year_range=[2024, 2026])
         self.app = app
         self.screen = None
         self.fecha_seleccionada = None
         self.current_family = None
 
-    def callback(self, date_obj):
-        if not date_obj or not hasattr(date_obj, "year"):
+    def on_date_selected(self, date_obj):
+        if not date_obj:
             Snackbar(text="No se seleccionó una fecha válida.").open()
             return
 
@@ -30,8 +29,13 @@ class DatePickerController:
             self.app.mostrar_listado_productos(self.current_family, "listadoproductos")
 
     def open(self):
-        if self.screen:
-            self.date.open()
+        date_picker = MDDatePicker(
+            year=date.today().year,
+            month=date.today().month,
+            day=date.today().day,
+        )
+        date_picker.bind(on_save=lambda instance, value, date_range: self.on_date_selected(value))
+        date_picker.open()
 
     def reset_fecha(self):
         hoy = date.today()
