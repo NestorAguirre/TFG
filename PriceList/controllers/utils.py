@@ -4,8 +4,7 @@ from kivy.core.window import Window
 
 def get_db_path():
     if platform == "android":
-        from android.storage import app_storage_path
-        ruta_base = app_storage_path()
+        ruta_base = "data/pricelist.db"
     else:
         ruta_base = os.path.dirname(os.path.abspath(__file__))
 
