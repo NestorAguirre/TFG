@@ -131,7 +131,7 @@ if platform == "android":
             app.productos_no_clasificados = productos_no_clasificados
 
             if app.productos_no_clasificados:
-                Clock.schedule_once(lambda dt: mostrar_siguiente_popup(app))  # ✅ se lanza en hilo principal
+                Clock.schedule_once(lambda dt: mostrar_siguiente_popup(app))
             else:
                 Logger.info("No hay productos sin clasificar.")
                 Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
@@ -207,12 +207,25 @@ else:
                 else:
                     productos_no_clasificados.append((producto, precio))
 
-            for producto, precio in productos_no_clasificados:
-                Clock.schedule_once(lambda dt, prod=producto, pre=precio: ClasificadorPopup(app, prod, pre).mostrar(), 0.5)
+            app.productos_no_clasificados = productos_no_clasificados
 
-            Logger.info("Archivo procesado correctamente.")
-            Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
+            if app.productos_no_clasificados:
+                Clock.schedule_once(lambda dt: mostrar_siguiente_popup(app))
+            else:
+                Logger.info("No hay productos sin clasificar.")
+                Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
+
 
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
             Clock.schedule_once(lambda dt: Snackbar(text="Error al importar el ticket", duration=2).open())
+            
+    def mostrar_siguiente_popup(app):
+        if not app.productos_no_clasificados:
+            Logger.info("Todos los productos han sido clasificados.")
+            Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
+            return
+
+        producto, precio = app.productos_no_clasificados.pop(0)
+        popup = ClasificadorPopup(app, producto, precio, callback=mostrar_siguiente_popup)
+        popup.mostrar()
