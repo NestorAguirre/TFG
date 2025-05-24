@@ -61,8 +61,8 @@ class ClasificadorPopup:
                         "text": familia,
                         "on_release": lambda x=familia: self.seleccionar_familia(x),
                         "theme_text_color": "Custom",
-                        "text_color": [0.1, 0.1, 0.1, 1],      # texto gris oscuro
-                        "bg_color": [0.9, 0.9, 0.9, 1],        # fondo gris claro
+                        "text_color": [0.1, 0.1, 0.1, 1],
+                        "bg_color": [0.9, 0.9, 0.9, 1],
                     }
                     for familia in FAMILIAS_FIJAS
                 ],

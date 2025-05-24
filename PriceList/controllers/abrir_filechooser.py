@@ -19,6 +19,17 @@ from controllers.clasificador_controller import ClasificadorPopup
 from modules.listados import productos_por_familia
 
 
+def mostrar_siguiente_popup(app):
+    if not app.productos_no_clasificados:
+        Logger.info("Todos los productos han sido clasificados.")
+        Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
+        return
+
+    producto, precio = app.productos_no_clasificados.pop(0)
+    popup = ClasificadorPopup(app, producto, precio, callback=mostrar_siguiente_popup)
+    Clock.schedule_once(lambda dt: popup.mostrar(), 0.1)
+
+
 if platform == "android":
     def abrir_filechooser(app):
         request_permissions([
@@ -140,16 +151,6 @@ if platform == "android":
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
             Clock.schedule_once(lambda dt: Snackbar(text="Error al importar el ticket", duration=2).open())
 
-
-    def mostrar_siguiente_popup(app):
-        if not app.productos_no_clasificados:
-            Logger.info("Todos los productos han sido clasificados.")
-            Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
-            return
-
-        producto, precio = app.productos_no_clasificados.pop(0)
-        popup = ClasificadorPopup(app, producto, precio, callback=mostrar_siguiente_popup)
-        popup.mostrar()
 else:
     from kivy.clock import Clock
     from kivymd.uix.snackbar import Snackbar
@@ -215,17 +216,6 @@ else:
                 Logger.info("No hay productos sin clasificar.")
                 Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
 
-
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
             Clock.schedule_once(lambda dt: Snackbar(text="Error al importar el ticket", duration=2).open())
-            
-    def mostrar_siguiente_popup(app):
-        if not app.productos_no_clasificados:
-            Logger.info("Todos los productos han sido clasificados.")
-            Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
-            return
-
-        producto, precio = app.productos_no_clasificados.pop(0)
-        popup = ClasificadorPopup(app, producto, precio, callback=mostrar_siguiente_popup)
-        popup.mostrar()
