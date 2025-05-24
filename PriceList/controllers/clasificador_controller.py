@@ -1,11 +1,13 @@
 from kivy.clock import Clock
 from kivy.lang import Builder
-from kivy.uix.scrollview import ScrollView
+from kivy.metrics import dp
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.menu import MDDropdownMenu
 from kivy.logger import Logger
 from kivy.utils import platform
+from kivy.factory import Factory
+from kivymd.uix.list import OneLineListItem
 
 from modules.listados import productos_por_familia, FAMILIAS_FIJAS
 from controllers.dbcontroller import DBController
@@ -29,17 +31,15 @@ class ClasificadorPopup:
     def mostrar(self):
         self.app.clasificador_popup = self
 
-        from kivy.factory import Factory
         layout = Factory.ClasificadorPopupLayout()
         self.label = layout.ids.producto_label
         self.label.text = f"Producto: {self.producto}"
         self.button_select = layout.ids.button_select
 
-        # QUITAR el ScrollView y usar layout directamente
         self.dialog = MDDialog(
             title=f"Asignar familia a '{self.producto}'",
             type="custom",
-            content_cls=layout,  # sin scroll
+            content_cls=layout,
             buttons=[
                 MDFlatButton(text="CANCELAR", on_release=self.cerrar),
                 MDFlatButton(text="GUARDAR", on_release=self.guardar)
@@ -51,7 +51,6 @@ class ClasificadorPopup:
         self.dialog.background_color = [0, 0, 0, 0]
         self.dialog.open()
 
-
     def abrir_menu(self, instance):
         if not self.menu:
             self.menu = MDDropdownMenu(
@@ -61,10 +60,16 @@ class ClasificadorPopup:
                         "viewclass": "OneLineListItem",
                         "text": familia,
                         "on_release": lambda x=familia: self.seleccionar_familia(x),
+                        "theme_text_color": "Custom",
+                        "text_color": [0.1, 0.1, 0.1, 1],      # texto gris oscuro
+                        "bg_color": [0.9, 0.9, 0.9, 1],        # fondo gris claro
                     }
                     for familia in FAMILIAS_FIJAS
                 ],
                 width_mult=3,
+                background_color=[0, 0, 0, 0],
+                max_height=dp(200),
+                elevation=0
             )
         self.button_select.parent.do_layout()
         Clock.schedule_once(lambda dt: self.menu.open(), 0.3)
@@ -94,5 +99,8 @@ class ClasificadorPopup:
     def cerrar(self, *args):
         if self.dialog:
             self.dialog.dismiss()
-            if self.callback:
-                Clock.schedule_once(lambda dt: self.callback(self.app), 0.3)
+            self.dialog.bind(on_dismiss=self._al_cerrar_dialogo)
+
+    def _al_cerrar_dialogo(self, *args):
+        if self.callback:
+            Clock.schedule_once(lambda dt: self.callback(self.app), 0.2)
