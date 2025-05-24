@@ -35,19 +35,22 @@ class ClasificadorPopup:
         self.label.text = f"Producto: {self.producto}"
         self.button_select = layout.ids.button_select
 
-        scroll = ScrollView(size_hint=(1, None), height=150)
-        scroll.add_widget(layout)
-
+        # QUITAR el ScrollView y usar layout directamente
         self.dialog = MDDialog(
             title=f"Asignar familia a '{self.producto}'",
             type="custom",
-            content_cls=scroll,
+            content_cls=layout,  # sin scroll
             buttons=[
                 MDFlatButton(text="CANCELAR", on_release=self.cerrar),
                 MDFlatButton(text="GUARDAR", on_release=self.guardar)
             ]
         )
+        self.dialog.scrim_color = [0, 0, 0, 0]
+        self.dialog.elevation = 0
+        self.dialog.radius = [0, 0, 0, 0]
+        self.dialog.background_color = [0, 0, 0, 0]
         self.dialog.open()
+
 
     def abrir_menu(self, instance):
         if not self.menu:
