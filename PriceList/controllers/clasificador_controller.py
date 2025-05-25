@@ -30,7 +30,7 @@ class ClasificadorPopup:
         label = Label(
             text=f"Producto: {self.producto}",
             size_hint=(1, 0.2),
-            font_size=18,
+            font_size="16sp",
             halign='center',
             valign='middle'
         )
@@ -53,7 +53,7 @@ class ClasificadorPopup:
             text="Cancelar",
             background_color=(0.6, 0, 0, 1),
             color=(1, 1, 1, 1),
-            font_size=16,
+            font_size='16sp',
             on_release=partial(self.cerrar)
         )
 
@@ -61,7 +61,7 @@ class ClasificadorPopup:
             text="Guardar",
             background_color=(0, 0.6, 0, 1),
             color=(1, 1, 1, 1),
-            font_size=16,
+            font_size='16sp',
             on_release=partial(self.guardar)
         )
 
