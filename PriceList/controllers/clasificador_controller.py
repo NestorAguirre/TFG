@@ -8,10 +8,12 @@ from kivy.utils import platform
 from kivy.logger import Logger
 
 from functools import partial
+import json
+import os
 
-from modules.listados import productos_por_familia, FAMILIAS_FIJAS
+from modules.listados import FAMILIAS_FIJAS
 from controllers.dbcontroller import DBController
-from controllers.utils import get_db_path
+from controllers.utils import get_db_path, get_familias_path
 
 
 class ClasificadorPopup:
@@ -87,8 +89,6 @@ class ClasificadorPopup:
             Logger.warning("ClasificadorPopup: No se seleccionó familia.")
             return
 
-        productos_por_familia.setdefault(self.familia_seleccionada, []).append(self.producto)
-
         if platform == "android":
             db = DBController("data/pricelist.db")
         else:
@@ -96,6 +96,22 @@ class ClasificadorPopup:
 
         db.insertarProducto(self.producto, self.familia_seleccionada)
         db.insertarPrecio(db.getProductoPorNombre(self.producto), db.getUltimoTicket(), self.precio)
+        
+        if platform == "android":
+            RUTA_JSON = "data/familias.json"
+        else:
+            RUTA_JSON = get_familias_path()
+            
+        if os.path.exists(RUTA_JSON):
+            with open(RUTA_JSON, "r", encoding="utf-8") as f:
+                datos = json.load(f)
+        else:
+            datos = {}
+
+        datos[self.producto] = self.familia_seleccionada
+
+        with open(RUTA_JSON, "w", encoding="utf-8") as f:
+            json.dump(datos, f, indent=4, ensure_ascii=False)
 
         Logger.info(f"'{self.producto}' asignado a familia '{self.familia_seleccionada}'")
         self.cerrar()

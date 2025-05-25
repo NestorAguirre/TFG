@@ -14,9 +14,8 @@ import pdfplumber
 
 from modules.lector_pdf import LectorTicket
 from controllers.dbcontroller import DBController
-from controllers.utils import get_db_path
+from controllers.utils import get_db_path, get_familias_path
 from controllers.clasificador_controller import ClasificadorPopup
-from modules.listados import productos_por_familia
 
 
 def mostrar_siguiente_popup(app):
@@ -28,6 +27,17 @@ def mostrar_siguiente_popup(app):
     producto, precio = app.productos_no_clasificados.pop(0)
     popup = ClasificadorPopup(app, producto, precio, callback=mostrar_siguiente_popup)
     Clock.schedule_once(lambda dt: popup.mostrar(), 0.1)
+    
+def cargar_familias_json():
+    import json
+    if platform == "android":
+        path = "data/familias.json"
+    else:
+        path = get_familias_path()
+    if not os.path.exists(path):
+        return {}
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 if platform == "android":
@@ -124,14 +134,11 @@ if platform == "android":
 
             productos_no_clasificados = []
 
+            familias_dict = cargar_familias_json()
+
             for producto, precio in lector.cargarDiccionario().items():
                 producto_normalizado = producto.strip().lower()
-                familia = None
-
-                for key, lista_productos in productos_por_familia.items():
-                    if any(p.strip().lower() == producto_normalizado for p in lista_productos):
-                        familia = key
-                        break
+                familia = familias_dict.get(producto_normalizado)
 
                 if familia:
                     db.insertarProducto(producto, familia)
@@ -150,7 +157,6 @@ if platform == "android":
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
             toast("Error al importar el ticket")
-
 else:
     from kivy.clock import Clock
     from kivymd.toast import toast
@@ -163,7 +169,6 @@ else:
         from modules.lector_pdf import LectorTicket
     except:
         pass
-    from modules.listados import productos_por_familia
     from controllers.clasificador_controller import ClasificadorPopup
 
     def abrir_filechooser(app):
@@ -193,14 +198,11 @@ else:
 
             productos_no_clasificados = []
 
-            for producto, precio in lector.cargarDiccionario().items():
-                producto_normalizado = producto.strip().lower()
-                familia = None
+            familias_dict = cargar_familias_json()
 
-                for key, lista_productos in productos_por_familia.items():
-                    if any(p.strip().lower() == producto_normalizado for p in lista_productos):
-                        familia = key
-                        break
+            for producto, precio in lector.cargarDiccionario().items():
+                producto_normalizado = producto.strip()
+                familia = familias_dict.get(producto_normalizado)
 
                 if familia:
                     db.insertarProducto(producto, familia)
@@ -219,3 +221,4 @@ else:
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
             toast("Error al importar el ticket")
+

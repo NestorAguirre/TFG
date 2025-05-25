@@ -5,6 +5,7 @@ from kivy.uix.screenmanager import ScreenManager
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.core.window import Window
 from kivymd.toast import toast
+from kivy.utils import platform
 
 from controllers.abrir_filechooser import abrir_filechooser
 from controllers.mostrar_productos import cargar_productos
@@ -13,6 +14,7 @@ from controllers.navegacion_controller import cambiar_pantalla as cambiar_pantal
 from controllers.utils import actualizar_fuentes
 from controllers.selector_fecha_controller import DatePickerController
 from controllers.dbcontroller import DBController
+from controllers.utils import get_db_path
 
 Builder.load_file("views/main.kv")
 Builder.load_file("views/bebidas.kv")
@@ -83,7 +85,10 @@ class PriceListApp(MDApp):
             
     def vaciar_base_de_datos(self):
         try:
-            db = DBController("data/pricelist.db")
+            if platform == "android":
+                db = DBController("data/pricelist.db")
+            else:
+                db = DBController(get_db_path())
             db.vaciarBaseDeDatos()
             toast("Base de datos vaciada correctamente")
         except:

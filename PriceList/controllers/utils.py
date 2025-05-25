@@ -14,6 +14,18 @@ def get_db_path():
 
     return os.path.join(data_dir, "pricelist.db")
 
+def get_familias_path():
+    if platform == "android":
+        ruta_base = "data/familias.json"
+    else:
+        ruta_base = os.path.dirname(os.path.abspath(__file__))
+
+    data_dir = os.path.join(ruta_base, "..", "data")
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
+    return os.path.join(data_dir, "familias.json")
+
 
 def actualizar_fuentes(app):
     base_ancho = 360
