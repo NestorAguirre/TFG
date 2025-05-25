@@ -5,7 +5,7 @@ package.domain = org.pricelist
 
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,ttf,txt,json,db
-include_patterns = modules/**, controllers/**, views/**, assets/**, data/**, data/*.db, data/*.json
+include_patterns = modules/**, controllers/**, views/**, assets/**, data/**, data/*.db, data/familias.json
 
 version = 1.0
 orientation = portrait
