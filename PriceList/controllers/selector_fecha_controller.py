@@ -1,6 +1,79 @@
-from kivymd.uix.pickers import MDDatePicker
+from kivy.clock import Clock
+from kivy.uix.popup import Popup
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.spinner import Spinner
+from kivy.uix.button import Button
+from kivy.uix.label import Label
 from datetime import date
 from kivymd.toast import toast
+import logging
+import traceback
+
+logging.basicConfig(level=logging.DEBUG)
+
+class KivyDatePicker(Popup):
+    def __init__(self, on_date_selected, **kwargs):
+        super().__init__(**kwargs)
+        self.title = "Seleccionar fecha"
+        self.size_hint = (0.8, 0.6)
+        self.auto_dismiss = False
+        self.on_date_selected = on_date_selected
+
+        layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
+
+        today = date.today()
+
+        self.day_spinner = Spinner(
+            text=str(today.day),
+            values=[str(d) for d in range(1, 32)],
+            size_hint=(1, 0.2)
+        )
+
+        self.month_spinner = Spinner(
+            text=str(today.month),
+            values=[str(m) for m in range(1, 13)],
+            size_hint=(1, 0.2)
+        )
+
+        self.year_spinner = Spinner(
+            text=str(today.year),
+            values=[str(y) for y in range(today.year - 5, today.year + 1)],
+            size_hint=(1, 0.2)
+        )
+
+        layout.add_widget(Label(text="Día:"))
+        layout.add_widget(self.day_spinner)
+        layout.add_widget(Label(text="Mes:"))
+        layout.add_widget(self.month_spinner)
+        layout.add_widget(Label(text="Año:"))
+        layout.add_widget(self.year_spinner)
+
+        btn_layout = BoxLayout(size_hint=(1, 0.3), spacing=10)
+        btn_ok = Button(text="Aceptar", on_release=self.select_date)
+        btn_cancel = Button(text="Cancelar", on_release=self.dismiss)
+        btn_layout.add_widget(btn_ok)
+        btn_layout.add_widget(btn_cancel)
+
+        layout.add_widget(btn_layout)
+        self.content = layout
+
+    def select_date(self, instance):
+        try:
+            selected_date = date(
+                int(self.year_spinner.text),
+                int(self.month_spinner.text),
+                int(self.day_spinner.text)
+            )
+            self.on_date_selected(selected_date)
+            self.dismiss()
+        except ValueError:
+            error_popup = Popup(
+                title="Error",
+                content=Label(text="Fecha no válida."),
+                size_hint=(0.6, 0.3)
+            )
+            error_popup.open()
+
 
 class DatePickerController:
     def __init__(self, app):
@@ -10,35 +83,61 @@ class DatePickerController:
         self.current_family = None
 
     def on_date_selected(self, date_obj):
-        if not date_obj:
-            toast("No se seleccionó una fecha válida.")
-            return
-
         try:
+            if not isinstance(date_obj, date):
+                toast("Error: Tipo de fecha inválido")
+                logging.error("Fecha recibida no es instancia de datetime.date")
+                return
+
             fecha_valida = date(date_obj.year, date_obj.month, date_obj.day)
-        except ValueError:
-            toast("Fecha inválida seleccionada.")
-            return
 
-        if self.screen and hasattr(self.screen.ids, 'date'):
-            self.screen.ids.date.text = f"{fecha_valida.day}/{fecha_valida.month}/{fecha_valida.year}"
+            Clock.schedule_once(lambda dt: self._update_ui(fecha_valida))
+            self.fecha_seleccionada = fecha_valida.strftime("%Y-%m-%d")
 
-        self.fecha_seleccionada = fecha_valida.strftime("%Y-%m-%d")
+            if self.current_family:
+                Clock.schedule_once(lambda dt: self.app.mostrar_listado_productos(
+                    self.current_family,
+                    "listadoproductos"
+                ))
 
-        if self.current_family:
-            self.app.mostrar_listado_productos(self.current_family, "listadoproductos")
+        except ValueError as ve:
+            toast(f"Fecha inválida: {str(ve)}")
+            logging.error(f"Error de valor: {ve}")
+        except Exception as e:
+            toast("Error inesperado")
+            logging.critical(f"Error crítico: {str(e)}")
+            traceback.print_exc()
+
+    def _update_ui(self, fecha_valida):
+        try:
+            if self.screen and hasattr(self.screen.ids, 'date'):
+                self.screen.ids.date.text = (
+                    f"{fecha_valida.day}/{fecha_valida.month}/{fecha_valida.year}"
+                )
+        except AttributeError as ae:
+            logging.error(f"Error actualizando UI: {str(ae)}")
 
     def open(self):
-        date_picker = MDDatePicker(
-            year=date.today().year,
-            month=date.today().month,
-            day=date.today().day,
-        )
-        date_picker.bind(on_save=lambda instance, value, date_range: self.on_date_selected(value))
-        date_picker.open()
+        try:
+            picker = KivyDatePicker(on_date_selected=self.on_date_selected)
+            picker.open()
+        except Exception as e:
+            toast("No se pudo abrir el calendario")
+            logging.error(f"Error abriendo datepicker: {str(e)}")
+            traceback.print_exc()
 
     def reset_fecha(self):
-        hoy = date.today()
-        self.fecha_seleccionada = hoy.strftime("%Y-%m-%d")
-        if self.screen and hasattr(self.screen.ids, 'date'):
-            self.screen.ids.date.text = f"{hoy.day}/{hoy.month}/{hoy.year}"
+        try:
+            hoy = date.today()
+            self.fecha_seleccionada = hoy.strftime("%Y-%m-%d")
+            if self.screen and hasattr(self.screen.ids, 'date'):
+                Clock.schedule_once(
+                    lambda dt: setattr(
+                        self.screen.ids.date,
+                        'text',
+                        f"{hoy.day}/{hoy.month}/{hoy.year}"
+                    )
+                )
+        except Exception as e:
+            logging.error(f"Error reseteando fecha: {str(e)}")
+            traceback.print_exc()

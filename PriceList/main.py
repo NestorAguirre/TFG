@@ -79,8 +79,7 @@ class PriceListApp(MDApp):
         abrir_filechooser(self)
 
     def open_date_picker(self):
-        if self.date_picker:
-            self.date_picker.open()
+        self.date_picker.open()
             
     def vaciar_base_de_datos(self):
         try:
