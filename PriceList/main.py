@@ -4,7 +4,7 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.core.window import Window
-from kivymd.uix.snackbar import Snackbar
+from kivymd.toast import toast
 
 from controllers.abrir_filechooser import abrir_filechooser
 from controllers.mostrar_productos import cargar_productos
@@ -86,7 +86,7 @@ class PriceListApp(MDApp):
         try:
             db = DBController("data/pricelist.db")
             db.vaciarBaseDeDatos()
-            Snackbar(text="Base de datos vaciada correctamente").open()
+            toast("Base de datos vaciada correctamente")
         except:
             pass
 

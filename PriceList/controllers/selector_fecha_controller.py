@@ -1,6 +1,6 @@
 from kivymd.uix.pickers import MDDatePicker
 from datetime import date
-from kivymd.uix.snackbar import Snackbar
+from kivymd.toast import toast
 
 class DatePickerController:
     def __init__(self, app):
@@ -11,13 +11,13 @@ class DatePickerController:
 
     def on_date_selected(self, date_obj):
         if not date_obj:
-            Snackbar(text="No se seleccionó una fecha válida.").open()
+            toast("No se seleccionó una fecha válida.")
             return
 
         try:
             fecha_valida = date(date_obj.year, date_obj.month, date_obj.day)
         except ValueError:
-            Snackbar(text="Fecha inválida seleccionada.").open()
+            toast("Fecha inválida seleccionada.")
             return
 
         if self.screen and hasattr(self.screen.ids, 'date'):

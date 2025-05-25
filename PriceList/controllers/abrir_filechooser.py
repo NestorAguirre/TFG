@@ -6,7 +6,7 @@ except:
     pass
 from kivy.logger import Logger
 from kivy.clock import Clock
-from kivymd.uix.snackbar import Snackbar
+from kivymd.toast import toast
 from kivy.utils import platform
 
 import os
@@ -22,7 +22,7 @@ from modules.listados import productos_por_familia
 def mostrar_siguiente_popup(app):
     if not app.productos_no_clasificados:
         Logger.info("Todos los productos han sido clasificados.")
-        Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
+        toast("Ticket importado correctamente")
         return
 
     producto, precio = app.productos_no_clasificados.pop(0)
@@ -106,7 +106,7 @@ if platform == "android":
 
             except Exception as e:
                 Logger.error(f"Procesamiento de PDF: Error al copiar archivo -> {e}")
-                Clock.schedule_once(lambda dt: Snackbar(text="Error al copiar el archivo", duration=2).open())
+                toast("Error al copiar el archivo")
 
 
     def _procesar_archivo(ruta, app):
@@ -145,15 +145,15 @@ if platform == "android":
                 Clock.schedule_once(lambda dt: mostrar_siguiente_popup(app))
             else:
                 Logger.info("No hay productos sin clasificar.")
-                Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
+                toast("Ticket importado correctamente")
 
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
-            Clock.schedule_once(lambda dt: Snackbar(text="Error al importar el ticket", duration=2).open())
+            toast("Error al importar el ticket")
 
 else:
     from kivy.clock import Clock
-    from kivymd.uix.snackbar import Snackbar
+    from kivymd.toast import toast
     from kivy.logger import Logger
     from plyer import filechooser
 
@@ -214,8 +214,8 @@ else:
                 Clock.schedule_once(lambda dt: mostrar_siguiente_popup(app))
             else:
                 Logger.info("No hay productos sin clasificar.")
-                Clock.schedule_once(lambda dt: Snackbar(text="Ticket importado correctamente", duration=2).open())
+                toast("Ticket importado correctamente")
 
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
-            Clock.schedule_once(lambda dt: Snackbar(text="Error al importar el ticket", duration=2).open())
+            toast("Error al importar el ticket")
