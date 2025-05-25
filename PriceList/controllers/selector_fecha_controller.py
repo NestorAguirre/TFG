@@ -24,7 +24,7 @@ class KivyDatePicker(Popup):
         today = date.today()
 
         # Layout principal
-        layout = BoxLayout(orientation='vertical', spacing=15, padding=20)
+        layout = BoxLayout(orientation='vertical', spacing=15, padding=(20,10,20,10))
 
         # Título personalizado
         layout.add_widget(Label(
@@ -93,7 +93,7 @@ class KivyDatePicker(Popup):
         layout.add_widget(grid)
 
         # Botones
-        btn_layout = BoxLayout(size_hint=(1, 0.3), spacing=15, padding=(0, 10))
+        btn_layout = BoxLayout(size_hint=(1, 0.3), spacing=15, padding=10)
 
         btn_ok = Button(
             text="Aceptar",
@@ -112,8 +112,8 @@ class KivyDatePicker(Popup):
             on_release=self.dismiss
         )
 
-        btn_layout.add_widget(btn_ok)
         btn_layout.add_widget(btn_cancel)
+        btn_layout.add_widget(btn_ok)
 
         layout.add_widget(btn_layout)
 
