@@ -43,27 +43,51 @@ class KivyDatePicker(Popup):
             text=str(today.day),
             values=[str(d) for d in range(1, 32)],
             size_hint=(1, None),
-            height="40sp"
+            height="48sp",
+            halign='center'
         )
         self.month_spinner = Spinner(
             text=str(today.month),
             values=[str(m) for m in range(1, 13)],
             size_hint=(1, None),
-            height="40sp"
+            height="48sp",
+            halign='center'
         )
         self.year_spinner = Spinner(
             text=str(today.year),
             values=[str(y) for y in range(today.year - 5, today.year + 1)],
             size_hint=(1, None),
-            height="40sp"
+            height="48sp",
+            halign='center'
         )
 
         # Añadir etiquetas y spinners
-        grid.add_widget(Label(text="Día:", font_size="16sp", size_hint=(1, None), height=30))
+        grid.add_widget(Label(
+            text="Día:", 
+            font_size="24sp", 
+            size_hint=(1, None), 
+            height="48sp",
+            halign="center",
+            valign="middle"
+        ))
         grid.add_widget(self.day_spinner)
-        grid.add_widget(Label(text="Mes:", font_size="16sp", size_hint=(1, None), height=30))
+        grid.add_widget(Label(
+            text="Mes:", 
+            font_size="24sp", 
+            size_hint=(1, None), 
+            height="48sp",
+            halign="center",
+            valign="middle"
+        ))
         grid.add_widget(self.month_spinner)
-        grid.add_widget(Label(text="Año:", font_size="16sp", size_hint=(1, None), height=30))
+        grid.add_widget(Label(
+            text="Año:", 
+            font_size="24sp", 
+            size_hint=(1, None), 
+            height="48sp",
+            halign="center",
+            valign="middle"
+        ))
         grid.add_widget(self.year_spinner)
 
         layout.add_widget(grid)
