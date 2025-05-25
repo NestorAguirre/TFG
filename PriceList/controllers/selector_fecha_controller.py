@@ -1,6 +1,7 @@
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.spinner import Spinner
 from kivy.uix.button import Button
 from kivy.uix.label import Label
@@ -11,50 +12,87 @@ import traceback
 
 logging.basicConfig(level=logging.DEBUG)
 
+
 class KivyDatePicker(Popup):
     def __init__(self, on_date_selected, **kwargs):
         super().__init__(**kwargs)
-        self.title = "Seleccionar fecha"
-        self.size_hint = (0.8, 0.6)
+        self.title = "Seleccionar Fecha"
+        self.size_hint = (0.85, 0.6)
         self.auto_dismiss = False
         self.on_date_selected = on_date_selected
 
-        layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
-
         today = date.today()
+
+        # Layout principal
+        layout = BoxLayout(orientation='vertical', spacing=15, padding=20)
+
+        # Título personalizado
+        layout.add_widget(Label(
+            text="Selecciona una fecha",
+            font_size='20sp',
+            bold=True,
+            size_hint=(1, 0.2),
+            halign="center",
+            valign="middle"
+        ))
+
+        # Cuadrícula para Día/Mes/Año
+        grid = GridLayout(cols=2, spacing=10, size_hint=(1, 0.6))
 
         self.day_spinner = Spinner(
             text=str(today.day),
             values=[str(d) for d in range(1, 32)],
-            size_hint=(1, 0.2)
+            size_hint=(1, None),
+            height=40
         )
-
         self.month_spinner = Spinner(
             text=str(today.month),
             values=[str(m) for m in range(1, 13)],
-            size_hint=(1, 0.2)
+            size_hint=(1, None),
+            height=40
         )
-
         self.year_spinner = Spinner(
             text=str(today.year),
             values=[str(y) for y in range(today.year - 5, today.year + 1)],
-            size_hint=(1, 0.2)
+            size_hint=(1, None),
+            height=40
         )
 
-        layout.add_widget(Label(text="Día:"))
-        layout.add_widget(self.day_spinner)
-        layout.add_widget(Label(text="Mes:"))
-        layout.add_widget(self.month_spinner)
-        layout.add_widget(Label(text="Año:"))
-        layout.add_widget(self.year_spinner)
+        # Añadir etiquetas y spinners
+        grid.add_widget(Label(text="Día:", font_size=16, size_hint=(1, None), height=30))
+        grid.add_widget(self.day_spinner)
+        grid.add_widget(Label(text="Mes:", font_size=16, size_hint=(1, None), height=30))
+        grid.add_widget(self.month_spinner)
+        grid.add_widget(Label(text="Año:", font_size=16, size_hint=(1, None), height=30))
+        grid.add_widget(self.year_spinner)
 
-        btn_layout = BoxLayout(size_hint=(1, 0.3), spacing=10)
-        btn_ok = Button(text="Aceptar", on_release=self.select_date)
-        btn_cancel = Button(text="Cancelar", on_release=self.dismiss)
+        layout.add_widget(grid)
+
+        # Botones
+        btn_layout = BoxLayout(size_hint=(1, 0.3), spacing=15, padding=(0, 10))
+
+        btn_ok = Button(
+            text="Aceptar",
+            background_color=(0, 0.6, 0, 1),
+            color=(1, 1, 1, 1),
+            font_size='16sp',
+            bold=True,
+            on_release=self.select_date
+        )
+        btn_cancel = Button(
+            text="Cancelar",
+            background_color=(0.6, 0, 0, 1),
+            color=(1, 1, 1, 1),
+            font_size='16sp',
+            bold=True,
+            on_release=self.dismiss
+        )
+
         btn_layout.add_widget(btn_ok)
         btn_layout.add_widget(btn_cancel)
 
         layout.add_widget(btn_layout)
+
         self.content = layout
 
     def select_date(self, instance):
@@ -73,7 +111,6 @@ class KivyDatePicker(Popup):
                 size_hint=(0.6, 0.3)
             )
             error_popup.open()
-
 
 class DatePickerController:
     def __init__(self, app):
