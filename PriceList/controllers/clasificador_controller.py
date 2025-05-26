@@ -67,7 +67,6 @@ class ClasificadorPopup:
             on_release=partial(self.guardar)
         )
 
-
         botones.add_widget(btn_cancelar)
         botones.add_widget(btn_guardar)
         layout.add_widget(botones)
@@ -89,28 +88,21 @@ class ClasificadorPopup:
             Logger.warning("ClasificadorPopup: No se seleccionó familia.")
             return
 
-        if platform == "android":
-            db = DBController("data/pricelist.db")
-        else:
-            db = DBController(get_db_path())
-
+        db = DBController(get_db_path())
         db.insertarProducto(self.producto, self.familia_seleccionada)
         db.insertarPrecio(db.getProductoPorNombre(self.producto), db.getUltimoTicket(), self.precio)
-        
-        if platform == "android":
-            RUTA_JSON = "data/familias.json"
-        else:
-            RUTA_JSON = get_familias_path()
-            
-        if os.path.exists(RUTA_JSON):
-            with open(RUTA_JSON, "r", encoding="utf-8") as f:
+
+        ruta_json = get_familias_path()
+
+        if os.path.exists(ruta_json):
+            with open(ruta_json, "r", encoding="utf-8") as f:
                 datos = json.load(f)
         else:
             datos = {}
 
-        datos[self.producto] = self.familia_seleccionada
+        datos[self.producto.strip()] = self.familia_seleccionada
 
-        with open(RUTA_JSON, "w", encoding="utf-8") as f:
+        with open(ruta_json, "w", encoding="utf-8") as f:
             json.dump(datos, f, indent=4, ensure_ascii=False)
 
         Logger.info(f"'{self.producto}' asignado a familia '{self.familia_seleccionada}'")
