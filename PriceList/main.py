@@ -1,7 +1,7 @@
 from kivymd.app import MDApp
 from kivy.clock import Clock
 from kivy.lang import Builder
-from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.core.window import Window
 from kivymd.toast import toast
@@ -66,10 +66,14 @@ class PriceListApp(MDApp):
         self.date_picker.screen = listado_screen
 
     def forzar_redibujado(self, dt):
-        self.sm.current = "menu"
-        self.sm.transition.direction = "left"
+        # Transición sin animación solo al inicio
         self.sm.transition.duration = 0
         self.sm.current = "menu"
+        # Restaurar transición animada tras un instante
+        Clock.schedule_once(self.restaurar_transicion, 0.5)
+
+    def restaurar_transicion(self, dt):
+        self.sm.transition = SlideTransition(duration=0.3)
 
     def cambiar_pantalla(self, nombre_pantalla):
         cambiar_pantalla_controller(self, nombre_pantalla)
