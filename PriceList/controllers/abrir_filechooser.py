@@ -137,7 +137,7 @@ if platform == "android":
             familias_dict = cargar_familias_json()
 
             for producto, precio in lector.cargarDiccionario().items():
-                producto_normalizado = producto.strip().lower()
+                producto_normalizado = producto.strip()
                 familia = familias_dict.get(producto_normalizado)
 
                 if familia:
@@ -152,7 +152,8 @@ if platform == "android":
                 Clock.schedule_once(lambda dt: mostrar_siguiente_popup(app))
             else:
                 Logger.info("No hay productos sin clasificar.")
-                toast("Ticket importado correctamente")
+            
+            toast("Ticket importado correctamente")
 
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
