@@ -16,15 +16,15 @@ def get_db_path():
 
 def get_familias_path():
     if platform == "android":
-        from android.storage import app_storage_path
-        app_path = app_storage_path()
-        path = os.path.join(app_path, "familias.json")
+        ruta_base = "data/familias.json"
     else:
-        base = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(base, "..", "data", "familias.json")
-    
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    return path
+        ruta_base = os.path.dirname(os.path.abspath(__file__))
+
+    data_dir = os.path.join(ruta_base, "..", "data")
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
+    return os.path.join(data_dir, "familias.json")
 
 
 def actualizar_fuentes(app):
