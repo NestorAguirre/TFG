@@ -9,12 +9,15 @@ from kivy.utils import platform
 
 from controllers.abrir_filechooser import abrir_filechooser
 from controllers.mostrar_productos import cargar_productos
-from controllers.screens_controller import (MenuScreen, cargar_vistas)
-from controllers.navegacion_controller import cambiar_pantalla as cambiar_pantalla_controller, volver_atras as volver_atras_controller, capturar_tecla_atras
-from controllers.utils import actualizar_fuentes
+from controllers.screens_controller import MenuScreen, cargar_vistas
+from controllers.navegacion_controller import (
+    cambiar_pantalla as cambiar_pantalla_controller,
+    volver_atras as volver_atras_controller,
+    capturar_tecla_atras,
+)
+from controllers.utils import actualizar_fuentes, get_db_path
 from controllers.selector_fecha_controller import DatePickerController
 from controllers.dbcontroller import DBController
-from controllers.utils import get_db_path
 
 Builder.load_file("views/main.kv")
 Builder.load_file("views/bebidas.kv")
@@ -26,6 +29,7 @@ Builder.load_file("views/frescos.kv")
 Builder.load_file("views/lacteos.kv")
 Builder.load_file("views/desayuno.kv")
 Builder.load_file("views/listadoproductos.kv")
+
 
 class PriceListApp(MDApp):
     title_font_size = NumericProperty(28)
@@ -44,24 +48,28 @@ class PriceListApp(MDApp):
         Window.bind(on_keyboard=capturar_tecla_atras)
 
         self.sm = ScreenManager()
-        self.sm.add_widget(MenuScreen(name='menu'))
+        self.sm.add_widget(MenuScreen(name="menu"))
 
         self.date_picker = DatePickerController(app=self)
         self.historial_pantallas = []
         Window.bind(on_resize=lambda *_: actualizar_fuentes(self))
         actualizar_fuentes(self)
 
-        cargar_vistas(self.sm)
-        listado_screen = self.sm.get_screen('listadoproductos')
-        self.date_picker.screen = listado_screen
+        Clock.schedule_once(self.post_carga_vistas, 0)
+        Clock.schedule_once(self.forzar_redibujado, 0.1)
 
         return self.sm
 
-
     def post_carga_vistas(self, dt):
         cargar_vistas(self.sm)
-        listado_screen = self.sm.get_screen('listadoproductos')
+        listado_screen = self.sm.get_screen("listadoproductos")
         self.date_picker.screen = listado_screen
+
+    def forzar_redibujado(self, dt):
+        self.sm.current = "menu"
+        self.sm.transition.direction = "left"
+        self.sm.transition.duration = 0
+        self.sm.current = "menu"
 
     def cambiar_pantalla(self, nombre_pantalla):
         cambiar_pantalla_controller(self, nombre_pantalla)
@@ -82,7 +90,7 @@ class PriceListApp(MDApp):
 
     def open_date_picker(self):
         self.date_picker.open()
-            
+
     def vaciar_base_de_datos(self):
         try:
             if platform == "android":
@@ -94,5 +102,6 @@ class PriceListApp(MDApp):
         except:
             pass
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     PriceListApp().run()
