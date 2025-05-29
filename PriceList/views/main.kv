@@ -30,17 +30,6 @@
                         size: self.width, dp(4)
                         pos: self.x, self.y - dp(5)
 
-            MDIconButton:
-                icon: "trash-can"
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-                md_bg_color: 1, 0.4, 0.4, 1
-                size_hint: None, None
-                size: dp(40), dp(40)
-                pos_hint: {"right": 1, "center_y": 0.5}
-                on_release: app.vaciar_base_de_datos()
-
-
         GridLayout:
             cols: 2
             spacing: dp(20)

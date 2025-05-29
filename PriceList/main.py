@@ -15,7 +15,7 @@ from controllers.navegacion_controller import (
     volver_atras as volver_atras_controller,
     capturar_tecla_atras,
 )
-from controllers.utils import actualizar_fuentes, get_db_path
+from controllers.utils import actualizar_fuentes, get_db_path, ensure_familias_json
 from controllers.selector_fecha_controller import DatePickerController
 from controllers.dbcontroller import DBController
 
@@ -44,6 +44,8 @@ class PriceListApp(MDApp):
     date_picker = ObjectProperty()
 
     def build(self):
+        ensure_familias_json()
+        
         Window.clearcolor = (0.98, 0.95, 0.88, 1)
         Window.bind(on_keyboard=capturar_tecla_atras)
 
@@ -66,9 +68,14 @@ class PriceListApp(MDApp):
         self.date_picker.screen = listado_screen
 
     def forzar_redibujado(self, dt):
-        # Transición sin animación solo al inicio
+    # Transición sin animación solo al inicio
         self.sm.transition.duration = 0
         self.sm.current = "menu"
+        
+        # Forzar renderizado inmediato
+        Window.canvas.ask_update()
+        self.sm.canvas.ask_update()
+
         # Restaurar transición animada tras un instante
         Clock.schedule_once(self.restaurar_transicion, 0.5)
 
@@ -94,18 +101,6 @@ class PriceListApp(MDApp):
 
     def open_date_picker(self):
         self.date_picker.open()
-
-    def vaciar_base_de_datos(self):
-        try:
-            if platform == "android":
-                db = DBController("data/pricelist.db")
-            else:
-                db = DBController(get_db_path())
-            db.vaciarBaseDeDatos()
-            toast("Base de datos vaciada correctamente")
-        except:
-            pass
-
 
 if __name__ == "__main__":
     PriceListApp().run()

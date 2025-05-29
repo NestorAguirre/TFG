@@ -88,19 +88,13 @@ class ClasificadorPopup:
         if not self.familia_seleccionada:
             Logger.warning("ClasificadorPopup: No se seleccionó familia.")
             return
-
-        if platform == "android":
-            db = DBController("data/pricelist.db")
-        else:
-            db = DBController(get_db_path())
+        
+        db = DBController(get_db_path())
 
         db.insertarProducto(self.producto, self.familia_seleccionada)
         db.insertarPrecio(db.getProductoPorNombre(self.producto), db.getUltimoTicket(), self.precio)
         
-        if platform == "android":
-            RUTA_JSON = "data/familias.json"
-        else:
-            RUTA_JSON = get_familias_path()
+        RUTA_JSON = get_familias_path()
             
         if os.path.exists(RUTA_JSON):
             with open(RUTA_JSON, "r", encoding="utf-8") as f:

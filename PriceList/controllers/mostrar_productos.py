@@ -1,6 +1,9 @@
 from kivy.logger import Logger
 from kivy.utils import platform
+
 import os
+
+from controllers.utils import get_db_path
 
 try:
     from controllers.dbcontroller import DBController
@@ -10,11 +13,7 @@ from datetime import date
 
 def cargar_productos(app, familia, nombre_pantalla="listadoproductos"):
     try:
-        if platform == "android":
-            db = DBController("data/pricelist.db")
-        else:
-            ruta_absoluta_db = os.path.join(os.path.dirname(__file__), "..", "data", "pricelist.db")
-            db = DBController(os.path.abspath(ruta_absoluta_db))
+        db = DBController(get_db_path())
 
         app.date_picker.current_family = familia
         

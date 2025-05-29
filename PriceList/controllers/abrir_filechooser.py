@@ -30,10 +30,7 @@ def mostrar_siguiente_popup(app):
     
 def cargar_familias_json():
     import json
-    if platform == "android":
-        path = "data/familias.json"
-    else:
-        path = get_familias_path()
+    path = get_familias_path()
     if not os.path.exists(path):
         return {}
     with open(path, "r", encoding="utf-8") as f:
@@ -127,7 +124,7 @@ if platform == "android":
                 raise FileNotFoundError(f"La ruta no existe: {ruta}")
 
             lector = LectorTicket(ruta)
-            db = DBController("data/pricelist.db")
+            db = DBController(get_db_path())
 
             db.insertarTicket(lector.getFechaTicket())
             ticket_id = db.getUltimoTicket()

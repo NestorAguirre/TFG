@@ -1,6 +1,8 @@
 import sqlite3 as sql
 import os
 
+from controllers.utils import get_db_path
+
 class DBController():
     
     def __init__(self, nombreDB):
@@ -163,5 +165,4 @@ class DBController():
         conexion.close()
 
 if __name__ == "__main__":
-    base = DBController("data/pricelist.db")
-    base.vaciarBaseDeDatos()
+    base = DBController(get_db_path())

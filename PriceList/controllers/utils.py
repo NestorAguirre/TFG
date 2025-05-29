@@ -2,30 +2,46 @@ import os
 from kivy.utils import platform
 from kivy.core.window import Window
 
+
+import os
+from kivy.utils import platform
+
 def get_db_path():
     if platform == "android":
-        ruta_base = "data/pricelist.db"
+        from android.storage import app_storage_path
+        ruta_base = app_storage_path()
     else:
         ruta_base = os.path.dirname(os.path.abspath(__file__))
 
-    data_dir = os.path.join(ruta_base, "..", "data")
-    if not os.path.exists(data_dir):
-        os.makedirs(data_dir)
-
+    data_dir = os.path.join(ruta_base, "data")
+    os.makedirs(data_dir, exist_ok=True)
     return os.path.join(data_dir, "pricelist.db")
+
 
 def get_familias_path():
     if platform == "android":
-        ruta_base = "data/familias.json"
+        from android.storage import app_storage_path
+        ruta_base = app_storage_path()
     else:
         ruta_base = os.path.dirname(os.path.abspath(__file__))
 
-    data_dir = os.path.join(ruta_base, "..", "data")
-    if not os.path.exists(data_dir):
-        os.makedirs(data_dir)
-
+    data_dir = os.path.join(ruta_base, "data")
+    os.makedirs(data_dir, exist_ok=True)
     return os.path.join(data_dir, "familias.json")
 
+
+def ensure_familias_json():
+    destino = get_familias_path()
+    if not os.path.exists(destino):
+        ruta_script = os.path.dirname(os.path.abspath(__file__))
+        ruta_inicial = os.path.join(ruta_script, "..", "assets", "familias_default.json")
+        try:
+            os.makedirs(os.path.dirname(destino), exist_ok=True)
+            import shutil
+            shutil.copy(ruta_inicial, destino)
+        except Exception as e:
+            from kivymd.toast import toast
+            toast(f"Error copiando familias.json: {e}")
 
 def actualizar_fuentes(app):
     base_ancho = 360

@@ -4,8 +4,8 @@ package.name = pricelist
 package.domain = org.pricelist
 
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,ttf,txt,json,db
-include_patterns = modules/**, controllers/**, views/**, assets/**, data/**, data/*.db, data/familias.json
+source.include_exts = py,png,jpg,kv,atlas,ttf,txt
+include_patterns = modules/**, controllers/**, views/**, assets/**, assets/familias_default.json
 
 version = 1.0
 orientation = portrait
