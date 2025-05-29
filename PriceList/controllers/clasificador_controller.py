@@ -1,3 +1,4 @@
+
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.button import Button
@@ -14,7 +15,6 @@ import os
 from modules.listados import FAMILIAS_FIJAS
 from controllers.dbcontroller import DBController
 from controllers.utils import get_db_path, get_familias_path
-
 
 class ClasificadorPopup:
     def __init__(self, app, producto, precio, callback=None):
@@ -67,7 +67,6 @@ class ClasificadorPopup:
             on_release=partial(self.guardar)
         )
 
-
         botones.add_widget(btn_cancelar)
         botones.add_widget(btn_guardar)
         layout.add_widget(botones)
@@ -88,23 +87,23 @@ class ClasificadorPopup:
         if not self.familia_seleccionada:
             Logger.warning("ClasificadorPopup: No se seleccionó familia.")
             return
-        
+
         db = DBController(get_db_path())
 
         db.insertarProducto(self.producto, self.familia_seleccionada)
         db.insertarPrecio(db.getProductoPorNombre(self.producto), db.getUltimoTicket(), self.precio)
-        
-        RUTA_JSON = get_familias_path()
-            
-        if os.path.exists(RUTA_JSON):
-            with open(RUTA_JSON, "r", encoding="utf-8") as f:
+
+        ruta_json = get_familias_path()
+
+        try:
+            with open(ruta_json, "r", encoding="utf-8") as f:
                 datos = json.load(f)
-        else:
+        except FileNotFoundError:
             datos = {}
 
         datos[self.producto] = self.familia_seleccionada
 
-        with open(RUTA_JSON, "w", encoding="utf-8") as f:
+        with open(ruta_json, "w", encoding="utf-8") as f:
             json.dump(datos, f, indent=4, ensure_ascii=False)
 
         Logger.info(f"'{self.producto}' asignado a familia '{self.familia_seleccionada}'")

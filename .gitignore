@@ -7,3 +7,5 @@ controllers/data/*.db
 
 # (Opcional) Ignorar carpetas típicas de caché
 __pycache__/
+PriceList/controllers/data/familias.json
+PriceList/controllers/data/pricelist.db
