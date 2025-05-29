@@ -1,8 +1,9 @@
-# Ignorar archivos de base de datos
-*.db
+# Ignorar todos los archivos .pyc del proyecto
+**/*.pyc
 
-# Ignorar archivos compilados de Python
-*.pyc
+# Ignorar archivos .json y .db solo en controllers/data/
+controllers/data/*.json
+controllers/data/*.db
 
-# Ignorar carpetas típicas de caché de Python
+# (Opcional) Ignorar carpetas típicas de caché
 __pycache__/
