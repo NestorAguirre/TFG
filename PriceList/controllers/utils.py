@@ -33,8 +33,8 @@ def get_familias_path():
 def ensure_familias_json():
     destino = get_familias_path()
     if not os.path.exists(destino):
-        from kivy.resources import resource_find
-        ruta_inicial = resource_find("assets/familias_default.json")
+        ruta_script = os.path.dirname(os.path.abspath(__file__))
+        ruta_inicial = os.path.join(ruta_script, "..", "assets", "familias_default.json")
         try:
             os.makedirs(os.path.dirname(destino), exist_ok=True)
             import shutil

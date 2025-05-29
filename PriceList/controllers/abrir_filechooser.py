@@ -28,20 +28,9 @@ def mostrar_siguiente_popup(app):
     popup = ClasificadorPopup(app, producto, precio, callback=mostrar_siguiente_popup)
     Clock.schedule_once(lambda dt: popup.mostrar(), 0.1)
     
-def cargar_familias_json_1():
+def cargar_familias_json():
     import json
     path = get_familias_path()
-    if not os.path.exists(path):
-        return {}
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
-    
-def cargar_familias_json_2():
-    import json
-    if platform == "android":
-        path = "data/familias.json"
-    else:
-        path = get_familias_path()
     if not os.path.exists(path):
         return {}
     with open(path, "r", encoding="utf-8") as f:
@@ -142,30 +131,17 @@ if platform == "android":
 
             productos_no_clasificados = []
 
-            familias_dict1 = cargar_familias_json_1()
-            
-            familias_dict2 = cargar_familias_json_2()
+            familias_dict = cargar_familias_json()
 
             for producto, precio in lector.cargarDiccionario().items():
                 producto_normalizado = producto.strip()
-                familia = familias_dict2.get(producto_normalizado)
+                familia = familias_dict.get(producto_normalizado)
 
                 if familia:
                     db.insertarProducto(producto, familia)
                     db.insertarPrecio(db.getProductoPorNombre(producto), ticket_id, precio)
                 else:
                     productos_no_clasificados.append((producto, precio))
-
-            for producto, precio in lector.cargarDiccionario().items():
-                producto_normalizado = producto.strip()
-                familia = familias_dict1.get(producto_normalizado)
-
-                if familia:
-                    db.insertarProducto(producto, familia)
-                    db.insertarPrecio(db.getProductoPorNombre(producto), ticket_id, precio)
-                else:
-                    if producto_normalizado not in productos_no_clasificados:
-                        productos_no_clasificados.append((producto, precio))
 
             app.productos_no_clasificados = productos_no_clasificados
 
@@ -220,7 +196,7 @@ else:
 
             productos_no_clasificados = []
 
-            familias_dict = cargar_familias_json_1()
+            familias_dict = cargar_familias_json()
 
             for producto, precio in lector.cargarDiccionario().items():
                 producto_normalizado = producto.strip()

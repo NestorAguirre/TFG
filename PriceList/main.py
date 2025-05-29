@@ -58,20 +58,26 @@ class PriceListApp(MDApp):
         actualizar_fuentes(self)
 
         Clock.schedule_once(self.post_carga_vistas, 0)
-        return self.sm
+        Clock.schedule_once(self.forzar_redibujado, 0.1)
 
-    def on_start(self):
-        # Forzar pantalla inicial y refresco visual
-        self.sm.transition.duration = 0
-        self.sm.current = "menu"
-        self.sm.canvas.ask_update()
-        Window.canvas.ask_update()
-        Clock.schedule_once(self.restaurar_transicion, 0.5)
+        return self.sm
 
     def post_carga_vistas(self, dt):
         cargar_vistas(self.sm)
         listado_screen = self.sm.get_screen("listadoproductos")
         self.date_picker.screen = listado_screen
+
+    def forzar_redibujado(self, dt):
+    # Transición sin animación solo al inicio
+        self.sm.transition.duration = 0
+        self.sm.current = "menu"
+        
+        # Forzar renderizado inmediato
+        Window.canvas.ask_update()
+        self.sm.canvas.ask_update()
+
+        # Restaurar transición animada tras un instante
+        Clock.schedule_once(self.restaurar_transicion, 0.5)
 
     def restaurar_transicion(self, dt):
         self.sm.transition = SlideTransition(duration=0.3)
@@ -95,7 +101,6 @@ class PriceListApp(MDApp):
 
     def open_date_picker(self):
         self.date_picker.open()
-
 
 if __name__ == "__main__":
     PriceListApp().run()
