@@ -1,4 +1,6 @@
 import os
+import shutil
+
 from kivy.utils import platform
 from kivy.core.window import Window
 
@@ -22,26 +24,23 @@ def get_familias_path():
     if platform == "android":
         from android.storage import app_storage_path
         ruta_base = app_storage_path()
+        default_path = "/data/data/org.test.pricelist/files/app/assets/familias_default.json"
     else:
         ruta_base = os.path.dirname(os.path.abspath(__file__))
+        default_path = os.path.join(ruta_base, "..", "assets", "familias_default.json")
 
     data_dir = os.path.join(ruta_base, "data")
     os.makedirs(data_dir, exist_ok=True)
-    return os.path.join(data_dir, "familias.json")
 
+    familias_path = os.path.join(data_dir, "familias.json")
 
-def ensure_familias_json():
-    destino = get_familias_path()
-    if not os.path.exists(destino):
-        ruta_script = os.path.dirname(os.path.abspath(__file__))
-        ruta_inicial = os.path.join(ruta_script, "..", "assets", "familias_default.json")
+    if not os.path.exists(familias_path):
         try:
-            os.makedirs(os.path.dirname(destino), exist_ok=True)
-            import shutil
-            shutil.copy(ruta_inicial, destino)
+            shutil.copy(default_path, familias_path)
         except Exception as e:
-            from kivymd.toast import toast
-            toast(f"Error copiando familias.json: {e}")
+            print(f"Error copiando archivo por primera vez: {e}")
+
+    return familias_path
 
 def actualizar_fuentes(app):
     base_ancho = 360

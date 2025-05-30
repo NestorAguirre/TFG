@@ -4,8 +4,8 @@ package.name = pricelist
 package.domain = org.pricelist
 
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,ttf,txt
-include_patterns = modules/**, controllers/**, views/**, assets/**, assets/familias_default.json
+source.include_exts = py,png,jpg,kv,atlas,ttf,txt,json
+include_patterns = modules/**, controllers/**, views/**, assets/**
 
 version = 1.0
 orientation = portrait
@@ -27,6 +27,7 @@ android.allow_backup = True
 android.hardwareAccelerated = True
 android.meta_data = android.max_aspect=2.1
 android.private_storage = True
+android.assets = assets/
 
 # Iconos
 icon.filename = assets/images/PriceListLogo.png

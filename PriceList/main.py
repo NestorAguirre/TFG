@@ -4,8 +4,6 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.core.window import Window
-from kivymd.toast import toast
-from kivy.utils import platform
 
 from controllers.abrir_filechooser import abrir_filechooser
 from controllers.mostrar_productos import cargar_productos
@@ -15,9 +13,8 @@ from controllers.navegacion_controller import (
     volver_atras as volver_atras_controller,
     capturar_tecla_atras,
 )
-from controllers.utils import actualizar_fuentes, get_db_path, ensure_familias_json
+from controllers.utils import actualizar_fuentes
 from controllers.selector_fecha_controller import DatePickerController
-from controllers.dbcontroller import DBController
 
 Builder.load_file("views/main.kv")
 Builder.load_file("views/bebidas.kv")
@@ -44,8 +41,7 @@ class PriceListApp(MDApp):
     date_picker = ObjectProperty()
 
     def build(self):
-        ensure_familias_json()
-        
+
         Window.clearcolor = (0.98, 0.95, 0.88, 1)
         Window.bind(on_keyboard=capturar_tecla_atras)
 
@@ -68,15 +64,10 @@ class PriceListApp(MDApp):
         self.date_picker.screen = listado_screen
 
     def forzar_redibujado(self, dt):
-    # Transición sin animación solo al inicio
         self.sm.transition.duration = 0
         self.sm.current = "menu"
-        
-        # Forzar renderizado inmediato
         Window.canvas.ask_update()
         self.sm.canvas.ask_update()
-
-        # Restaurar transición animada tras un instante
         Clock.schedule_once(self.restaurar_transicion, 0.5)
 
     def restaurar_transicion(self, dt):
@@ -101,6 +92,7 @@ class PriceListApp(MDApp):
 
     def open_date_picker(self):
         self.date_picker.open()
+
 
 if __name__ == "__main__":
     PriceListApp().run()
