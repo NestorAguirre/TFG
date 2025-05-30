@@ -17,7 +17,6 @@ from controllers.dbcontroller import DBController
 from controllers.utils import get_db_path, get_familias_path
 from controllers.clasificador_controller import ClasificadorPopup
 
-
 def mostrar_siguiente_popup(app):
     if not app.productos_no_clasificados:
         Logger.info("Todos los productos han sido clasificados.")
@@ -27,7 +26,7 @@ def mostrar_siguiente_popup(app):
     producto, precio = app.productos_no_clasificados.pop(0)
     popup = ClasificadorPopup(app, producto, precio, callback=mostrar_siguiente_popup)
     Clock.schedule_once(lambda dt: popup.mostrar(), 0.1)
-    
+
 def cargar_familias_json():
     import json
     path = get_familias_path()
@@ -35,7 +34,6 @@ def cargar_familias_json():
         return {}
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
-
 
 if platform == "android":
     def abrir_filechooser(app):
@@ -54,21 +52,18 @@ if platform == "android":
         currentActivity = cast('android.app.Activity', PythonActivity.mActivity)
         currentActivity.startActivityForResult(intent, 1)
 
-
     def _on_activity_result(requestCode, resultCode, intent, app):
-        if requestCode == 1 and resultCode == -1:  # RESULT_OK
+        if requestCode == 1 and resultCode == -1:
             try:
                 uri = intent.getData()
                 context = autoclass('org.kivy.android.PythonActivity').mActivity
                 contentResolver = context.getContentResolver()
                 inputStream = contentResolver.openInputStream(uri)
 
-                # Verificar tipo MIME
                 mimeType = contentResolver.getType(uri)
                 if not mimeType or "pdf" not in mimeType.lower():
                     raise Exception(f"Archivo no válido. Tipo detectado: {mimeType}")
 
-                # Obtener nombre del archivo
                 DocumentFile = autoclass('androidx.documentfile.provider.DocumentFile')
                 docFile = DocumentFile.fromSingleUri(context, uri)
                 fileName = docFile.getName()
@@ -76,11 +71,9 @@ if platform == "android":
                 if not fileName.endswith(".pdf"):
                     raise Exception("El archivo seleccionado no es un PDF.")
 
-                # Guardar en almacenamiento interno privado
                 internal_dir = context.getFilesDir().getAbsolutePath()
                 target_path = f"{internal_dir}/{fileName}"
 
-                # Leer el archivo usando InputStream Java y bytearray Python
                 buffer = bytearray(1024)
                 data = bytearray()
 
@@ -101,7 +94,6 @@ if platform == "android":
                     header = f.read(5)
                 Logger.info(f"Encabezado del archivo: {header}")
 
-                # Verificar si se puede abrir con pdfplumber
                 try:
                     with pdfplumber.open(target_path) as pdf:
                         Logger.info(f"PDF abierto correctamente, páginas: {len(pdf.pages)}")
@@ -114,7 +106,6 @@ if platform == "android":
             except Exception as e:
                 Logger.error(f"Procesamiento de PDF: Error al copiar archivo -> {e}")
                 toast("Error al copiar el archivo")
-
 
     def _procesar_archivo(ruta, app):
         Logger.info(f"Procesando archivo: {ruta}")
@@ -130,7 +121,6 @@ if platform == "android":
             ticket_id = db.getUltimoTicket()
 
             productos_no_clasificados = []
-
             familias_dict = cargar_familias_json()
 
             for producto, precio in lector.cargarDiccionario().items():
@@ -149,8 +139,6 @@ if platform == "android":
                 Clock.schedule_once(lambda dt: mostrar_siguiente_popup(app))
             else:
                 Logger.info("No hay productos sin clasificar.")
-            
-            toast("Ticket importado correctamente")
 
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
@@ -195,7 +183,6 @@ else:
             ticket_id = db.getUltimoTicket()
 
             productos_no_clasificados = []
-
             familias_dict = cargar_familias_json()
 
             for producto, precio in lector.cargarDiccionario().items():
@@ -219,4 +206,3 @@ else:
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
             toast("Error al importar el ticket")
-
