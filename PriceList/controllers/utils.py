@@ -24,7 +24,7 @@ def get_familias_path():
     if platform == "android":
         from android.storage import app_storage_path
         ruta_base = app_storage_path()
-        default_path = "/data/data/org.test.pricelist/files/app/assets/familias_default.json"
+        default_path = "assets/familias_default.json"
     else:
         ruta_base = os.path.dirname(os.path.abspath(__file__))
         default_path = os.path.join(ruta_base, "..", "assets", "familias_default.json")
