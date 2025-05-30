@@ -139,6 +139,7 @@ if platform == "android":
                 Clock.schedule_once(lambda dt: mostrar_siguiente_popup(app))
             else:
                 Logger.info("No hay productos sin clasificar.")
+                toast("Ticket importado correctamente")
 
         except Exception as e:
             Logger.error(f"Procesamiento de PDF: Error -> {e}")
