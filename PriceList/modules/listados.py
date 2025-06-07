@@ -17,7 +17,7 @@ FAMILIAS_FIJAS = [
     "Bolleria",
     "Pan",
     "Cereales",
-    "Otros",
+    "Otros (Desayuno)",
     "Congelados de carne",
     "Congelado de pescado",
     "Congelados de verduras",

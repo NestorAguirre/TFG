@@ -4,7 +4,6 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.spinner import Spinner
 from kivy.clock import Clock
-from kivy.utils import platform
 from kivy.logger import Logger
 
 from functools import partial
@@ -81,6 +80,8 @@ class ClasificadorPopup:
         self.popup.open()
 
     def seleccionar_familia(self, spinner, value):
+        if value == "Otros (Desayuno)":
+            value = "Otros"
         self.familia_seleccionada = value
         Logger.info(f"Familia seleccionada: {value}")
 
