@@ -7,7 +7,7 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,ttf,txt,json
 include_patterns = modules/**, controllers/**, views/**, assets/**
 
-version = 1.0
+version = 1.1
 orientation = portrait
 fullscreen = 1
 

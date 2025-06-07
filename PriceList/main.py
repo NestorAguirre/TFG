@@ -5,7 +5,7 @@ from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from kivy.properties import NumericProperty, ObjectProperty
 from kivy.core.window import Window
 
-from controllers.abrir_filechooser import abrir_filechooser
+from controllers.filechooser_controller import abrir_filechooser
 from controllers.mostrar_productos import cargar_productos
 from controllers.screens_controller import MenuScreen, cargar_vistas
 from controllers.navegacion_controller import (
