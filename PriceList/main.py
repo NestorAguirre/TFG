@@ -26,6 +26,7 @@ Builder.load_file("views/frescos.kv")
 Builder.load_file("views/lacteos.kv")
 Builder.load_file("views/desayuno.kv")
 Builder.load_file("views/listadoproductos.kv")
+Builder.load_file("views/listadoproductosgeneral.kv")
 
 
 class PriceListApp(MDApp):
