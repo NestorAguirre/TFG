@@ -21,6 +21,7 @@
                     size: self.width, dp(4)
                     pos: self.x, self.y - dp(5)
 
+            # Botón Volver (izquierda)
             RelativeLayout:
                 size_hint: None, None
                 size: dp(40), dp(40)
@@ -35,6 +36,26 @@
 
                 Image:
                     source: 'assets/images/botones/btnatras.png'
+                    size_hint: None, None
+                    size: dp(24), dp(24)
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+            # Botón Guardar (derecha)
+            RelativeLayout:
+                size_hint: None, None
+                size: dp(40), dp(40)
+                pos: root.width - dp(80), self.height - dp(25)
+
+                Button:
+                    id: btn_guardar
+                    size: dp(40), dp(40)
+                    pos: 0, 0
+                    background_normal: ''
+                    background_color: 0, 0, 0, 0
+                    on_release: app.guardar_productos()
+
+                MDIcon:
+                    icon: "content-save"
                     size_hint: None, None
                     size: dp(24), dp(24)
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
@@ -131,18 +152,16 @@
                 pos: self.pos
                 size: self.size
 
-    Label:
+    Spinner:
+        id: spinner_familia
         text: root.familia
-        text_size: self.size
-        halign: 'center'
-        valign: 'middle'
-        color: 0.2, 0.2, 0.2, 1
-        font_size: app.label_font_size
+        values: ["Frutas","Verduras","Carnes","Pescados","Mariscos","Embutidos","Yogures y postres","Leche y derivados","Quesos","Huevos","Arroz, pastas y legumbres","Conservas","Aceites y vinagres","Snacks","Alimentos preparados","Bolleria","Pan","Cereales","Otros (Desayuno)","Congelados de carne","Congelado de pescado","Congelados de verduras","Postres congelados","Otros congelados","Bebidas no alcohólicas","Bebidas alcohólicas","Cosmética","Higiene","Limpieza del hogar","Productos de cocina"]
         size_hint_x: 0.2
+        font_size: app.label_font_size
         font_name: "assets/fonts/Lato-Regular.ttf"
-        canvas.before:
-            Color:
-                rgba: 0.98, 0.98, 0.98, 1
-            Rectangle:
-                pos: self.pos
-                size: self.size
+
+        color: 0.2, 0.2, 0.2, 1
+        background_normal: ''
+        background_color: 1, 1, 1, 1
+
+        on_text: root.familia = self.text

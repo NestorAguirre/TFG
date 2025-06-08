@@ -1,7 +1,4 @@
 from kivy.logger import Logger
-from kivy.utils import platform
-
-import os
 
 from controllers.utils import get_db_path
 
