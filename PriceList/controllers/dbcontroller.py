@@ -163,6 +163,24 @@ class DBController():
 
         conexion.commit()
         conexion.close()
+        
+    def getProductosFamilias(self):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+        
+        cursor.execute("SELECT nombre, familia FROM productos")
+        
+        resultados = cursor.fetchall()
+        conexion.close()
+
+        productos = []
+        for nombre, familia in resultados:
+            productos.append({
+                "producto": nombre,
+                "familia": familia
+            })
+
+        return productos
 
 if __name__ == "__main__":
     base = DBController(get_db_path())

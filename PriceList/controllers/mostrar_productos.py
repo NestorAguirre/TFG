@@ -31,3 +31,17 @@ def cargar_productos(app, familia, nombre_pantalla="listadoproductos"):
         
     except Exception as e:
         Logger.error(f"Mostrar productos: Error al cargar datos -> {e}")
+
+def cargar_productos_generales(app, nombre_pantalla="listadoproductosgeneral"):
+    try:
+        db = DBController(get_db_path())
+
+        datos = db.getProductosFamilias()
+        screen = app.sm.get_screen(nombre_pantalla)
+        
+        screen.ids.rv.data = []
+        screen.ids.rv.refresh_from_data()
+        screen.ids.rv.data = datos
+        
+    except Exception as e:
+        Logger.error(f"Mostrar productos generales: Error al cargar datos -> {e}")

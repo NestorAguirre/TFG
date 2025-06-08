@@ -6,7 +6,7 @@ from kivy.properties import NumericProperty, ObjectProperty
 from kivy.core.window import Window
 
 from controllers.filechooser_controller import abrir_filechooser
-from controllers.mostrar_productos import cargar_productos
+from controllers.mostrar_productos import cargar_productos, cargar_productos_generales
 from controllers.screens_controller import MenuScreen, cargar_vistas
 from controllers.navegacion_controller import (
     cambiar_pantalla as cambiar_pantalla_controller,
@@ -87,6 +87,9 @@ class PriceListApp(MDApp):
 
     def mostrar_listado_productos(self, familia, nombre_pantalla):
         cargar_productos(self, familia, nombre_pantalla)
+        
+    def mostrar_listado_productos_generales(self):
+        cargar_productos_generales(self)
 
     def abrir_filechooser(self):
         abrir_filechooser(self)

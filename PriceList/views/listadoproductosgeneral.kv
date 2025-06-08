@@ -92,7 +92,7 @@
 
             RecycleView:
                 id: rv
-                viewclass: 'ProductosRecyclerView'
+                viewclass: 'ProductosGeneralesRecyclerView'
                 bar_width: dp(10)
                 bar_color: 0.73, 0.37, 0.27, 1
                 scroll_type: ['bars', 'content']
@@ -105,7 +105,7 @@
                     height: self.minimum_height
                     spacing: dp(2)
 
-<ProductosRecyclerView>:
+<ProductosGeneralesRecyclerView>:
     producto: ""
     familia: ""
    
@@ -117,12 +117,12 @@
     Label:
         text: root.producto
         text_size: self.size
-        halign: 'left'
+        halign: 'center'
         valign: 'middle'
         padding: (dp(10), 0)
         color: 0.2, 0.2, 0.2, 1
         font_size: app.label_font_size
-        size_hint_x: 0.4
+        size_hint_x: 0.2
         font_name: "assets/fonts/Lato-Regular.ttf"
         canvas.before:
             Color:
@@ -132,13 +132,13 @@
                 size: self.size
 
     Label:
-        text: root.precio
+        text: root.familia
         text_size: self.size
         halign: 'center'
         valign: 'middle'
         color: 0.2, 0.2, 0.2, 1
         font_size: app.label_font_size
-        size_hint_x: 0.15
+        size_hint_x: 0.2
         font_name: "assets/fonts/Lato-Regular.ttf"
         canvas.before:
             Color:

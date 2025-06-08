@@ -19,6 +19,9 @@ class ProductosRecyclerView(BoxLayout):
     maximo = StringProperty("")
     minimo = StringProperty("")
     media = StringProperty("")
+class ProductosGeneralesRecyclerView(BoxLayout):
+    producto = StringProperty("")
+    familia = StringProperty("")
 
 def cargar_vistas(sm):
     sm.add_widget(FrescosScreen(name='frescos'))

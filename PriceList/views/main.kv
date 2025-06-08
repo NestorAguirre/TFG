@@ -170,7 +170,9 @@
                         #OPCIONES DEL MENÚ
                         OneLineIconListItem:
                             text: "Ver todos los productos"
-                            on_release: app.cambiar_pantalla('listadoproductosgeneral')
+                            on_release: 
+                                app.cambiar_pantalla('listadoproductosgeneral')
+                                app.mostrar_listado_productos_generales()
                             IconLeftWidget:
                                 icon: "format-list-bulleted"
                     
