@@ -52,7 +52,7 @@
                     pos: 0, 0
                     background_normal: ''
                     background_color: 0, 0, 0, 0
-                    on_release: app.guardar_productos()
+                    on_release: app.guardar_productos_generales()
 
                 MDIcon:
                     icon: "content-save"
@@ -112,7 +112,7 @@
                             size: self.size
 
             RecycleView:
-                id: rv
+                id: rv_general
                 viewclass: 'ProductosGeneralesRecyclerView'
                 bar_width: dp(10)
                 bar_color: 0.73, 0.37, 0.27, 1

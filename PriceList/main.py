@@ -6,7 +6,7 @@ from kivy.properties import NumericProperty, ObjectProperty
 from kivy.core.window import Window
 
 from controllers.filechooser_controller import abrir_filechooser
-from controllers.mostrar_productos import cargar_productos, cargar_productos_generales
+from controllers.mostrar_productos import cargar_productos, cargar_productos_generales, guardar_productos_generales
 from controllers.screens_controller import MenuScreen, cargar_vistas
 from controllers.navegacion_controller import (
     cambiar_pantalla as cambiar_pantalla_controller,
@@ -96,6 +96,9 @@ class PriceListApp(MDApp):
 
     def open_date_picker(self):
         self.date_picker.open()
+        
+    def guardar_productos_generales(self):
+        guardar_productos_generales(self)
 
 
 if __name__ == "__main__":

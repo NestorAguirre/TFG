@@ -29,16 +29,27 @@ def cargar_productos(app, familia, nombre_pantalla="listadoproductos"):
     except Exception as e:
         Logger.error(f"Mostrar productos: Error al cargar datos -> {e}")
 
-def cargar_productos_generales(app, nombre_pantalla="listadoproductosgeneral"):
+def cargar_productos_generales(app):
     try:
         db = DBController(get_db_path())
 
         datos = db.getProductosFamilias()
-        screen = app.sm.get_screen(nombre_pantalla)
+        screen = app.sm.get_screen("listadoproductosgeneral")
         
-        screen.ids.rv.data = []
-        screen.ids.rv.refresh_from_data()
-        screen.ids.rv.data = datos
+        screen.ids.rv_general.data = []
+        screen.ids.rv_general.refresh_from_data()
+        screen.ids.rv_general.data = datos
         
     except Exception as e:
         Logger.error(f"Mostrar productos generales: Error al cargar datos -> {e}")
+        
+def guardar_productos_generales(app):
+    # Accede al RecycleView
+    screen = app.sm.get_screen("listadoproductosgeneral")
+    rv = screen.ids.rv_general
+
+    # rv.data es la lista de filas
+    for fila in rv.data:
+        producto = fila.get('producto', '')
+        familia = fila.get('familia', '')
+        print(f"Producto: {producto}, Familia: {familia}")
