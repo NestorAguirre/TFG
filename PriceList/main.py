@@ -43,9 +43,6 @@ class PriceListApp(MDApp):
 
     def build(self):
 
-        db = DBController(get_db_path())
-        db.borrarPreciosFecha()
-
         Window.clearcolor = (0.98, 0.95, 0.88, 1)
         Window.bind(on_keyboard=capturar_tecla_atras)
 
