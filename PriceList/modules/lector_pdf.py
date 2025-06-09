@@ -48,22 +48,54 @@ class LectorTicket:
     def extraerProductos(self):
         try:
             lista_productos = []
-            for linea in self.arrayTicket[self.inicioProductos + 1:]:
-                linea = linea.strip()
+            i = self.inicioProductos + 1
+
+            while i < len(self.arrayTicket):
+                linea = self.arrayTicket[i].strip()
+
+                # Saltar líneas vacías o de totales
                 if not linea or "TOTAL" in linea or "TARJETA" in linea:
+                    i += 1
                     continue
 
+                # Productos normales con 1 o 2 precios
                 match = re.match(r"^(\d+)\s+(.*?)(?:\s+\d+,\d{2}){1,2}$", linea)
                 if match:
                     cantidad = int(match.group(1))
                     nombre = match.group(2).strip().title()
                     lista_productos.append((nombre, cantidad))
-                else:
-                    tokens = linea.split()
-                    if len(tokens) >= 2 and tokens[0].isdigit():
-                        cantidad = int(tokens[0])
-                        nombre = " ".join(tokens[1:]).title()
+                    i += 1
+                    continue
+
+                # Productos por peso en formato:
+                # Línea 1: nombre (ej: "LANGOSTINO COCIDO")
+                # Línea 2: "0,572 kg 9,95 €/kg 5,69"
+                # Productos por peso: nombre + línea siguiente con "kg €/kg total"
+                if i + 1 < len(self.arrayTicket):
+                    next_line = self.arrayTicket[i + 1].strip()
+                    if re.match(r"^\d+,\d+\s+kg\s+\d+,\d+\s+€/kg\s+\d+,\d+$", next_line):
+                        tokens = linea.split()
+                        if tokens[0].isdigit():
+                            nombre = " ".join(tokens[1:]).title()
+                        else:
+                            nombre = linea.title()
+                        cantidad = 1
                         lista_productos.append((nombre, cantidad))
+                        i += 2
+                        continue
+
+                # Último intento: línea tipo "1 NOMBRE" sin precio
+                tokens = linea.split()
+                if len(tokens) >= 2 and tokens[0].isdigit():
+                    cantidad = int(tokens[0])
+                    nombre = " ".join(tokens[1:]).title()
+                    lista_productos.append((nombre, cantidad))
+                    i += 1
+                    continue
+
+                # Si nada coincide, seguir con la siguiente línea
+                i += 1
+
             return lista_productos
         except Exception:
             raise ErrorTicket("Error en la lectura de productos")
@@ -119,5 +151,5 @@ if __name__ == "__main__":
     #    print(texto)
     #except ErrorTicket as e:
     #    print(f"Error: {e}")
-    lector = LectorTicket(r"D:\ASIGNATURAS\TFG\TFG\tickets\ticket1.pdf")
+    lector = LectorTicket(r"D:\ASIGNATURAS\TFG\TFG\tickets\ticket32.pdf")
     print(lector.cargarDiccionario())
