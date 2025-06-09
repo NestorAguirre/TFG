@@ -163,6 +163,20 @@ class DBController():
 
         conexion.commit()
         conexion.close()
+        
+    def borrarPreciosFecha(self):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+        
+        cursor.execute("""
+            DELETE FROM precios
+            WHERE ticket_id IN (
+                SELECT id FROM tickets WHERE fecha = '2024-07-18'
+            );
+        """)
+        
+        conexion.commit()
+        conexion.close()
 
 if __name__ == "__main__":
     base = DBController(get_db_path())

@@ -13,8 +13,9 @@ from controllers.navegacion_controller import (
     volver_atras as volver_atras_controller,
     capturar_tecla_atras,
 )
-from controllers.utils import actualizar_fuentes
+from controllers.utils import actualizar_fuentes, get_db_path
 from controllers.selector_fecha_controller import DatePickerController
+from controllers.dbcontroller import DBController
 
 Builder.load_file("views/main.kv")
 Builder.load_file("views/bebidas.kv")
@@ -41,6 +42,9 @@ class PriceListApp(MDApp):
     date_picker = ObjectProperty()
 
     def build(self):
+
+        db = DBController(get_db_path())
+        db.borrarPreciosFecha()
 
         Window.clearcolor = (0.98, 0.95, 0.88, 1)
         Window.bind(on_keyboard=capturar_tecla_atras)
