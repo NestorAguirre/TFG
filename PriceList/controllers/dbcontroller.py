@@ -181,6 +181,19 @@ class DBController():
             })
 
         return productos
+    
+    def actualizar_familia(self, nombre_producto, nueva_familia):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+
+        cursor.execute("""
+            UPDATE productos
+            SET familia = ?
+            WHERE nombre = ?
+        """, (nueva_familia, nombre_producto))
+
+        conexion.commit()
+        conexion.close()
 
 if __name__ == "__main__":
     base = DBController(get_db_path())
