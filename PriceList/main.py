@@ -6,7 +6,7 @@ from kivy.properties import NumericProperty, ObjectProperty
 from kivy.core.window import Window
 
 from controllers.filechooser_controller import abrir_filechooser
-from controllers.mostrar_productos import cargar_productos
+from controllers.mostrar_productos import cargar_productos, cargar_productos_generales, guardar_productos_generales, actualizar_familia
 from controllers.screens_controller import MenuScreen, cargar_vistas
 from controllers.navegacion_controller import (
     cambiar_pantalla as cambiar_pantalla_controller,
@@ -27,6 +27,7 @@ Builder.load_file("views/frescos.kv")
 Builder.load_file("views/lacteos.kv")
 Builder.load_file("views/desayuno.kv")
 Builder.load_file("views/listadoproductos.kv")
+Builder.load_file("views/listadoproductosgeneral.kv")
 
 
 class PriceListApp(MDApp):
@@ -87,12 +88,21 @@ class PriceListApp(MDApp):
 
     def mostrar_listado_productos(self, familia, nombre_pantalla):
         cargar_productos(self, familia, nombre_pantalla)
+        
+    def mostrar_listado_productos_generales(self):
+        cargar_productos_generales(self)
 
     def abrir_filechooser(self):
         abrir_filechooser(self)
 
     def open_date_picker(self):
         self.date_picker.open()
+        
+    def guardar_productos_generales(self):
+        guardar_productos_generales(self)
+        
+    def actualizar_familia(self, producto, nueva_familia):
+        actualizar_familia(self, producto, nueva_familia)
 
 
 if __name__ == "__main__":

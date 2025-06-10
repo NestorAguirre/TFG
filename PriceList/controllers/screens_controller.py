@@ -12,12 +12,16 @@ class FrescosScreen(Screen): familia_nombre = "Frescos"
 class LacteosScreen(Screen): familia_nombre = "Lácteos"
 class DesayunoScreen(Screen): familia_nombre = "Desayuno"
 class ListadoProductosScreen(Screen): familia_nombre = StringProperty("")
+class ListadoProductosGeneralScreen(Screen): familia_nombre = StringProperty("")
 class ProductosRecyclerView(BoxLayout):
     producto = StringProperty("")
     precio = StringProperty("")
     maximo = StringProperty("")
     minimo = StringProperty("")
     media = StringProperty("")
+class ProductosGeneralesRecyclerView(BoxLayout):
+    producto = StringProperty("")
+    familia = StringProperty("")
 
 def cargar_vistas(sm):
     sm.add_widget(FrescosScreen(name='frescos'))
@@ -29,3 +33,4 @@ def cargar_vistas(sm):
     sm.add_widget(EnvasadosScreen(name='envasados'))
     sm.add_widget(LacteosScreen(name='lacteos'))
     sm.add_widget(ListadoProductosScreen(name='listadoproductos'))
+    sm.add_widget(ListadoProductosGeneralScreen(name='listadoproductosgeneral'))

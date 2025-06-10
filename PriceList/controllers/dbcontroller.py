@@ -175,6 +175,34 @@ class DBController():
             );
         """)
         
+    def getProductosFamilias(self):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+        
+        cursor.execute("SELECT nombre, familia FROM productos")
+        
+        resultados = cursor.fetchall()
+        conexion.close()
+
+        productos = []
+        for nombre, familia in resultados:
+            productos.append({
+                "producto": nombre,
+                "familia": familia
+            })
+
+        return productos
+    
+    def actualizar_familia(self, nombre_producto, nueva_familia):
+        conexion = sql.connect(self.nombreDB)
+        cursor = conexion.cursor()
+
+        cursor.execute("""
+            UPDATE productos
+            SET familia = ?
+            WHERE nombre = ?
+        """, (nueva_familia, nombre_producto))
+
         conexion.commit()
         conexion.close()
 
