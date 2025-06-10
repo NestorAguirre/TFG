@@ -164,4 +164,6 @@
         background_normal: ''
         background_color: 1, 1, 1, 1
 
-        on_text: root.familia = self.text
+        on_text:
+            root.familia = self.text
+            app.actualizar_familia(root.producto, self.text)

@@ -53,3 +53,12 @@ def guardar_productos_generales(app):
         producto = fila.get('producto', '')
         familia = fila.get('familia', '')
         print(f"Producto: {producto}, Familia: {familia}")
+        
+def actualizar_familia(self, producto, nueva_familia):
+    screen = self.sm.get_screen("listadoproductosgeneral")
+    rv = screen.ids.rv_general
+
+    for i, fila in enumerate(rv.data):
+        if fila['producto'] == producto and fila['familia'] != nueva_familia:
+            rv.data[i]['familia'] = nueva_familia
+            break
